@@ -1057,7 +1057,8 @@ function postReply(parentId){
 }
 
 /* ---------- GIF sticker picker (comment compose) ---------- */
-const allStickers = window.PURBALINK_MEDIA?.stickers || [...reactionDefs.map(r=>({label:r.label,file:r.file})), ...bonusStickers];
+const savedStickerLibrary = (()=>{try{const x=JSON.parse(localStorage.getItem("purbalink_sticker_library")||"[]");return Array.isArray(x)?x.filter(s=>s&&s.active!==false&&s.file):[]}catch(_){return []}})();
+const allStickers = window.PURBALINK_MEDIA?.stickers || (savedStickerLibrary.length?savedStickerLibrary:[...reactionDefs.map(r=>({label:r.label,file:r.file,package:"Reaction",category:"Reaction"})), ...bonusStickers.map(s=>({...s,package:"Umum",category:"Umum"}))]);
 function renderStickerPopup(){
   document.getElementById("stickerPopup").innerHTML = allStickers.map(s=>`
     <div class="stk" onclick="pickSticker('${s.file}')">
