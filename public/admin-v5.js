@@ -70,7 +70,18 @@ function dashboard(){
  var d=D()||{articles:[],jobs:[],products:[],orders:[],moderation:[]};
  var pending=(d.moderation||[]).length+A.videoModeration.filter(function(x){return x.status==='Menunggu'}).length;
  var unread=A.notifications.filter(function(x){return !x.read}).length;
- var html='<div class="admin-v5-quick"><button onclick="AdminV5.articleForm()">＋ Artikel</button><button onclick="AdminV5.jobForm()">＋ Lowongan</button><button onclick="AdminV5.productForm()">＋ Produk</button><button onclick="switchTab(\'media-interaksi\')">🧩 Sticker & GIF</button><button onclick="switchTab(\'integrasi\')">🔌 Cek Integrasi</button></div>';
+ var html='<div class="admin-v5-launcher">'+
+ '<button onclick="AdminV5.articleForm()" title="Artikel"><span>📰</span><small>Artikel</small></button>'+
+ '<button onclick="AdminV5.jobForm()" title="Lowongan"><span>💼</span><small>Loker</small></button>'+
+ '<button onclick="AdminV5.productForm()" title="Produk"><span>🛍️</span><small>Produk</small></button>'+
+ '<button onclick="switchTab(\'shop-pesanan\')" title="Pesanan"><span>📦</span><small>Pesanan</small></button>'+
+ '<button onclick="switchTab(\'video-konten\')" title="Video"><span>🎬</span><small>Video</small></button>'+
+ '<button onclick="switchTab(\'komentar\')" title="Komentar"><span>💬</span><small>Komentar</small></button>'+
+ '<button onclick="switchTab(\'media-interaksi\')" title="Sticker & GIF"><span>🧩</span><small>Sticker</small></button>'+
+ '<button onclick="switchTab(\'iklan\')" title="Iklan & AdSense"><span>📣</span><small>Iklan</small></button>'+
+ '<button onclick="switchTab(\'pengguna\')" title="Pengguna"><span>👥</span><small>User</small></button>'+
+ '<button onclick="switchTab(\'pengaturan\')" title="Pengaturan"><span>⚙️</span><small>Setting</small></button>'+
+ '</div>';
  html+='<div class="admin-v5-kpis"><div><b>'+d.articles.length+'</b><span>Artikel</span></div><div><b>'+d.jobs.filter(function(x){return x.status==='Aktif'}).length+'</b><span>Lowongan aktif</span></div><div><b>'+d.products.filter(function(x){return x.status==='Aktif'}).length+'</b><span>Produk aktif</span></div><div><b>'+((d.orders||[]).length)+'</b><span>Pesanan</span></div><div><b>'+pending+'</b><span>Moderasi</span></div><div><b>'+unread+'</b><span>Notifikasi</span></div></div>';
  return html+(window.dashboardHTML?dashboardHTML():'')
 }
