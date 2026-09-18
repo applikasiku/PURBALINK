@@ -387,6 +387,142 @@ canvas{max-width:100%!important}
 .ai-usage-pill{font-size:9.5px;background:#f2f4f7;border:1px solid #e4e7ec;border-radius:999px;padding:4px 7px;color:#667085}
 .gen-check{display:flex;align-items:center;gap:7px;font-size:11px;color:#475467;margin-top:6px}.gen-check input{width:auto!important}
 @media(max-width:760px){.ai-provider-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.gen-inline-action{flex-direction:column}.gen-inline-action button{height:40px}}
+
+/* ===== ADMIN DESKTOP LAYOUT FIX V3 ===== */
+@media(min-width:761px){
+  .shell{
+    display:block!important;
+    width:100%!important;
+    min-height:100dvh!important;
+  }
+  .sidebar{
+    position:fixed!important;
+    left:0!important;
+    top:0!important;
+    bottom:0!important;
+    width:var(--admin-sidebar)!important;
+    min-width:var(--admin-sidebar)!important;
+    max-width:var(--admin-sidebar)!important;
+    height:100dvh!important;
+    z-index:120!important;
+  }
+  .mainarea{
+    display:block!important;
+    margin-left:var(--admin-sidebar)!important;
+    width:calc(100% - var(--admin-sidebar))!important;
+    max-width:calc(100% - var(--admin-sidebar))!important;
+    min-width:0!important;
+    overflow-x:hidden!important;
+  }
+  .topbar{
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+  }
+  .content{
+    width:100%!important;
+    max-width:var(--admin-max)!important;
+    margin:0 auto!important;
+    padding:26px 28px 48px!important;
+    overflow-x:visible!important;
+  }
+
+  /* Dashboard desktop: article table needs more room than moderation card */
+  .cols{
+    grid-template-columns:minmax(720px,1.35fr) minmax(430px,.85fr)!important;
+    gap:22px!important;
+    align-items:start!important;
+  }
+  .cols>.panel{
+    width:100%!important;
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+
+  /* Dashboard table should fit desktop without horizontal scrolling */
+  .cols>.panel:first-child table{
+    min-width:0!important;
+    table-layout:fixed!important;
+  }
+  .cols>.panel:first-child th:nth-child(1),
+  .cols>.panel:first-child td:nth-child(1){width:40%!important}
+  .cols>.panel:first-child th:nth-child(2),
+  .cols>.panel:first-child td:nth-child(2){width:16%!important}
+  .cols>.panel:first-child th:nth-child(3),
+  .cols>.panel:first-child td:nth-child(3){width:14%!important}
+  .cols>.panel:first-child th:nth-child(4),
+  .cols>.panel:first-child td:nth-child(4){width:17%!important}
+  .cols>.panel:first-child th:nth-child(5),
+  .cols>.panel:first-child td:nth-child(5){width:13%!important}
+  .cols>.panel:first-child td:first-child{
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  .cols>.panel:first-child .row-actions{
+    display:flex!important;
+    gap:5px!important;
+    flex-wrap:nowrap!important;
+  }
+  .cols>.panel:first-child .row-actions button{
+    padding:5px 8px!important;
+  }
+
+  /* KPI cards stay evenly distributed and do not overflow */
+  .stats{
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    gap:16px!important;
+    width:100%!important;
+  }
+  .stat-card{min-width:0!important}
+  .stat-val{
+    font-size:clamp(19px,1.55vw,25px)!important;
+    white-space:nowrap!important;
+  }
+
+  /* Article list and settings tables can use full width */
+  #content>.panel{
+    max-width:100%!important;
+  }
+  .panel:has(table){
+    overflow-x:auto!important;
+    scrollbar-gutter:stable;
+  }
+}
+
+/* medium desktop / small laptop */
+@media(min-width:761px) and (max-width:1360px){
+  :root{--admin-sidebar:235px}
+  .content{padding:20px!important}
+  .cols{
+    grid-template-columns:1fr!important;
+  }
+  .cols>.panel:first-child table{
+    min-width:760px!important;
+    table-layout:auto!important;
+  }
+  .stats{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
+
+/* wide desktop */
+@media(min-width:1600px){
+  :root{--admin-max:1560px}
+  .content{padding-left:30px!important;padding-right:30px!important}
+}
+
+/* mobile reset: mainarea must not retain desktop offset */
+@media(max-width:760px){
+  .shell{display:block!important}
+  .mainarea{
+    margin-left:0!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow-x:hidden!important;
+  }
+}
 </style>
 <link rel="stylesheet" href="v2.css">
 </head>
