@@ -162,6 +162,13 @@ tr:last-child td{border-bottom:none;}
 .gen-preview h1{font-size:24px;line-height:1.3;margin:0 0 10px}.gen-preview h2{font-size:18px;margin:22px 0 8px}.gen-preview p,.gen-preview li{font-size:14px;line-height:1.75;color:#344054}
 .gen-meta-box{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.gen-meta-item{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:9px}.gen-meta-item b{display:block;font-size:10px;text-transform:uppercase;color:var(--ink-2);margin-bottom:3px}.gen-meta-item span{font-size:12px}
 @media(max-width:980px){.article-generator-grid{grid-template-columns:1fr}.gen-output{min-height:auto}}
+
+.article-admin-head{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px}
+.article-admin-head h2{font-size:17px;margin:0 0 4px}.article-admin-head p{font-size:12.5px;color:var(--ink-2);margin:0}
+.article-generator-cta{border:0;background:#0B5ED7;color:#fff;font-weight:800;font-size:12.5px;padding:10px 14px;border-radius:8px;white-space:nowrap;box-shadow:0 4px 12px rgba(11,94,215,.2)}
+.article-generator-cta:hover{background:#093A8A}
+#articleTabbar{margin-bottom:12px}
+@media(max-width:760px){.article-admin-head{align-items:flex-start;flex-direction:column}.article-generator-cta{width:100%}}
 </style>
 <link rel="stylesheet" href="v2.css">
 </head>
@@ -442,9 +449,16 @@ function tabHTML(tab){
   switch(tab){
     case "dashboard": return dashboardHTML();
     case "artikel": return `
-      <div class="tabbar">
-        <button class="active" onclick="switchArticleSubtab(this,'list')">Daftar Artikel</button>
-        <button onclick="switchArticleSubtab(this,'generator')">AI Article Generator</button>
+      <div class="article-admin-head">
+        <div>
+          <h2>Manajemen Artikel / Berita</h2>
+          <p>Kelola artikel manual atau buat artikel high value dengan AI Article Generator.</p>
+        </div>
+        <button class="article-generator-cta" onclick="openArticleGenerator()">+ AI Article Generator</button>
+      </div>
+      <div class="tabbar" id="articleTabbar">
+        <button class="active" data-article-mode="list" onclick="switchArticleSubtab(this,'list')">Daftar Artikel</button>
+        <button data-article-mode="generator" onclick="switchArticleSubtab(this,'generator')">AI Article Generator</button>
       </div>
       <div id="articleSubtabList">
         ${genericTable("Semua Artikel",
@@ -626,6 +640,11 @@ function articleGeneratorHTML(){
       </div>
     </div>
   </div>`;
+}
+function openArticleGenerator(){
+  const tab=document.querySelector('#articleTabbar [data-article-mode="generator"]');
+  if(tab) switchArticleSubtab(tab,'generator');
+  setTimeout(()=>document.getElementById('genTopic')?.focus(),60);
 }
 function switchArticleSubtab(btn,mode){
   btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active")); btn.classList.add("active");
