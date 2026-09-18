@@ -229,25 +229,105 @@ function deleteStickerPackage(name){
  var items=A.stickers.filter(function(st){return (st.package||'Umum')===name});confirmA('Hapus paket '+name+' beserta '+items.length+' sticker?',function(){A.stickers=A.stickers.filter(function(st){return (st.package||'Umum')!==name});SA();toast('Paket sticker dihapus');refresh('media-interaksi')})
 }
 
+function stickerDbOpen(){
+ return new Promise(function(resolve,reject){
+  var req=indexedDB.open('purbalink_stickers_v1',1);
+  req.onupgradeneeded=function(e){var db=e.target.result;if(!db.objectStoreNames.contains('files'))db.createObjectStore('files',{keyPath:'id'})};
+  req.onsuccess=function(){resolve(req.result)};req.onerror=function(){reject(req.error)}
+ })
+}
+async function stickerDbPut(rec){
+ var db=await stickerDbOpen();return new Promise(function(resolve,reject){var tx=db.transaction('files','readwrite');tx.objectStore('files').put(rec);tx.oncomplete=resolve;tx.onerror=function(){reject(tx.error)}})
+}
+async function stickerDbDelete(id){
+ var db=await stickerDbOpen();return new Promise(function(resolve,reject){var tx=db.transaction('files','readwrite');tx.objectStore('files').delete(id);tx.oncomplete=resolve;tx.onerror=function(){reject(tx.error)}})
+}
+async function stickerDbGet(id){
+ var db=await stickerDbOpen();return new Promise(function(resolve,reject){var tx=db.transaction('files','readonly'),q=tx.objectStore('files').get(id);q.onsuccess=function(){resolve(q.result||null)};q.onerror=function(){reject(q.error)}})
+}
+function autoStickerCategory(name){
+ var n=String(name||'').toLowerCase();
+ var rules=[
+  ['Lucu',['ngakak','haha','wkwk','lucu','ketawa','lol']],
+  ['Cinta',['love','cinta','sayang','suka','heart']],
+  ['Marah',['marah','kesal','emosi','angry']],
+  ['Sedih',['sedih','nangis','cry','galau']],
+  ['Kerja',['boss','ceo','kerja','safety','hse','admin','mentri','menteri']],
+  ['Anak',['anak','sekolah','kids','bocil']],
+  ['Spiritual',['kultivator','spiritual','raja','naga']],
+  ['Komentar',['mantap','keren','setuju','menarik','siap']]
+ ];
+ for(var i=0;i<rules.length;i++)if(rules[i][1].some(function(k){return n.indexOf(k)>=0}))return rules[i][0];
+ return 'Umum'
+}
+function autoStickerLabel(file){
+ var n=String(file.name||'Sticker').replace(/\.[^.]+$/,'').replace(/[_-]+/g,' ').replace(/\s+/g,' ').trim();
+ return n.replace(/\b\w/g,function(c){return c.toUpperCase()})
+}
+async function hydrateMediaThumbs(){
+ var imgs=[].slice.call(document.querySelectorAll('[data-sticker-id][data-local="1"]'));
+ for(var i=0;i<imgs.length;i++){var el=imgs[i],rec=await stickerDbGet(el.dataset.stickerId).catch(function(){return null});if(rec&&rec.blob)el.src=URL.createObjectURL(rec.blob)}
+}
+async function bulkStickerUpload(files,packageName,categoryMode,customCategory){
+ files=[].slice.call(files||[]).filter(function(f){return /^image\//.test(f.type)});
+ if(!files.length){toast('Pilih file gambar terlebih dahulu','warn');return}
+ if(files.length>50){toast('Maksimal 50 sticker sekali upload','error');return}
+ packageName=(packageName||'').trim()||('Paket Sticker '+new Date().toLocaleDateString('id-ID'));
+ var added=[];
+ for(var i=0;i<files.length;i++){
+  var file=files[i],id=UID('st');
+  var category=categoryMode==='custom'?(customCategory||'Umum').trim()||'Umum':autoStickerCategory(file.name);
+  var rec={id:id,label:autoStickerLabel(file),file:'idb:'+id,type:'sticker',active:true,package:packageName,category:category,storage:'indexeddb',mime:file.type,size:file.size};
+  await stickerDbPut({id:id,blob:file,name:file.name,type:file.type,size:file.size});
+  A.stickers.push(rec);added.push(rec)
+ }
+ SA();localStorage.setItem('purbalink_sticker_library',JSON.stringify(A.stickers.filter(function(x){return x.active})));
+ toast(added.length+' sticker ditambahkan ke paket '+packageName);refresh('media-interaksi')
+}
+function bulkStickerForm(){
+ openM('Bulk Upload Sticker (maks. 50)', '<form id="bulkStickerForm"><div class="admin-v5-form">'+
+  '<label class="full">Nama Paket<input name="packageName" placeholder="Contoh: Sticker PURBALINK Lucu"></label>'+
+  '<label>Mode Kategori<select name="categoryMode" id="bulkCategoryMode"><option value="auto">Otomatis dari nama file</option><option value="custom">Satu kategori untuk semua</option></select></label>'+
+  '<label>Kategori Custom<input name="customCategory" placeholder="Contoh: Lucu"></label>'+
+  '<label class="full">Pilih Sticker<input name="files" type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple required><small>Maksimal 50 file. PNG/WebP/GIF disarankan.</small></label>'+
+  '<div class="full admin-v5-note">Kategori otomatis membaca nama file: <b>ngakak/haha → Lucu</b>, <b>love/cinta → Cinta</b>, <b>safety/CEO → Kerja</b>, <b>sedih → Sedih</b>. Nama sticker otomatis dari nama file dan tetap bisa diedit.</div>'+
+ '</div><div class="admin-v5-actions"><button type="button" class="a-btn ghost" data-close>Batal</button><button class="a-btn primary">Upload & Jadikan Paket</button></div></form>', function(m){
+  m.querySelector('#bulkStickerForm').onsubmit=async function(e){
+   e.preventDefault();var fd=new FormData(e.currentTarget),files=e.currentTarget.elements.files.files;
+   if(files.length>50){toast('Maksimal 50 sticker sekali upload','error');return}
+   var btn=e.currentTarget.querySelector('.a-btn.primary');btn.disabled=true;btn.textContent='Mengupload...';
+   try{await bulkStickerUpload(files,fd.get('packageName'),fd.get('categoryMode'),fd.get('customCategory'));closeM()}catch(err){toast('Upload gagal: '+err.message,'error');btn.disabled=false;btn.textContent='Upload & Jadikan Paket'}
+  }
+ })
+}
+function stickerEditForm(id){
+ var st=A.stickers.find(function(x){return x.id===id});if(!st)return;
+ openM('Edit Sticker','<form id="stickerEditForm"><div class="admin-v5-form">'+
+  '<label>Nama Sticker<input name="label" required value="'+E(st.label||'')+'"></label>'+
+  '<label>Kategori<input name="category" value="'+E(st.category||'Umum')+'"></label>'+
+  '<label class="full">Nama Paket<input name="'+E(st.package||'Default')+'"></label>'+
+  '</div><div class="admin-v5-actions"><button type="button" class="a-btn ghost" data-close>Batal</button><button class="a-btn primary">Simpan</button></div></form>',function(m){
+  m.querySelector('form').onsubmit=function(e){e.preventDefault();var d=FD(e.currentTarget);Object.assign(st,d);SA();closeM();toast('Sticker diperbarui');refresh('media-interaksi')}
+ })
+}
+
 function mediaPage(){
- var packages=stickerPackages(),pkgCards='';
- packages.forEach(function(p){
-  var safe=E(p.name).replace(/'/g,"&#39;");
-  pkgCards+='<div class="admin-v5-package"><div class="admin-v5-package-main"><span>📦</span><div><b>'+E(p.name)+'</b><small>'+E(p.category)+' · '+p.count+' sticker · '+p.active+' aktif</small></div></div><div class="admin-v5-package-actions"><button onclick="AdminV5.renameStickerPackage(\''+safe+'\')">Edit</button><button onclick="AdminV5.deleteStickerPackage(\''+safe+'\')">Hapus</button></div></div>'
- });
- var cards='';
- A.stickers.forEach(function(st){
-  cards+='<div class="admin-v5-media-card"><img src="'+E(st.file)+'" alt="'+E(st.label)+'"><b>'+E(st.label)+'</b><small>'+E(st.package||'Umum')+' · '+E(st.category||st.type||'sticker')+' · '+(st.active?'Aktif':'Nonaktif')+'</small><div><button onclick="AdminV5.toggleSticker(\''+st.id+'\')">'+(st.active?'Nonaktifkan':'Aktifkan')+'</button><button onclick="AdminV5.deleteSticker(\''+st.id+'\')">Hapus</button></div></div>'
- });
+ var groups={};A.stickers.forEach(function(st){var p=st.package||'Default';(groups[p]=groups[p]||[]).push(st)});
+ var cards=Object.keys(groups).map(function(pkg){
+   var items=groups[pkg],inner=items.map(function(st){
+    var src=st.storage==='indexeddb'?'':E(st.file);
+    return '<div class="admin-v5-media-card"><img '+(st.storage==='indexeddb'?'data-local="1" data-sticker-id="'+E(st.id)+'"':'')+' src="'+src+'" alt="'+E(st.label)+'"><b>'+E(st.label)+'</b><small>'+E(st.category||st.type||'Umum')+' · '+(st.active?'Aktif':'Nonaktif')+'</small><div><button onclick="AdminV5.editSticker(\''+st.id+'\')">Edit</button><button onclick="AdminV5.toggleSticker(\''+st.id+'\')">'+(st.active?'Off':'On')+'</button><button onclick="AdminV5.deleteSticker(\''+st.id+'\')">Hapus</button></div></div>'
+   }).join('');
+   return '<section class="sticker-package"><div class="sticker-package-head"><div><h3>'+E(pkg)+'</h3><span>'+items.length+' sticker · '+new Set(items.map(function(x){return x.category||'Umum'})).size+' kategori</span></div></div><div class="admin-v5-media-grid">'+inner+'</div></section>'
+ }).join('');
  var g=A.media;
- return '<div class="admin-v5-sticker-hero"><div><h2>Sticker Manager</h2><p>Upload maksimal 50 sticker sekaligus. Sistem membuat nama paket/kategori otomatis dari nama file, lalu bisa Anda edit.</p></div><div class="admin-v5-sticker-actions"><button class="a-btn ghost" onclick="AdminV5.stickerForm()">+ URL Sticker</button><button class="a-btn primary" onclick="AdminV5.openBulkStickerUpload()">⇧ Bulk Upload</button></div></div>'+
- '<div class="panel"><div class="panel-head"><h2>Paket Sticker</h2><span class="admin-v5-chip">'+packages.length+' paket</span></div><div class="admin-v5-packages">'+(pkgCards||'<div class="admin-v5-empty">Belum ada paket sticker.</div>')+'</div></div>'+
- '<div class="panel" style="margin-top:16px"><div class="panel-head"><h2>Semua Sticker</h2><span class="admin-v5-chip">'+A.stickers.length+' sticker</span></div><div class="admin-v5-media-grid">'+(cards||'<div class="admin-v5-empty">Belum ada sticker.</div>')+'</div></div>'+
- '<div class="panel" style="margin-top:16px"><div class="panel-head"><h2>Giphy GIF</h2></div><div class="admin-v5-note">GIF memakai Giphy. API key production sebaiknya melalui Cloudflare Worker / Secret.</div><div class="settings-grid"><div class="field"><label>Status</label><select id="giphyEnabled"><option value="true" '+(g.giphyEnabled?'selected':'')+'>Aktif</option><option value="false" '+(!g.giphyEnabled?'selected':'')+'>Nonaktif</option></select></div><div class="field"><label>Rating</label><select id="giphyRating"><option '+(g.giphyRating==='g'?'selected':'')+'>g</option><option '+(g.giphyRating==='pg'?'selected':'')+'>pg</option><option '+(g.giphyRating==='pg-13'?'selected':'')+'>pg-13</option></select></div><div class="field"><label>Limit</label><input id="giphyLimit" type="number" min="6" max="50" value="'+g.giphyLimit+'"></div><div class="field"><label>API Key Dev</label><input id="giphyApiKey" value="'+E(g.giphyApiKey||'')+'" placeholder="opsional"></div></div><button class="save-btn" onclick="AdminV5.saveMedia()">Simpan Media Settings</button></div>'
+ var html='<div class="panel"><div class="panel-head"><div><h2>Sticker & Reaction Library</h2><p class="admin-v5-sub">Kelola sticker sebagai paket dan kategori.</p></div><div class="admin-v5-inline-actions"><button class="a-btn ghost" onclick="AdminV5.stickerForm()">+ Sticker URL</button><button class="a-btn primary" onclick="AdminV5.bulkStickerForm()">⇧ Bulk Upload</button></div></div>'+ (cards||'<div class="admin-v5-empty">Belum ada sticker.</div>') +'</div>';
+ html+='<div class="panel" style="margin-top:16px"><div class="panel-head"><h2>Giphy GIF</h2></div><div class="admin-v5-note">GIF memakai Giphy. Untuk production, API key sebaiknya melalui Cloudflare Worker / Secret.</div><div class="settings-grid"><div class="field"><label>Status</label><select id="giphyEnabled"><option value="true" '+(g.giphyEnabled?'selected':'')+'>Aktif</option><option value="false" '+(!g.giphyEnabled?'selected':'')+'>Nonaktif</option></select></div><div class="field"><label>Rating</label><select id="giphyRating"><option '+(g.giphyRating==='g'?'selected':'')+'>g</option><option '+(g.giphyRating==='pg'?'selected':'')+'>pg</option><option '+(g.giphyRating==='pg-13'?'selected':'')+'>pg-13</option></select></div><div class="field"><label>Limit</label><input id="giphyLimit" type="number" min="6" max="50" value="'+g.giphyLimit+'"></div><div class="field"><label>API Key Dev</label><input id="giphyApiKey" value="'+E(g.giphyApiKey||'')+'" placeholder="opsional"></div></div><button class="save-btn" onclick="AdminV5.saveMedia()">Simpan Media Settings</button></div>';
+ setTimeout(hydrateMediaThumbs,0);return html
 }
 function stickerForm(){openM('Tambah Sticker','<form id="v5StickerForm"><div class="admin-v5-form"><label>Label<input name="label" required></label><label>Tipe<select name="type"><option value="sticker">Sticker</option><option value="reaction">Reaction</option></select></label><label class="full">Path / URL Gambar<input name="file" required placeholder="stickers/mantap-bang.png"></label></div><div class="admin-v5-actions"><button type="button" class="a-btn ghost" data-close>Batal</button><button class="a-btn primary">Tambah</button></div></form>',function(m){m.querySelector('#v5StickerForm').onsubmit=function(e){e.preventDefault();var x=FD(e.currentTarget);A.stickers.push(Object.assign(x,{id:UID('st'),active:true}));SA();closeM();toast('Sticker ditambahkan');refresh('media-interaksi')}})}
 function toggleSticker(id){var s=A.stickers.find(function(x){return x.id===id});if(!s)return;s.active=!s.active;SA();refresh('media-interaksi')}
-function deleteSticker(id){confirmA('Hapus sticker ini dari library?',function(){A.stickers=A.stickers.filter(function(x){return x.id!==id});SA();toast('Sticker dihapus');refresh('media-interaksi')})}
+function deleteSticker(id){confirmA('Hapus sticker ini dari library?',async function(){var st=A.stickers.find(function(x){return x.id===id});if(st&&st.storage==='indexeddb')await stickerDbDelete(id).catch(function(){});A.stickers=A.stickers.filter(function(x){return x.id!==id});SA();toast('Sticker dihapus');refresh('media-interaksi')})}
 function saveMedia(){A.media.giphyEnabled=document.getElementById('giphyEnabled').value==='true';A.media.giphyRating=document.getElementById('giphyRating').value;A.media.giphyLimit=Number(document.getElementById('giphyLimit').value)||24;A.media.giphyApiKey=document.getElementById('giphyApiKey').value.trim();SA();localStorage.setItem('purbalink_media_settings',JSON.stringify(A.media));localStorage.setItem('purbalink_sticker_library',JSON.stringify(A.stickers.filter(function(x){return x.active})));toast('Media settings tersimpan')}
 
 function featuresPage(){var h='';Object.entries(D().features||{}).forEach(function(kv){h+='<label class="admin-v5-feature"><div><b>'+E(kv[0].replaceAll('_',' '))+'</b><span>Kontrol modul '+E(kv[0])+' di frontend.</span></div><input type="checkbox" data-feature="'+E(kv[0])+'" '+(kv[1]!==false?'checked':'')+'></label>'});return '<div class="panel"><div class="panel-head"><h2>Kustomisasi Fitur</h2><button class="a-btn primary" onclick="AdminV5.saveFeatures()">Simpan</button></div><p class="admin-v5-sub">Aktif/nonaktifkan fitur frontend tanpa mengubah kode.</p><div class="admin-v5-feature-list">'+h+'</div></div>'}
