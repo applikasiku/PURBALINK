@@ -942,9 +942,6 @@ function renderThread(c){
         <div class="c-actions">
           <span class="fb-reply" onclick="toggleReply(${c.id})">Balas</span>
           ${reactControlHTML(c)}
-          <span class="fb-action-spacer"></span>
-          <button class="fb-vote" onclick="pickCommentReaction(${c.id},'suka')" aria-label="Suka">👍</button>
-          <button class="fb-vote" onclick="toggleDislike(event,${c.id})" aria-label="Tidak suka">👎</button>
         </div>
         ${c.replyOpen? `
         <div class="reply-box">
@@ -968,9 +965,6 @@ function renderReply(r){
         <div class="c-actions">
           <span class="fb-reply">Balas</span>
           ${reactControlHTML(r)}
-          <span class="fb-action-spacer"></span>
-          <button class="fb-vote" onclick="pickCommentReaction(${r.id},'suka')" aria-label="Suka">👍</button>
-          <button class="fb-vote" onclick="toggleDislike(event,${r.id})" aria-label="Tidak suka">👎</button>
         </div>
       </div>
     </div>
