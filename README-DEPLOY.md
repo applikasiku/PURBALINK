@@ -1,4 +1,4 @@
-# PURBALINK V2.1 — Midtrans Payment Gateway
+# PURBALINK V2.2 — Responsive UI + Jooble Jobs + Midtrans
 
 Target domain: https://purbalink.web.id
 
@@ -32,3 +32,15 @@ Payment status:
 `GET /api/midtrans/status?order_id=...`
 
 Important: Shop/order/auth data is still browser-persisted in V2.1. For secure multi-user fulfillment and admin reconciliation, move orders/users/products to a server-side database in the next production backend release.
+
+
+## Jooble jobs integration
+Loker uses the official Jooble REST API through the Cloudflare Worker so the API key is not exposed in browser code.
+
+Required Cloudflare secret:
+- \`JOOBLE_API_KEY\` = API key from the Indonesian Jooble API portal
+
+Endpoint used by the frontend:
+- \`POST /api/jobs/jooble\`
+
+The integration targets the Indonesian Jooble endpoint. If the secret is absent or Jooble is unavailable, PURBALINK automatically falls back to locally managed jobs.
