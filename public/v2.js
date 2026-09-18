@@ -1,6 +1,6 @@
 (()=>{
   'use strict';
-  const VERSION='2.4.0';
+  const VERSION='2.6.0';
   const DB_KEY='purbalink_v2_db';
   const DOMAIN='https://purbalink.web.id';
   const page=(location.pathname.split('/').pop()||'index.html').toLowerCase();
@@ -171,6 +171,7 @@
       const body=document.querySelector('#detailView .art-body');if(body)body.innerHTML=nl2p(a.body||a.summary||'');
       history.replaceState({articleId:a.id},'',`?article=${encodeURIComponent(a.id)}`);
       showDetail();
+      setTimeout(renderAds,0);
     };
     if(search){search.addEventListener('input',()=>{q=search.value.trim().toLowerCase();renderCards()});search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();renderCards()}})}
     document.querySelectorAll('.tabs .tab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.tabs .tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');cat=(t.textContent.trim()==='Semua'?'SEMUA':t.textContent.trim().toUpperCase());renderCards()}));
@@ -436,6 +437,95 @@
     switchTab('dashboard');
   }
 
+
+  function defaultAdsConfig(){
+    return {enabled:true,provider:'mixed',adsenseClient:'',lazy:true,slots:[
+      {id:'top-header',name:'Atas Header',type:'banner',provider:'direct',enabled:true,placement:'top-header',image:'',url:'',adsenseSlot:''},
+      {id:'header-banner',name:'Banner Header',type:'banner',provider:'adsense',enabled:true,placement:'header-banner',image:'',url:'',adsenseSlot:''},
+      {id:'home-native',name:'Native Beranda',type:'native',provider:'direct',enabled:true,placement:'home-native',image:'',url:'',adsenseSlot:''},
+      {id:'article-top',name:'Artikel Atas',type:'in-article',provider:'adsense',enabled:true,placement:'article-top',image:'',url:'',adsenseSlot:''},
+      {id:'article-middle',name:'Artikel Tengah',type:'in-article',provider:'adsense',enabled:true,placement:'article-middle',image:'',url:'',adsenseSlot:''},
+      {id:'article-bottom',name:'Artikel Bawah',type:'in-article',provider:'direct',enabled:true,placement:'article-bottom',image:'',url:'',adsenseSlot:''},
+      {id:'footer-banner',name:'Banner Footer',type:'banner',provider:'direct',enabled:true,placement:'footer-banner',image:'',url:'',adsenseSlot:''},
+      {id:'anchor',name:'Anchor',type:'anchor',provider:'adsense',enabled:true,placement:'anchor',image:'',url:'',adsenseSlot:''},
+      {id:'reward',name:'Reward',type:'reward',provider:'direct',enabled:true,placement:'reward',image:'',url:'',adsenseSlot:''}
+    ]};
+  }
+  function adsConfig(){
+    if(!db.ads){db.ads=defaultAdsConfig();saveDb()}
+    if(!Array.isArray(db.ads.slots))db.ads.slots=defaultAdsConfig().slots;
+    return db.ads
+  }
+  let adsenseLoading=null;
+  function ensureAdsense(){
+    const a=adsConfig(),client=(a.adsenseClient||'').trim();
+    if(!client)return Promise.reject(new Error('AdSense Client ID belum diatur'));
+    if(window.adsbygoogle)return Promise.resolve();
+    if(adsenseLoading)return adsenseLoading;
+    adsenseLoading=new Promise((resolve,reject)=>{
+      const sc=document.createElement('script');sc.async=true;sc.crossOrigin='anonymous';
+      sc.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+encodeURIComponent(client);
+      sc.onload=resolve;sc.onerror=()=>reject(new Error('Gagal memuat AdSense'));document.head.appendChild(sc);
+    });
+    return adsenseLoading;
+  }
+  function validDirect(slot){return !!String(slot.image||'').trim()}
+  function validAdsense(slot){const a=adsConfig();return !!String(a.adsenseClient||'').trim()&&!!String(slot.adsenseSlot||'').trim()}
+  function mountAdContent(box,slot){
+    if(box.dataset.loaded==='1')return;
+    if(slot.provider==='adsense'){
+      if(!validAdsense(slot)){box.remove();return}
+      box.dataset.loaded='1';box.innerHTML='<div class="pv2-ad-label">'+esc(slot.label||'Advertisement')+'</div><ins class="adsbygoogle" style="display:block" data-ad-client="'+esc(adsConfig().adsenseClient)+'" data-ad-slot="'+esc(slot.adsenseSlot)+'" data-ad-format="auto" data-full-width-responsive="true"></ins>';
+      ensureAdsense().then(()=>{try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(_){}}).catch(()=>box.remove());
+    }else{
+      if(!validDirect(slot)){box.remove();return}
+      box.dataset.loaded='1';
+      const img='<img loading="lazy" decoding="async" src="'+esc(slot.image)+'" alt="'+esc(slot.name||'Iklan')+'">';
+      box.innerHTML='<div class="pv2-ad-label">'+esc(slot.label||'Sponsored')+'</div>'+(slot.url?'<a href="'+esc(slot.url)+'" target="_blank" rel="sponsored noopener">'+img+'</a>':img);
+    }
+  }
+  function makeAd(slot){
+    const box=document.createElement('div');box.className='pv2-ad pv2-ad-'+String(slot.type||'banner').replace(/[^a-z0-9-]/gi,'');box.dataset.adSlot=slot.id;
+    if(adsConfig().lazy&&'IntersectionObserver'in window&&slot.type!=='anchor'){
+      const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){io.disconnect();mountAdContent(box,slot)}})},{rootMargin:'450px 0px'});
+      io.observe(box);
+    }else mountAdContent(box,slot);
+    return box
+  }
+  function putAd(slot,target,where){
+    if(!target||document.querySelector('[data-ad-slot="'+slot.id+'"]'))return;
+    const box=makeAd(slot);if(where==='before')target.parentNode.insertBefore(box,target);else if(where==='after')target.parentNode.insertBefore(box,target.nextSibling);else target.appendChild(box)
+  }
+  function renderAds(){
+    const a=adsConfig();document.querySelectorAll('.pv2-ad').forEach(x=>x.remove());if(!a.enabled)return;
+    const active=a.slots.filter(x=>x.enabled!==false);
+    const by=p=>active.find(x=>x.placement===p);
+    let s;
+    if((s=by('top-header'))){const h=document.querySelector('.p6-header,.pl-global-header,header.site,header');putAd(s,h,'before')}
+    if((s=by('header-banner'))){const h=document.querySelector('.p6-header,.pl-global-header,header.site,header');putAd(s,h,'after')}
+    if((s=by('home-native'))&&document.getElementById('homeView')){const t=document.querySelector('.p6-quick,.p6-popular-box,#newsGrid');putAd(s,t,'after')}
+    const body=document.querySelector('#detailView .art-body,.article-wrap .art-body');
+    if(body){
+      if((s=by('article-top')))putAd(s,body,'before');
+      if((s=by('article-middle'))){
+        const ps=body.querySelectorAll('p');const p=ps[Math.min(3,Math.max(0,Math.floor(ps.length/2)))];
+        if(p)putAd(s,p,'after');else putAd(s,body,'after')
+      }
+      if((s=by('article-bottom'))){const tags=document.querySelector('#detailView .article-tags,.article-wrap .article-tags');putAd(s,tags||body,'before')}
+    }
+    if((s=by('footer-banner'))){const ft=document.querySelector('.p6-footer,footer');putAd(s,ft,'before')}
+    if((s=by('anchor'))){
+      const box=makeAd(s);box.classList.add('pv2-ad-anchor');const close=document.createElement('button');close.className='pv2-ad-close';close.type='button';close.textContent='×';close.onclick=()=>box.remove();box.appendChild(close);document.body.appendChild(box)
+    }
+  }
+  window.PV2.showRewardAd=function(onReward){
+    const slot=adsConfig().slots.find(x=>x.placement==='reward'&&x.enabled!==false);
+    if(!adsConfig().enabled||!slot){if(onReward)onReward();return}
+    const html='<div class="pv2-reward"><div class="pv2-ad-label">'+esc(slot.label||'Reward')+'</div>'+(slot.image?'<img src="'+esc(slot.image)+'" alt="Reward Ad">':'<div class="pv2-reward-placeholder">Reward Ad siap dihubungkan ke jaringan iklan reward.</div>')+'<p>Tonton iklan untuk membuka bonus atau konten tambahan.</p><div class="pv2-actions"><button class="pv2-btn ghost" onclick="PV2.closeModal()">Nanti</button><button class="pv2-btn primary" id="rewardDone">Selesai & Klaim</button></div></div>';
+    modal('Reward Ad',html,m=>{const b=m.querySelector('#rewardDone');if(b)b.onclick=()=>{closeModal();if(onReward)onReward()}});
+  };
+  window.PV2.renderAds=renderAds;
+
   function initStaticPages(){
     document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().getFullYear());
   }
@@ -450,4 +540,5 @@
   if(page==='profile.html')initProfile();
   if(page==='admin-dashboard.html')initAdmin();
   initStaticPages();
+  setTimeout(renderAds,80);
 })();
