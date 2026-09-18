@@ -321,7 +321,7 @@
       document.querySelectorAll('.tk-card').forEach(c=>c.onclick=e=>{if(e.target.closest('.tk-fav'))return;openProduct(Number(c.dataset.productId))});
       document.querySelectorAll('.tk-fav').forEach(f=>f.onclick=e=>{e.stopPropagation();f.classList.toggle('on');f.textContent=f.classList.contains('on')?'♥':'♡';toast(f.classList.contains('on')?'Produk disimpan':'Produk dihapus dari simpanan')});
     }
-    function updateCartBadge(){const n=Object.values(cart).reduce((a,b)=>a+Number(b||0),0);document.querySelectorAll('[data-cart-count],'#cartBadge').forEach(el=>el.textContent=n)}
+    function updateCartBadge(){const n=Object.values(cart).reduce((a,b)=>a+Number(b||0),0);document.querySelectorAll('[data-cart-count],#cartBadge').forEach(el=>el.textContent=n)}
     function openProduct(id){
       const p=products.find(x=>x.id==id);if(!p)return;pdQty=1;
       document.getElementById('listView').style.display='none';document.getElementById('cartView').style.display='none';document.getElementById('detailView').style.display='block';window.scrollTo(0,0);
