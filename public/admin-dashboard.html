@@ -169,6 +169,207 @@ tr:last-child td{border-bottom:none;}
 .article-generator-cta:hover{background:#093A8A}
 #articleTabbar{margin-bottom:12px}
 @media(max-width:760px){.article-admin-head{align-items:flex-start;flex-direction:column}.article-generator-cta{width:100%}}
+
+/* ===== PURBALINK ADMIN RESPONSIVE PWA V2 ===== */
+:root{
+  --admin-sidebar:270px;
+  --admin-header:72px;
+  --admin-max:1480px;
+}
+html,body{max-width:100%;overflow-x:hidden}
+body{min-height:100dvh;background:#f4f7fb}
+.sidebar{
+  width:var(--admin-sidebar)!important;
+  min-width:var(--admin-sidebar);
+  max-width:var(--admin-sidebar);
+  height:100dvh;
+  position:fixed;
+  inset:0 auto 0 0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  z-index:120;
+}
+.main{
+  margin-left:var(--admin-sidebar)!important;
+  width:calc(100% - var(--admin-sidebar))!important;
+  min-width:0;
+}
+.topbar{
+  min-height:var(--admin-header);
+  height:auto!important;
+  padding:12px 28px!important;
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(10px);
+}
+.topbar h1{font-size:23px!important;line-height:1.2;margin:0}
+.top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.content{
+  width:100%;
+  max-width:var(--admin-max);
+  margin:0 auto;
+  padding:28px!important;
+  min-width:0;
+}
+.panel,.gen-card,.article-admin-head{
+  min-width:0;
+  max-width:100%;
+  overflow:hidden;
+}
+.panel{border-radius:16px!important}
+.panel-head{gap:12px;flex-wrap:wrap}
+.panel-head h2{min-width:0}
+table{width:100%;min-width:760px}
+.panel:has(table){overflow-x:auto}
+.panel:has(table) .panel-head{position:sticky;left:0}
+.settings-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:18px!important;
+}
+.settings-grid .field{min-width:0}
+.settings-grid input,.settings-grid select,.settings-grid textarea{
+  width:100%!important;
+  max-width:100%;
+  box-sizing:border-box;
+}
+.color-row{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:16px!important;
+}
+.color-swatch{min-width:0}
+.color-swatch span{width:100%!important;aspect-ratio:1/1;max-width:96px;height:auto!important}
+.article-admin-head{border-radius:16px!important}
+.article-generator-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)!important}
+.gen-card{border-radius:16px!important}
+.gen-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.gen-preview{max-width:100%;overflow:auto}
+.tabbar{max-width:100%;overflow-x:auto;scrollbar-width:none}
+.tabbar::-webkit-scrollbar{display:none}
+.tabbar button{white-space:nowrap}
+.kpi-grid,.stats-grid,.dash-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))!important}
+.chart-wrap,.chart-card{min-width:0;overflow:hidden}
+canvas{max-width:100%!important}
+.save-btn{max-width:100%;white-space:nowrap}
+#menuBtn{display:none!important}
+
+/* tablet */
+@media(max-width:1100px){
+  :root{--admin-sidebar:230px}
+  .content{padding:22px!important}
+  .topbar{padding:12px 20px!important}
+  .settings-grid{grid-template-columns:1fr 1fr!important}
+  .color-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .article-generator-grid{grid-template-columns:1fr!important}
+}
+
+/* mobile PWA */
+@media(max-width:760px){
+  :root{--admin-header:62px}
+  body{padding-bottom:env(safe-area-inset-bottom)}
+  .sidebar{
+    width:min(84vw,300px)!important;
+    min-width:0!important;
+    max-width:300px!important;
+    transform:translateX(-105%);
+    transition:transform .22s ease;
+    box-shadow:18px 0 40px rgba(9,58,138,.25);
+  }
+  .sidebar.open{transform:translateX(0)}
+  .main{
+    margin-left:0!important;
+    width:100%!important;
+  }
+  #menuBtn{
+    display:flex!important;
+    width:42px;height:42px;
+    flex:0 0 auto;
+    border-radius:10px;
+  }
+  .topbar{
+    padding:10px 12px!important;
+    gap:10px;
+  }
+  .topbar>div:first-child{min-width:0;flex:1}
+  .topbar h1{font-size:18px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #pageRange{font-size:10.5px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .top-actions{gap:6px}
+  .top-actions>a,.top-actions button:not(#menuBtn){font-size:11px!important}
+  .content{
+    padding:14px 10px 24px!important;
+  }
+  .panel,.article-admin-head,.gen-card{
+    border-radius:12px!important;
+  }
+  .panel{padding:14px!important}
+  .panel-head{align-items:flex-start}
+  .panel-head h2{font-size:16px!important}
+  .settings-grid,.gen-row{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+  .color-row{grid-template-columns:1fr 1fr!important;gap:10px!important}
+  .color-swatch{padding:10px!important;font-size:11px}
+  .color-swatch span{max-width:64px!important}
+  .article-admin-head{
+    padding:14px!important;
+    align-items:stretch!important;
+  }
+  .article-admin-head h2{font-size:16px!important}
+  .article-admin-head p{font-size:11.5px!important}
+  .article-generator-cta{width:100%!important}
+  .gen-card{padding:14px!important}
+  .gen-preview{min-height:330px!important}
+  .gen-output{min-height:auto!important}
+  .gen-meta-box{grid-template-columns:1fr!important}
+  .gen-actions{display:grid!important;grid-template-columns:1fr 1fr}
+  .gen-actions button:first-child{grid-column:1/-1}
+  .tabbar{display:flex!important}
+  .tabbar button{flex:0 0 auto}
+  .panel:has(table){
+    margin-left:0;
+    margin-right:0;
+    padding:0!important;
+    border-radius:12px;
+  }
+  .panel:has(table) .panel-head{padding:14px 14px 6px}
+  table{min-width:720px;font-size:12px!important}
+  th,td{padding:12px 10px!important}
+  .row-actions{white-space:nowrap}
+  .row-actions button{padding:7px 9px!important;font-size:11px!important}
+  .feature-row{gap:12px}
+  .feature-label{font-size:13px!important}
+  .feature-desc{font-size:11px!important}
+  .save-btn{
+    width:100%!important;
+    margin-top:6px;
+    position:sticky;
+    bottom:calc(8px + env(safe-area-inset-bottom));
+    z-index:35;
+    box-shadow:0 8px 24px rgba(184,15,36,.22);
+  }
+}
+
+/* very small phones */
+@media(max-width:420px){
+  .content{padding-left:8px!important;padding-right:8px!important}
+  .topbar{padding-left:8px!important;padding-right:8px!important}
+  .color-row{grid-template-columns:1fr!important}
+  .gen-actions{grid-template-columns:1fr!important}
+  .gen-actions button:first-child{grid-column:auto}
+  .kpi-grid,.stats-grid,.dash-grid{grid-template-columns:1fr 1fr!important}
+}
+
+.sidebar-overlay{display:none}
+@media(max-width:760px){
+  .sidebar-overlay{position:fixed;inset:0;background:rgba(15,23,42,.38);z-index:110;display:none}
+  .sidebar-overlay.show{display:block}
+}
 </style>
 <link rel="stylesheet" href="v2.css">
 </head>
@@ -595,7 +796,7 @@ function tabHTML(tab){
         <div class="settings-grid">
           <div class="field"><label>Fee Platform Gift Author (%)</label><input type="number" value="10" id="setFeeGift"></div>
           <div class="field"><label>Fee Platform Shop (%)</label><input type="number" value="5" id="setFeeShop"></div>
-          <div class="field"><label>Payment Gateway Aktif</label><input type="text" value="DOKU" id="setGateway"></div>
+          <div class="field"><label>Payment Gateway Aktif</label><input type="text" value="Midtrans" id="setGateway"></div>
           <div class="field"><label>Mode Gateway</label><input type="text" value="Sandbox" id="setGatewayMode"></div>
         </div>
       </div>
@@ -727,7 +928,7 @@ function switchTab(tab){
   document.getElementById("content").innerHTML = tabHTML(tab);
   if(tab==="dashboard" || tab==="statistik") drawChart();
   if(tab==="fitur") renderFeatureList();
-  document.getElementById("sidebar").classList.remove("open");
+  closeAdminSidebar();
 }
 
 function renderFeatureList(){
@@ -758,8 +959,15 @@ function saveSettings(){
 document.querySelectorAll(".sb-item[data-tab]").forEach(el=>{
   el.addEventListener("click", ()=>switchTab(el.dataset.tab));
 });
+function closeAdminSidebar(){
+  document.getElementById("sidebar")?.classList.remove("open");
+  document.getElementById("sidebarOverlay")?.classList.remove("show");
+}
 document.getElementById("menuBtn").addEventListener("click", ()=>{
-  document.getElementById("sidebar").classList.toggle("open");
+  const sb=document.getElementById("sidebar");
+  const open=!sb.classList.contains("open");
+  sb.classList.toggle("open",open);
+  document.getElementById("sidebarOverlay")?.classList.toggle("show",open);
 });
 function checkMobile(){
   document.getElementById("menuBtn").style.display = window.innerWidth<=760 ? "flex" : "none";
