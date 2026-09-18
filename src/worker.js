@@ -1,3 +1,24 @@
+const ADMIN_HOST = 'admin.purbalink.web.id';
+const PUBLIC_HOST = 'purbalink.web.id';
+
+function adminEmail(env) {
+  return String(env.ADMIN_EMAIL || 'amelianewsid@gmail.com').trim().toLowerCase();
+}
+
+function accessEmail(request) {
+  return String(request.headers.get('cf-access-authenticated-user-email') || '').trim().toLowerCase();
+}
+
+function forbiddenAdmin() {
+  return new Response('<!doctype html><html lang="id"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Akses Admin PURBALINK</title><body style="font-family:system-ui;background:#f5f8fc;color:#101828;display:grid;place-items:center;min-height:100vh;margin:0"><main style="max-width:520px;background:#fff;border:1px solid #dce6f5;border-radius:18px;padding:28px;box-shadow:0 16px 40px rgba(9,58,138,.08)"><h1 style="margin:0 0 10px;font-size:22px">Dashboard Admin terlindungi</h1><p style="line-height:1.6;color:#5b6574">Akses hanya tersedia melalui Cloudflare Access untuk akun admin yang diizinkan.</p></main></body></html>', { status: 403, headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow' } });
+}
+
+async function serveAsset(request, env, pathname) {
+  const u = new URL(request.url);
+  u.pathname = pathname;
+  return env.ASSETS.fetch(new Request(u.toString(), request));
+}
+
 const JSON_HEADERS = {
   'content-type': 'application/json; charset=utf-8',
   'cache-control': 'no-store',
@@ -257,21 +278,62 @@ async function verifyNotification(request, env) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const host = url.hostname.toLowerCase();
+    const isAdminHost = host === ADMIN_HOST;
+    const isPublicHost = host === PUBLIC_HOST || host.endsWith('.workers.dev');
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: { 'access-control-allow-origin': '*', 'access-control-methods': 'GET,POST,OPTIONS', 'access-control-allow-headers': 'content-type,authorization' } });
     }
 
     try {
+      // API routes remain available on the Worker regardless of public/admin hostname.
       if (url.pathname === '/api/jobs/jooble' && request.method === 'POST') return searchJooble(request, env);
       if (url.pathname === '/api/ai/article' && request.method === 'POST') return generateAIArticle(request, env);
       if (url.pathname === '/api/health') {
-        return json({ ok: true, app: 'PURBALINK', payment_gateway: 'Midtrans', mode: mode(env), midtrans_configured: Boolean(env.MIDTRANS_SERVER_KEY), ai: { openai:Boolean(env.OPENAI_API_KEY), gemini:Boolean(env.GEMINI_API_KEY), deepseek:Boolean(env.DEEPSEEK_API_KEY), groq:Boolean(env.GROQ_API_KEY), mistral:Boolean(env.MISTRAL_API_KEY), anthropic:Boolean(env.ANTHROPIC_API_KEY), openrouter:Boolean(env.OPENROUTER_API_KEY), together:Boolean(env.TOGETHER_API_KEY) } });
+        return json({ ok: true, app: 'PURBALINK', public_host: PUBLIC_HOST, admin_host: ADMIN_HOST, payment_gateway: 'Midtrans', mode: mode(env), midtrans_configured: Boolean(env.MIDTRANS_SERVER_KEY), ai: { openai:Boolean(env.OPENAI_API_KEY), gemini:Boolean(env.GEMINI_API_KEY), deepseek:Boolean(env.DEEPSEEK_API_KEY), groq:Boolean(env.GROQ_API_KEY), mistral:Boolean(env.MISTRAL_API_KEY), anthropic:Boolean(env.ANTHROPIC_API_KEY), openrouter:Boolean(env.OPENROUTER_API_KEY), together:Boolean(env.TOGETHER_API_KEY) } });
       }
       if (url.pathname === '/api/midtrans/transaction' && request.method === 'POST') return createTransaction(request, env);
       if (url.pathname === '/api/midtrans/status' && request.method === 'GET') return getStatus(request, env);
       if (url.pathname === '/api/midtrans/notification' && request.method === 'POST') return verifyNotification(request, env);
-      return json({ error: 'API route tidak ditemukan.' }, 404);
+
+      // Dedicated admin subdomain. Access is denied unless Cloudflare Access
+      // authenticates the explicitly allowed admin email.
+      if (isAdminHost) {
+        const email = accessEmail(request);
+        if (!email || email !== adminEmail(env)) return forbiddenAdmin();
+
+        if (url.pathname === '/' || url.pathname === '/index.html' || url.pathname === '/admin-dashboard.html') {
+          const res = await serveAsset(request, env, '/admin-dashboard.html');
+          const headers = new Headers(res.headers);
+          headers.set('cache-control', 'no-store');
+          headers.set('x-robots-tag', 'noindex, nofollow, noarchive');
+          return new Response(res.body, { status: res.status, statusText: res.statusText, headers });
+        }
+
+        // Allow only assets required by the admin application.
+        const allowed = [
+          '/admin-v5.js','/admin-v5.css','/v2.js','/v2.css','/manifest.json',
+          '/icon-192.png','/icon-512.png','/brand-icon-transparent.png','/logo-purbalink.png'
+        ];
+        if (allowed.includes(url.pathname) || url.pathname.startsWith('/sticker/')) {
+          const res = await env.ASSETS.fetch(request);
+          const headers = new Headers(res.headers);
+          headers.set('x-robots-tag', 'noindex, nofollow, noarchive');
+          return new Response(res.body, { status: res.status, statusText: res.statusText, headers });
+        }
+        return new Response('Not Found', { status: 404, headers: { 'x-robots-tag': 'noindex, nofollow' } });
+      }
+
+      // Never expose the admin HTML on the public site.
+      if (isPublicHost && (url.pathname === '/admin-dashboard.html' || url.pathname.startsWith('/admin/'))) {
+        return new Response('Not Found', { status: 404, headers: { 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow' } });
+      }
+
+      // Public static application.
+      if (isPublicHost) return env.ASSETS.fetch(request);
+
+      return new Response('Not Found', { status: 404 });
     } catch (error) {
       return json({ error: 'Terjadi kesalahan pada server PURBALINK.', detail: String(error?.message || error) }, 500);
     }
