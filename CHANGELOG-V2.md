@@ -1,10 +1,15 @@
+# PURBALINK V2.3.0
+
+- Redesigned the homepage with a clean mobile editorial layout inspired by leading Indonesian news portals while retaining PURBALINK branding.
+- Added large feature story, compact two-column headlines, Terpopuler card, video rail, Berita Pilihan, News, Foto Pilihan, ShowBiz, and a light information footer.
+- Added a compact white masthead with profile/menu actions and horizontally scrollable Berita Utama / Terkini / Populer / Rekomendasi navigation.
+- Reworked mobile article comments to resemble familiar Facebook interaction patterns: reaction/share summary, compact avatars, threaded replies, reaction count, like/dislike controls, hidden-reply notice, and sticky mobile composer.
+- Existing reaction GIFs, stickers, gift, bookmark, share, Loker, Shop, Video, Profile, Jooble, and Midtrans logic remain available.
+- Bumped the PWA cache to force the new layout to replace older cached assets.
+
 # PURBALINK V2.2.0
 
-- Unified public masthead across Loker, Shop, Video, Profile, Login, and Register to match the original PURBALINK home header.
-- Refined mobile home proportions: smaller hero typography, balanced spacing, responsive two-column cards, and reduced overflow.
-- Rebuilt Loker with a JobStreet-inspired search/list/detail layout while retaining PURBALINK branding.
-- Added Cloudflare Worker proxy for the official Jooble REST API using `JOOBLE_API_KEY` secret.
-- Jooble results are cached in the browser session for 30 minutes to reduce API usage; local PURBALINK jobs remain as fallback.
-- Rebuilt Shop with a Tokopedia-inspired marketplace structure: search-first header, promo hero, shortcuts, category chips, flash sale rail, compact two-column mobile product cards, richer product detail, seller block, cart and checkout.
-- Midtrans checkout remains active.
-- Standardized bottom navigation and responsive spacing across public pages.
+- Unified public masthead across Loker, Shop, Video, Profile, Login, and Register.
+- Rebuilt Loker with a JobStreet-inspired search/list/detail layout.
+- Added secure Cloudflare Worker proxy for Jooble.
+- Rebuilt Shop with a Tokopedia-inspired marketplace structure.
