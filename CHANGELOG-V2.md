@@ -1,5 +1,18 @@
 # PURBALINK V2.7.0
 
+- Replaced text-heavy admin quick actions with a precise 5-column icon grid for Artikel, Lowongan, Produk, Pesanan, Video, Komentar, Sticker, Iklan, Pengaturan, and Integrasi.
+- Admin icon grid remains five compact columns on desktop and becomes horizontally scrollable/compact on narrow screens.
+- Disabled all public ad rendering, including anchor ads, inside admin-dashboard.html.
+- Added Sticker bulk upload for up to 50 image files per batch.
+- Bulk sticker upload creates a named package and automatically generates sticker labels from filenames.
+- Added automatic sticker categories from filename keywords: Lucu, Cinta, Marah, Sedih, Kerja, Anak, Spiritual, Komentar, and Umum.
+- Admin can choose one custom category for the entire batch and can edit sticker name, package, and category after upload.
+- Local bulk sticker binary files are stored in IndexedDB instead of localStorage to reduce memory/storage pressure; metadata remains in the sticker library.
+- Sticker library is grouped by package with category counts and responsive card grids.
+- Bumped PWA cache to V2.7.
+
+# PURBALINK V2.7.0
+
 - Replaced oversized dashboard quick-action buttons with a compact 5-column icon launcher.
 - Added 10 admin shortcuts: Article, Jobs, Product, Orders, Video, Comments, Sticker, Ads, Users, Settings.
 - Disabled all frontend ad rendering on admin-dashboard.html, including anchor/sticky ads.
