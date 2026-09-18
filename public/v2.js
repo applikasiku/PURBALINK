@@ -211,20 +211,88 @@
     }
   }
 
-  function initLoker(){
-    if(typeof jobs==='undefined')return;
-    jobs.splice(0,jobs.length,...db.jobs.filter(j=>j.status!=='Ditutup'));
-    let saved=new Set(getLocal(`pv2_saved_jobs_${userKey()}`,[]));
-    let filter='Semua',query='';
-    window.renderList=function(){let list=jobs.filter(j=>!query||`${j.title} ${j.company} ${j.loc}`.toLowerCase().includes(query));if(filter==='Full Time'||filter==='Part Time'||filter==='Magang'||filter==='WFH')list=list.filter(j=>j.type===filter);if(filter==='Terdekat')list=[...list].sort((a,b)=>(a.loc.includes('Kota')?-1:1)-(b.loc.includes('Kota')?-1:1));if(filter==='Gaji Tertinggi')list=[...list].sort((a,b)=>String(b.salary).localeCompare(String(a.salary)));document.getElementById('resultCount').textContent=`${list.length} lowongan ditemukan`;document.getElementById('jobList').innerHTML=list.length?list.map(j=>`<div class="job-card" onclick="showDetail(${j.id})"><div class="job-top"><div class="job-logo" style="background:${j.color||'#0B5ED7'};">${initials(j.company)}</div><div class="job-info"><div class="job-title">${esc(j.title)}${j.posted==='Baru'?'<span class="badge-new">BARU</span>':''}</div><div class="job-company">${esc(j.company)} · ${esc(j.loc)}</div></div></div><div class="job-meta"><span class="meta-tag">💼 ${esc(j.type)}</span><span class="meta-tag">📍 ${esc(j.loc)}</span></div><div class="job-bottom"><span class="job-salary">${esc(j.salary)}</span><span class="job-time">${esc(j.posted||'')}</span></div></div>`).join(''):`<div class="pv2-search-empty">Lowongan tidak ditemukan.</div>`};
-    const si=document.querySelector('.search-bar input');const sb=document.querySelector('.search-bar button');if(si){const run=()=>{query=si.value.trim().toLowerCase();renderList()};si.addEventListener('input',run);si.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();run()}});sb?.addEventListener('click',run)}
-    document.querySelectorAll('.filters .chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.filters .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');filter=c.textContent.trim();renderList()}));
-    window.saveJob=function(id,btn){saved.has(id)?saved.delete(id):saved.add(id);setLocal(`pv2_saved_jobs_${userKey()}`,[...saved]);btn?.classList.toggle('saved',saved.has(id));toast(saved.has(id)?'Lowongan disimpan':'Lowongan dihapus dari simpanan')};
-    window.applyJob=function(id){if(!requireLogin())return;const j=db.jobs.find(x=>String(x.id)===String(id));const u=currentUser();const exists=db.applications.find(a=>a.jobId==id&&a.userEmail===u.email);if(exists){toast('Anda sudah melamar posisi ini.');return}modal(`Lamar — ${j.title}`,`<form id="pv2Apply"><div class="pv2-grid"><div class="pv2-field"><label>Nama lengkap</label><input id="apName" required value="${esc(u.name||'')}"></div><div class="pv2-field"><label>Email</label><input id="apEmail" type="email" required value="${esc(u.email||'')}"></div><div class="pv2-field"><label>No. WhatsApp</label><input id="apPhone" required placeholder="08xxxxxxxxxx"></div><div class="pv2-field"><label>Link CV / Portfolio</label><input id="apCv" type="url" placeholder="https://..."></div><div class="pv2-field full"><label>Pesan untuk perekrut</label><textarea id="apNote" placeholder="Ceritakan singkat pengalaman Anda"></textarea></div></div><div class="pv2-actions"><button type="button" class="pv2-btn ghost" onclick="PV2.closeModal()">Batal</button><button class="pv2-btn red">Kirim Lamaran</button></div></form>`,m=>m.querySelector('form').onsubmit=e=>{e.preventDefault();db.applications.unshift({id:uid('app'),jobId:id,jobTitle:j.title,company:j.company,userEmail:u.email,name:m.querySelector('#apName').value.trim(),email:m.querySelector('#apEmail').value.trim(),phone:m.querySelector('#apPhone').value.trim(),cv:m.querySelector('#apCv').value.trim(),note:m.querySelector('#apNote').value.trim(),status:'Menunggu',date:new Date().toLocaleDateString('id-ID')});saveDb();closeModal();toast('Lamaran berhasil dikirim');showDetail(id)})};
-    const oldShow=window.showDetail;window.showDetail=function(id){oldShow(id);setTimeout(()=>{const b=document.querySelector('.btn-save');if(b)b.classList.toggle('saved',saved.has(id));const u=currentUser();const applied=u&&db.applications.some(a=>a.jobId==id&&a.userEmail===u.email);const a=document.querySelector('.btn-apply');if(a&&applied){a.textContent='✓ Lamaran Terkirim';a.classList.add('applied')}},0)};
-    renderList();
-  }
 
+  function initLoker(){
+    const keyword=document.getElementById('jobKeyword');
+    const locationInput=document.getElementById('jobLocation');
+    const searchBtn=document.getElementById('jobSearchBtn');
+    const listEl=document.getElementById('jobList');
+    const countEl=document.getElementById('resultCount');
+    const sourceEl=document.getElementById('jobSourceNote');
+    if(!listEl)return;
+    let localJobs=db.jobs.filter(j=>j.status!=='Ditutup').map(j=>({...j,origin:'PURBALINK',external:false}));
+    let externalJobs=[];
+    let filter='Semua';
+    let saved=new Set(getLocal(`pv2_saved_jobs_${userKey()}`,[]));
+    function jobId(j){return String(j.id)}
+    function jobLogo(j){return initials(j.company||j.source||'JOB')}
+    function jobCard(j){
+      const source=j.external?'<span class="job-source">Jooble</span>':'<span class="job-source local">PURBALINK</span>';
+      const salary=j.salary?esc(j.salary):'Gaji tidak dicantumkan';
+      return `<article class="job-card" data-job-id="${esc(jobId(j))}">
+        <div class="job-top"><div class="job-logo">${jobLogo(j)}</div><div class="job-info"><div class="job-title">${esc(j.title)} ${source}</div><div class="job-company">${esc(j.company||j.source||'Perusahaan')}</div></div><button class="job-save-mini ${saved.has(jobId(j))?'saved':''}" data-save-job="${esc(jobId(j))}" aria-label="Simpan">${saved.has(jobId(j))?'♥':'♡'}</button></div>
+        <div class="job-location">⌖ ${esc(j.loc||'Indonesia')}</div>
+        <div class="job-salary">${salary}</div>
+        ${j.snippet?`<p class="job-snippet">${esc(j.snippet)}</p>`:''}
+        <div class="job-footer"><span>${esc(j.type||'Lowongan kerja')}</span><span>${esc(j.posted||'Terbaru')}</span></div>
+      </article>`;
+    }
+    function allJobs(){return [...externalJobs,...localJobs]}
+    function filteredJobs(){
+      let arr=allJobs();
+      if(filter==='Full Time'||filter==='Part Time'||filter==='Magang'||filter==='WFH')arr=arr.filter(j=>String(j.type||'').toLowerCase().includes(filter.toLowerCase()));
+      if(filter==='Terbaru')arr=[...arr].sort((a,b)=>String(b.updated||b.posted||'').localeCompare(String(a.updated||a.posted||'')));
+      return arr;
+    }
+    function render(){
+      const arr=filteredJobs();
+      countEl.textContent=`${arr.length} lowongan ditemukan`;
+      listEl.innerHTML=arr.length?arr.map(jobCard).join(''):'<div class="pv2-search-empty">Lowongan tidak ditemukan. Coba kata kunci atau lokasi lain.</div>';
+      listEl.querySelectorAll('.job-card').forEach(card=>card.addEventListener('click',e=>{if(e.target.closest('[data-save-job]'))return;openJob(card.dataset.jobId)}));
+      listEl.querySelectorAll('[data-save-job]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();toggleSave(btn.dataset.saveJob,btn)}));
+    }
+    function toggleSave(id,btn){saved.has(id)?saved.delete(id):saved.add(id);setLocal(`pv2_saved_jobs_${userKey()}`,[...saved]);btn?.classList.toggle('saved',saved.has(id));if(btn)btn.textContent=saved.has(id)?'♥':'♡';toast(saved.has(id)?'Lowongan disimpan':'Lowongan dihapus dari simpanan')}
+    function getJob(id){return allJobs().find(j=>jobId(j)===String(id))}
+    function openJob(id){
+      const j=getJob(id);if(!j)return;
+      document.getElementById('listView').style.display='none';document.getElementById('detailView').style.display='block';window.scrollTo(0,0);
+      const detail=document.getElementById('jdCard');
+      const externalAction=j.external?`<a class="btn-apply" href="${esc(j.link||'#')}" target="_blank" rel="noopener">Lihat & Lamar di Sumber</a>`:`<button class="btn-apply" id="localApplyBtn">Lamar Sekarang</button>`;
+      detail.innerHTML=`<div class="jd-hero"><div class="jd-logo">${jobLogo(j)}</div><div><div class="jd-title">${esc(j.title)}</div><div class="jd-company">${esc(j.company||j.source||'Perusahaan')}</div><div class="jd-location">⌖ ${esc(j.loc||'Indonesia')}</div></div></div>
+        <div class="jd-chip-row"><span>${esc(j.type||'Lowongan kerja')}</span><span>${esc(j.salary||'Gaji tidak dicantumkan')}</span>${j.external?'<span>Sumber: Jooble</span>':'<span>Lowongan PURBALINK</span>'}</div>
+        <div class="jd-actions">${externalAction}<button class="btn-save ${saved.has(jobId(j))?'saved':''}" id="detailSave">${saved.has(jobId(j))?'♥':'♡'}</button></div>
+        <section class="jd-section"><h3>Deskripsi pekerjaan</h3><p>${esc(j.desc||j.snippet||'Buka sumber lowongan untuk melihat deskripsi lengkap dan persyaratan terbaru.')}</p></section>
+        ${Array.isArray(j.req)&&j.req.length?`<section class="jd-section"><h3>Kualifikasi</h3><ul>${j.req.map(r=>`<li>${esc(r)}</li>`).join('')}</ul></section>`:''}
+        <section class="jd-section"><h3>Tentang lowongan</h3><p>${esc(j.about||(`Lowongan dari ${j.company||j.source||'perusahaan'} di ${j.loc||'Indonesia'}.`))}</p></section>`;
+      document.getElementById('detailSave').onclick=()=>toggleSave(jobId(j),document.getElementById('detailSave'));
+      if(!j.external){const apply=document.getElementById('localApplyBtn');const u=currentUser();const applied=u&&db.applications.some(a=>a.jobId==j.id&&a.userEmail===u.email);if(applied){apply.textContent='✓ Lamaran Terkirim';apply.classList.add('applied')}else apply.onclick=()=>applyLocal(j)}
+    }
+    function applyLocal(j){
+      if(!requireLogin())return;const u=currentUser();
+      modal(`Lamar — ${j.title}`,`<form id="pv2Apply"><div class="pv2-grid"><div class="pv2-field"><label>Nama lengkap</label><input id="apName" required value="${esc(u.name||'')}"></div><div class="pv2-field"><label>Email</label><input id="apEmail" type="email" required value="${esc(u.email||'')}"></div><div class="pv2-field"><label>No. WhatsApp</label><input id="apPhone" required placeholder="08xxxxxxxxxx"></div><div class="pv2-field"><label>Link CV / Portfolio</label><input id="apCv" type="url" placeholder="https://..."></div><div class="pv2-field full"><label>Pesan untuk perekrut</label><textarea id="apNote"></textarea></div></div><div class="pv2-actions"><button type="button" class="pv2-btn ghost" onclick="PV2.closeModal()">Batal</button><button class="pv2-btn red">Kirim Lamaran</button></div></form>`,m=>m.querySelector('form').onsubmit=e=>{e.preventDefault();db.applications.unshift({id:uid('app'),jobId:j.id,jobTitle:j.title,company:j.company,userEmail:u.email,name:m.querySelector('#apName').value.trim(),email:m.querySelector('#apEmail').value.trim(),phone:m.querySelector('#apPhone').value.trim(),cv:m.querySelector('#apCv').value.trim(),note:m.querySelector('#apNOte').value.trim(),status:'Menunggu',date:new Date().toLocaleDateString('id-ID')});saveDb();closeModal();toast('Lamaran berhasil dikirim');openJob(j.id)})
+    }
+    async function fetchJooble(force=false){
+      const q=(keyword?.value||'').trim()||'Lowongan';
+      const loc=(locationInput?.value||'').trim()||'Purbalingga';
+      const cacheKey='pv2_jooble_cache_'+q.toLowerCase()+'_'+loc.toLowerCase();
+      if(!force){try{const c=JSON.parse(sessionStorage.getItem(cacheKey)||'null');if(c&&Date.now()-c.ts<1800000){externalJobs=c.jobs||[];sourceEl.textContent='Lowongan live dari Jooble ´ cache 30 menit';render();return}}catch(_){}}
+      if(searchBtn)searchBtn.disabled=true;sourceEl.textContent='Memuat lowongan live dari Jooble…';
+      try{
+        const res=await fetch('/api/jobs/jooble',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({keywords:q,location:loc,page:1})});
+        const data=await res.json().catch(()=>({}));
+        if(!res.ok||data.configured===false)throw new Error(data.error||'Jooble API belum dikonfigurasi');
+        externalJobs=(data.jobs||[]).map((j,i)=>({id:'jooble-'+(j.id||i)+'-'+Date.now(),title:j.title||'Lowongan kerja',company:j.company||j.source||'Perusahan',loc:j.location||loc,salary:j.salary||'',type:j.type||'Lowongan Jooble',posted:j.updated||'Terbaru',updated:j.updated||'',snippet:(j.snippet||'').replace(/<[^>]+>/g,' '),link:j.link||'#',source:j.source||'Jooble',origin:'Jooble',external:true}));
+        sessionStorage.setItem(cacheKey,JSON.stringify({ts:Date.now(),jobs:externalJobs}));
+        sourceEl.textContent=`${externalJobs.length} lowongan live dari Jooble + ${localJobs.length} lowongan lokal PURBALINK`;
+      }catch(e){externalJobs=[];sourceEl.textContent='Menampilkan lowongan lokal PURBALINK. '+e.message}
+      if(searchBtn)searchBtn.disabled=false;render();
+    }
+    window.showList=function(){document.getElementById('detailView').style.display='none';document.getElementById('listView').style.display='block';window.scrollTo(0,0)};
+    document.querySelectorAll('.job-filter-chip').forEach(ch=>ch.onclick=()=>{document.querySelectorAll('.job-filter-chip').forEach(x=>x.classList.remove('active'));ch.classList.add('active');filter=ch.dataset.filter||'Semua';render()});
+    if(searchBtn)searchBtn.onclick=()=>fetchJooble(true);
+    [keyword,locationInput].forEach(inp=>inp&&inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();fetchJooble(true)}}));
+    render();fetchJooble(false);
+  }
   function initShop(){
     if(typeof products==='undefined')return;
     products.splice(0,products.length,...db.products.filter(p=>p.status==='Aktif'));
