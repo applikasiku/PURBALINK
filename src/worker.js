@@ -133,7 +133,7 @@ async function searchJooble(request, env) {
   const keywords = cleanText(body.keywords || 'lowongan', 100);
   const location = cleanText(body.location || 'Purbalingga', 100);
   const page = Math.max(1, Math.min(20, Math.round(Number(body.page) || 1)));
-  const res = await fetch(\`https://id.jooble.org/api/\${encodeURIComponent(env.JOOBLE_API_KEY)}\`, {
+  const res = await fetch(`https://id.jooble.org/api/${encodeURIComponent(env.JOOBLE_API_KEY)}`, {
     method: 'POST',
     headers: { accept: 'application/json', 'content-type': 'application/json' },
     body: JSON.stringify({ keywords, location, page, ResultOnPage: 20 })
