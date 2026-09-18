@@ -1,6 +1,7 @@
-PURBALINK V2.2.0 — Responsive UI + Jooble Jobs + Midtrans
+PURBALINK V2.3.0 — Editorial News UI + Facebook-style Comments
 Build date: 2026-09-18
 Domain target: https://purbalink.web.id
+Cloudflare Worker: purbalink
 Jobs API: Jooble via Cloudflare Worker
 Payment gateway: Midtrans Snap
 Brand: Blue #0B5ED7 + Red #E3062C
