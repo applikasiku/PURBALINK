@@ -9,11 +9,16 @@
   },
   "vars": {
     "MIDTRANS_MODE": "sandbox",
+    "ADMIN_EMAIL": "amelianewsid@gmail.com",
     "AI_PROVIDER_ORDER": "openrouter,groq,gemini,deepseek,mistral,together,openai,anthropic"
   },
+  "routes": [
+    { "pattern": "purbalink.web.id", "custom_domain": true },
+    { "pattern": "admin.purbalink.web.id", "custom_domain": true }
+  ],
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/*"]
+    "run_worker_first": ["/*"]
   }
 }
