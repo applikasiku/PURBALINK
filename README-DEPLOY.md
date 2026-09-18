@@ -1,17 +1,34 @@
-# PURBALINK V2 — Active Features
+# PURBALINK V2.1 — Midtrans Payment Gateway
 
 Target domain: https://purbalink.web.id
 
-## Deploy via GitHub + Cloudflare Workers Static Assets
+## Deploy via GitHub + Cloudflare Workers
 Cloudflare build settings:
 - Production branch: `main`
 - Build command: none
 - Deploy command: `npx wrangler deploy`
 - Root directory: `/`
 
-The repository root must contain `wrangler.jsonc` and the `public/` folder.
+The repository root contains `wrangler.jsonc`, `src/worker.js`, and the `public/` folder. Static assets are served by Cloudflare; `/api/*` is handled by the Worker.
 
-## V2 feature mode
-This package activates the UI flows using browser persistence (localStorage): registration/login fallback, search/category filtering, comments/reactions/bookmarks, loker applications, shop cart/checkout/order history, video interactions, profile editing, admin CRUD, feature flags, notifications test, and JSON backup/restore.
+## Midtrans setup
+The site uses Midtrans Snap redirect flow for Shop checkout and Gift Author. The Worker creates Snap transactions on the server so the Midtrans Server Key never appears in frontend code.
 
-For public multi-user production, connect a secure backend/database before relying on admin/auth/payment data. Google Login requires a valid Google Client ID + server-side token verification. DOKU requires server-side payment endpoints and webhook verification. Web Push across devices requires subscription storage + a push backend.
+Required Cloudflare secret:
+- `MIDTRANS_SERVER_KEY` = Midtrans Server Key
+
+Default mode in `wrangler.jsonc`:
+- `MIDTRANS_MODE` = `sandbox`
+
+For production, change `MIDTRANS_MODE` to `production` and configure the production Server Key as the Cloudflare secret.
+
+Recommended Midtrans Payment Notification URL:
+`https://purbalink.web.id/api/midtrans/notification`
+
+Health check:
+`https://purbalink.web.id/api/health`
+
+Payment status:
+`GET /api/midtrans/status?order_id=...`
+
+Important: Shop/order/auth data is still browser-persisted in V2.1. For secure multi-user fulfillment and admin reconciliation, move orders/users/products to a server-side database in the next production backend release.

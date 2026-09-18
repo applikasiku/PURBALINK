@@ -1,8 +1,14 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "purbalink",
+  "main": "src/worker.js",
   "compatibility_date": "2026-09-18",
+  "vars": {
+    "MIDTRANS_MODE": "sandbox"
+  },
   "assets": {
-    "directory": "./public"
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
   }
 }

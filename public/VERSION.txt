@@ -1,4 +1,5 @@
-PURBALINK V2.0.0 — Active Features
+PURBALINK V2.1.0 — Midtrans Payment Gateway
 Build date: 2026-09-18
 Domain target: https://purbalink.web.id
+Payment gateway: Midtrans Snap (Sandbox default)
 Brand: Blue #0B5ED7 + Red #E3062C
