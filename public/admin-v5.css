@@ -90,3 +90,28 @@
 @media(max-width:390px){
   .admin-v5-launcher{gap:5px}.admin-v5-launcher button{border-radius:11px}.admin-v5-launcher span{font-size:20px}.admin-v5-launcher small{font-size:7.5px}
 }
+
+/* ===== ADMIN V5.2 icon dashboard + sticker packages ===== */
+.admin-icon-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:0 0 18px}
+.admin-icon-grid button{min-height:92px;border:1px solid #DCE6F5;background:#fff;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#344054;box-shadow:0 1px 2px rgba(16,24,40,.03);transition:.16s ease}
+.admin-icon-grid button:hover{border-color:#0B5ED7;color:#0B5ED7;transform:translateY(-1px);box-shadow:0 6px 16px rgba(11,94,215,.08)}
+.admin-icon-grid span{font-size:27px;line-height:1}
+.admin-icon-grid b{font-size:11px;line-height:1.2}
+.sticker-package{padding:4px 0 18px;border-top:1px solid #EAECF0}
+.sticker-package:first-of-type{border-top:0}
+.sticker-package-head{display:flex;align-items:center;justify-content:space-between;padding:14px 0 10px}
+.sticker-package-head h3{font-size:14px;margin:0 0 3px}
+.sticker-package-head span{font-size:10.5px;color:#667085}
+.admin-v5-media-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.admin-v5-media-card>div{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.admin-v5-media-card button{padding:6px 4px}
+@media(max-width:1100px){
+ .admin-icon-grid{grid-template-columns:repeat(5,minmax(100px,1fr));overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+ .admin-v5-media-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:760px){
+ .admin-icon-grid{grid-template-columns:repeat(5,72px);gap:8px;overflow-x:auto;margin-left:-2px;margin-right:-2px}
+ .admin-icon-grid button{min-height:76px;border-radius:12px;padding:8px 4px}
+ .admin-icon-grid span{font-size:23px}.admin-icon-grid b{font-size:9.5px}
+ .admin-v5-media-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
