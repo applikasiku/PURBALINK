@@ -1,8 +1,10 @@
-PURBALINK V2.5.0 — Functional Admin Dashboard V5
+PURBALINK V2.6.0 — Ads Monetization + Admin Precision
 Build date: 2026-09-19
 Domain target: https://purbalink.web.id
-Admin: CRUD Article, Loker, Shop, Video, Users, Moderation, Sticker/GIF, Settings, Integrations
+Admin: Functional V5.1 + Ads/AdSense Manager
+Ad slots: top header, header banner, native, article top/middle/bottom, sidebar, footer, anchor, reward
+Ad providers: Direct / Mandiri + Google AdSense
+Performance: lazy ad loading, async AdSense, CLS-safe containers, responsive admin
 Cloudflare Worker: purbalink
 Jobs API: Jooble via Cloudflare Worker
 Payment gateway: Midtrans Snap
-Brand: Blue #0B5ED7 + Red #E3062C
