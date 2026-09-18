@@ -1,7 +1,7 @@
-PURBALINK V2.4.0 — Article Actions + Rich Comments + Recommendations
+PURBALINK V2.6.0 — Responsive Admin PWA
 Build date: 2026-09-18
 Domain target: https://purbalink.web.id
-Cloudflare Worker: purbalink
+Admin: responsive PWA dashboard + AI Article Generator
 Jobs API: Jooble via Cloudflare Worker
 Payment gateway: Midtrans Snap
 Brand: Blue #0B5ED7 + Red #E3062C
