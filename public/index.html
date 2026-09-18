@@ -597,7 +597,8 @@ let bookmarked = false;
 let giftAmount = 10000;
 
 /* ---------- init ---------- */
-document.getElementById("todayDate").textContent = new Date().toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const todayDateEl = document.getElementById("todayDate");
+if(todayDateEl) todayDateEl.textContent = new Date().toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 
 function renderHome(){
   const grid=document.getElementById("newsGrid");
