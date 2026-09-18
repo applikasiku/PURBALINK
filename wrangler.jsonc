@@ -8,7 +8,8 @@
     "watch_dir": ["sticker", "scripts"]
   },
   "vars": {
-    "MIDTRANS_MODE": "sandbox"
+    "MIDTRANS_MODE": "sandbox",
+    "AI_PROVIDER_ORDER": "openrouter,groq,gemini,deepseek,mistral,together,openai,anthropic"
   },
   "assets": {
     "directory": "./public",
