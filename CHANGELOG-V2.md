@@ -1,3 +1,14 @@
+# PURBALINK V2.4.0
+
+- Added matching action icon bars below the author and below the article body: Add on Google, reaction, gift, share, comment, and bookmark.
+- Added article tags and hashtags above the lower action bar.
+- Removed separate thumbs-up / thumbs-down comment buttons; reactions remain available through the reaction picker.
+- Added WhatsApp-style emoji grid, Sticker tab, and GIF tab for both main comments and replies.
+- Reply composer now supports emoji, sticker, GIF, text, and sends directly into the thread.
+- Added 2-column recommendation sections under comments for Berita, Loker, and Shop.
+- Kept existing reaction GIF assets, gifts, sharing, bookmarks, Jooble jobs, Shop, and Midtrans flows.
+- Bumped PWA cache for immediate layout refresh.
+
 # PURBALINK V2.3.0
 
 - Redesigned the homepage with a clean mobile editorial layout inspired by leading Indonesian news portals while retaining PURBALINK branding.
