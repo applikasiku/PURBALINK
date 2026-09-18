@@ -163,6 +163,72 @@ function balancesPage(){var sums={};(D().gifts||[]).forEach(function(g){var k=g.
 function withdrawalsPage(){var r='';A.withdrawals.forEach(function(w){r+='<tr><td>'+E(w.name)+'</td><td>'+RP(w.amount)+'</td><td>'+E(w.date)+'</td><td><span class="status '+SC(w.status)+'">'+E(w.status)+'</span></td><td class="row-actions"><button onclick="AdminV5.processWithdrawal(\''+w.id+'\')">'+(w.status==='Menunggu'?'Proses':'Detail')+'</button></td></tr>'});return table('Withdrawal',['Penulis','Nominal','Tanggal','Status','Aksi'],r)}
 function processWithdrawal(id){var w=A.withdrawals.find(function(x){return x.id===id});if(!w)return;if(w.status!=='Menunggu'){toast('Withdrawal sudah diproses');return}confirmA('Tandai withdrawal '+RP(w.amount)+' sebagai selesai?',function(){w.status='Selesai';SA();toast('Withdrawal selesai');refresh('withdrawal')})}
 
+
+function cleanStickerName(name){return String(name||'Sticker').replace(/\.[a-z0-9]+$/i,'').replace(/[_-]+/g,' ').replace(/\s+/g,' ').trim()}
+function titleStickerName(v){return String(v||'').replace(/\b\w/g,function(c){return c.toUpperCase()})}
+function commonStickerPrefix(files){
+ var names=[].slice.call(files||[]).map(function(f){return cleanStickerName(f.name).replace(/\d+$/,'').trim()}).filter(Boolean);
+ if(!names.length)return 'Paket Sticker '+new Date().toLocaleDateString('id-ID');
+ var words=names[0].split(' '),out=[];
+ for(var i=0;i<words.length;i++){if(names.every(function(n){return (n.toLowerCase().split(' ')[i]||'')===words[i].toLowerCase()}))out.push(words[i]);else break}
+ var p=out.join(' ').trim();return titleStickerName(p||('Paket Sticker '+new Date().toLocaleDateString('id-ID')))
+}
+async function compressStickerFile(file){
+ if(file.type==='image/gif')return await new Promise(function(resolve,reject){var r=new FileReader();r.onload=function(){resolve(r.result)};r.onerror=reject;r.readAsDataURL(file)});
+ try{
+  var img=await createImageBitmap(file),max=360,scale=Math.min(1,max/Math.max(img.width,img.height)),w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale));
+  var canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);
+  return canvas.toDataURL('image/webp',.72)
+ }catch(e){
+  return await new Promise(function(resolve,reject){var r=new FileReader();r.onload=function(){resolve(r.result)};r.onerror=reject;r.readAsDataURL(file)})
+ }
+}
+function stickerPackages(){
+ var map={};A.stickers.forEach(function(st){var p=st.package||'Umum';if(!map[p])map[p]={name:p,category:st.category||p,count:0,active:0};map[p].count++;if(st.active)map[p].active++});return Object.values(map)
+}
+function openBulkStickerUpload(){
+ openM('Bulk Upload Sticker (maks. 50)','<form id="bulkStickerForm"><div class="admin-v5-form">'+
+ '<label class="full">Pilih Sticker<input id="bulkStickerFiles" type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple required><span class="admin-v5-help">PNG, JPG, WEBP, GIF. Maksimal 50 file sekali upload.</span></label>'+
+ '<label>Nama Paket<input id="bulkStickerPackage" placeholder="Otomatis dari nama file"></label>'+
+ '<label>Kategori<input id="bulkStickerCategory" placeholder="Otomatis mengikuti paket"></label>'+
+ '<label class="full">Prefix Label<input id="bulkStickerPrefix" placeholder="Opsional"></label>'+
+ '<div class="full admin-v5-upload-summary" id="bulkStickerSummary">Belum ada file dipilih.</div>'+
+ '</div><div class="admin-v5-actions"><button type="button" class="a-btn ghost" data-close>Batal</button><button class="a-btn primary" id="bulkUploadBtn">Upload Paket</button></div></form>',function(m){
+   var inp=m.querySelector('#bulkStickerFiles'),pkg=m.querySelector('#bulkStickerPackage'),cat=m.querySelector('#bulkStickerCategory'),sum=m.querySelector('#bulkStickerSummary'),form=m.querySelector('#bulkStickerForm');
+   inp.onchange=function(){
+    var files=[].slice.call(inp.files||[]);
+    if(files.length>50){toast('Maksimal 50 sticker per paket','error');inp.value='';sum.textContent='Pilih maksimal 50 file.';return}
+    var auto=commonStickerPrefix(files);if(!pkg.value)pkg.value=auto;if(!cat.value)cat.value=auto;
+    sum.textContent=files.length+' sticker dipilih · '+Math.round(files.reduce(function(n,f){return n+f.size},0)/1024)+' KB'
+   };
+   pkg.oninput=function(){if(!cat.dataset.edited)cat.value=pkg.value};cat.oninput=function(){cat.dataset.edited='1'};
+   form.onsubmit=async function(e){
+    e.preventDefault();var files=[].slice.call(inp.files||[]);if(!files.length)return toast('Pilih sticker terlebih dahulu','warn');if(files.length>50)return toast('Maksimal 50 sticker','error');
+    var btn=m.querySelector('#bulkUploadBtn'),packageName=(pkg.value||commonStickerPrefix(files)).trim(),category=(cat.value||packageName).trim(),prefix=m.querySelector('#bulkStickerPrefix').value.trim(),ok=0;
+    btn.disabled=true;
+    for(var i=0;i<files.length;i++){
+      try{
+       btn.textContent='Upload '+(i+1)+'/'+files.length+'…';
+       var file=files[i],data=await compressStickerFile(file),base=titleStickerName(cleanStickerName(file.name)),label=prefix?(prefix+' '+base):base;
+       A.stickers.push({id:UID('st'),label:label,file:data,type:'sticker',active:true,package:packageName,category:category,sourceName:file.name,created:Date.now()});ok++
+      }catch(err){}
+    }
+    try{SA()}catch(err){toast('Penyimpanan browser penuh. Kurangi ukuran/jumlah sticker.','error');btn.disabled=false;btn.textContent='Upload Paket';return}
+    localStorage.setItem('purbalink_sticker_library',JSON.stringify(A.stickers.filter(function(x){return x.active})));
+    closeM();toast(ok+' sticker masuk paket '+packageName);refresh('media-interaksi')
+   }
+ })
+}
+function renameStickerPackage(name){
+ var items=A.stickers.filter(function(st){return (st.package||'Umum')===name});if(!items.length)return;
+ openM('Kustomisasi Paket','<form id="renameStickerPackage"><div class="admin-v5-form"><label>Nama Paket<input name="package" required value="'+E(name)+'"></label><label>Kategori<input name="category" required value="'+E(items[0].category||name)+'"></label></div><div class="admin-v5-actions"><button type="button" class="a-btn ghost" data-close>Batal</button><button class="a-btn primary">Simpan</button></div></form>',function(m){
+   m.querySelector('form').onsubmit=function(e){e.preventDefault();var d=FD(e.currentTarget);items.forEach(function(st){st.package=d.package.trim();st.category=d.category.trim()});SA();closeM();toast('Paket sticker diperbarui');refresh('media-interaksi')}
+ })
+}
+function deleteStickerPackage(name){
+ var items=A.stickers.filter(function(st){return (st.package||'Umum')===name});confirmA('Hapus paket '+name+' beserta '+items.length+' sticker?',function(){A.stickers=A.stickers.filter(function(st){return (st.package||'Umum')!==name});SA();toast('Paket sticker dihapus');refresh('media-interaksi')})
+}
+
 function mediaPage(){
  var cards='';A.stickers.forEach(function(s){cards+='<div class="admin-v5-media-card"><img src="'+E(s.file)+'" alt="'+E(s.label)+'"><b>'+E(s.label)+'</b><small>'+E(s.type)+' · '+(s.active?'Aktif':'Nonaktif')+'</small><div><button onclick="AdminV5.toggleSticker(\''+s.id+'\')">'+(s.active?'Nonaktifkan':'Aktifkan')+'</button><button onclick="AdminV5.deleteSticker(\''+s.id+'\')">Hapus</button></div></div>'});
  var g=A.media;
