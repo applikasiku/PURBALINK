@@ -1,5 +1,6 @@
-PURBALINK V2.1.0 — Midtrans Payment Gateway
+PURBALINK V2.2.0 — Responsive UI + Jooble Jobs + Midtrans
 Build date: 2026-09-18
 Domain target: https://purbalink.web.id
-Payment gateway: Midtrans Snap (Sandbox default)
+Jobs API: Jooble via Cloudflare Worker
+Payment gateway: Midtrans Snap
 Brand: Blue #0B5ED7 + Red #E3062C
