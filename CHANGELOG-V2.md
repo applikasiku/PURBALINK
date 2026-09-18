@@ -1,3 +1,15 @@
+# PURBALINK V2.6.0
+
+- Added a new Monetization → Iklan & AdSense admin page.
+- Supports direct/mandiri ads and Google AdSense per slot.
+- Added configurable placements: top header, header banner, native home, article top, article middle, article bottom, desktop sidebar, footer banner, anchor/sticky, and reward ad.
+- Every slot can be enabled/disabled, assigned a provider, labeled, sized for desktop/mobile, and configured with direct image/link or AdSense slot ID.
+- Added global AdSense Client ID and mixed-provider mode.
+- Added lazy loading with IntersectionObserver, async AdSense script loading, lazy image decoding, sponsored links, closeable anchor ads, and CLS-safe ad containers.
+- Added reward-ad hook for video/bonus/premium flows without forcing reward ads on normal news reading.
+- Refined admin layout precision, responsive tables, KPI grids, mobile quick actions, sticky table headers, containment/content-visibility, and lighter shadows for faster rendering.
+- Bumped PWA cache to V2.6.
+
 # PURBALINK V2.5.0
 
 - Rebuilt Admin Dashboard into functional Admin V5.
