@@ -424,6 +424,29 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
         </div>
       </div>
 
+      <div class="article-iconbar">
+        <a class="article-google-btn" href="https://www.google.com/search?q=site%3Apurbalink.web.id+PURBALINK" target="_blank" rel="noopener" aria-label="Add on Google">
+          <span class="google-g">G</span><b>Add on Google</b>
+        </a>
+        <button class="article-circle-btn" type="button" onclick="toggleArticleReactionPicker(event)" aria-label="Reaction" title="Reaction">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M7 10v11H4a1 1 0 01-1-1v-9a1 1 0 011-1h3z"/><path d="M7 10l4-7a2 2 0 012 2v4h5a2 2 0 012 2l-1 7a2 2 0 01-2 2H9a2 2 0 01-2-2v-8z"/></svg>
+          <span class="article-action-dot" data-reaction-dot></span>
+        </button>
+        <button class="article-circle-btn" type="button" onclick="toggleGift()" aria-label="Gift" title="Gift">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M20 12v9H4v-9"/><path d="M2 7h20v5H2z"/><path d="M12 7v14"/><path d="M12 7H7.5A2.5 2.5 0 1110 4.5L12 7zm0 0h4.5A2.5 2.5 0 1014 4.5L12 7z"/></svg>
+        </button>
+        <button class="article-circle-btn" type="button" onclick="shareArticle()" aria-label="Bagikan" title="Bagikan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M14 5l5 5-5 5"/><path d="M19 10H9a6 6 0 00-6 6v3"/><rect x="5" y="4" width="12" height="16" rx="2" opacity=".22"/></svg>
+        </button>
+        <button class="article-circle-btn" type="button" onclick="scrollToComments()" aria-label="Komentar" title="Komentar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 4h16v12H8l-4 4z"/><path d="M8 8h8M8 12h6"/></svg>
+        </button>
+        <button class="article-circle-btn" type="button" data-bookmark onclick="toggleBookmark()" aria-label="Bookmark" title="Bookmark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M6 3h12v18l-6-4-6 4z"/></svg>
+        </button>
+      </div>
+      <div class="article-reaction-picker" id="articleReactionPicker"></div>
+
       <figure class="art-figure">
         <img src="https://images.unsplash.com/photo-1601134467661-3d775b999c8b?w=900&q=80" alt="Gunung Lewotobi">
         <figcaption>Aktivitas Gunung Lewotobi terlihat dari Desa Nobo, Flores Timur, NTT (12/10/2024). Foto: ANTARA</figcaption>
@@ -435,36 +458,32 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
         <p>Pemerintah daerah bersama kementerian terkait juga tengah menyusun rencana relokasi jangka panjang bagi warga yang berada di zona rawan bencana, sembari memastikan kebutuhan dasar seperti air bersih, logistik, dan layanan kesehatan tetap terpenuhi selama masa tanggap darurat.</p>
       </div>
 
-      <div class="engage">
-        <div class="q">Apakah artikel ini bermanfaat?</div>
-        <div class="react-row">
-          <div class="react-main" id="reactMain">
-            <button class="react-main-btn" id="mainReactBtn"
-              onclick="handleMainReactClick()"
-              onmouseenter="mainHoverStart()" onmouseleave="mainHoverEnd()"
-              ontouchstart="mainPressStart(event)" ontouchend="mainPressEnd(event)">
-              <span class="ric" id="mainReactIconWrap"></span>
-              <span id="mainReactLabel">Suka</span>
-            </button>
-            <div class="react-popup" id="reactPopup" onmouseenter="mainPopupEnter()" onmouseleave="mainPopupLeave()"></div>
-          </div>
-          <div class="react-summary" id="reactSummary"></div>
-        </div>
-
-        <div class="rating-row">
-          <div>
-            <div class="stars" id="starsRow"></div>
-          </div>
-          <div class="rating-summary"><b id="ratingAvg">4.6</b> ★ · <span id="ratingCount">328</span> rating</div>
-        </div>
-
-        <div class="action-row">
-          <button class="act-btn" id="bookmarkBtn" onclick="toggleBookmark()">🔖 <span id="bookmarkLabel">Simpan</span></button>
-          <button class="act-btn" onclick="document.querySelector('.comments-head').scrollIntoView({behavior:'smooth',block:'start'})">💬 Komentar</button>
-          <button class="act-btn" onclick="shareArticle()">↗ Bagikan</button>
-          <button class="act-btn gift" onclick="toggleGift()">🎁 Gift</button>
-        </div>
+      <div class="article-tags">
+        <div><b>Tag:</b><a href="#">Gunung Lewotobi</a><a href="#">Bencana</a><a href="#">Nasional</a><a href="#">Pemulihan</a></div>
+        <div class="article-hashtags"><b>Tagar:</b><a href="#">#Purbalink</a><a href="#">#BeritaTerkini</a><a href="#">#Indonesia</a></div>
       </div>
+      <div class="article-iconbar">
+        <a class="article-google-btn" href="https://www.google.com/search?q=site%3Apurbalink.web.id+PURBALINK" target="_blank" rel="noopener" aria-label="Add on Google">
+          <span class="google-g">G</span><b>Add on Google</b>
+        </a>
+        <button class="article-circle-btn" type="button" onclick="toggleArticleReactionPicker(event)" aria-label="Reaction" title="Reaction">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M7 10v11H4a1 1 0 01-1-1v-9a1 1 0 011-1h3z"/><path d="M7 10l4-7a2 2 0 012 2v4h5a2 2 0 012 2l-1 7a2 2 0 01-2 2H9a2 2 0 01-2-2v-8z"/></svg>
+          <span class="article-action-dot" data-reaction-dot></span>
+        </button>
+        <button class="article-circle-btn" type="button" onclick="toggleGift()" aria-label="Gift" title="Gift">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M20 12v9H4v-9"/><path d="M2 7h20v5H2z"/><path d="M12 7v14"/><path d="M12 7H7.5A2.5 2.5 0 1110 4.5L12 7zm0 0h4.5A2.5 2.5 0 1014 4.5L12 7z"/></svg>
+        </button>
+        <button class="article-circle-btn" type="button" onclick="shareArticle()" aria-label="Bagikan" title="Bagikan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M14 5l5 5-5 5"/><path d="M19 10H9a6 6 0 00-6 6v3"/><rect x="5" y="4" width="12" height="16" rx="2" opacity=".22"/></svg>
+        </button>
+        <button class="article-circle-btn" type="button" onclick="scrollToComments()" aria-label="Komentar" title="Komentar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 4h16v12H8l-4 4z"/><path d="M8 8h8M8 12h6"/></svg>
+        </button>
+        <button class="article-circle-btn" type="button" data-bookmark onclick="toggleBookmark()" aria-label="Bookmark" title="Bookmark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M6 3h12v18l-6-4-6 4z"/></svg>
+        </button>
+      </div>
+      <div class="article-reaction-summary" id="reactSummary"></div>
 
       <div class="gift-panel" id="giftPanel" style="display:none;">
         <div class="label">DUKUNG PENULIS</div>
@@ -491,20 +510,59 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
 
       <div class="compose-wrap">
         <div class="sticker-preview" id="stickerPreview" style="display:none;">
-          <img id="stickerPreviewImg" src="" alt="stiker">
-          <span style="font-size:12px;color:var(--ink-2);">Stiker siap dikirim</span>
+          <img id="stickerPreviewImg" src="" alt="media">
+          <span id="stickerPreviewLabel" style="font-size:12px;color:var(--ink-2);">Media siap dikirim</span>
           <button onclick="clearPendingSticker()">Hapus</button>
         </div>
         <div class="compose">
-          <button class="sticker-btn" id="stickerToggleBtn" onclick="toggleStickerPopup()" title="Kirim stiker GIF">😊</button>
+          <button class="sticker-btn" id="stickerToggleBtn" onclick="openComposerPicker('comment')" title="Emoji, sticker, GIF">😊</button>
           <textarea id="newComment" rows="1" placeholder="Tulis komentar..."></textarea>
           <button onclick="postComment()">Kirim</button>
         </div>
-        <div class="sticker-popup" id="stickerPopup"></div>
+        <div class="composer-picker" id="composerPicker">
+          <div class="composer-tabs">
+            <button data-picker-tab="emoji" onclick="renderComposerPicker('emoji')">Emoji</button>
+            <button data-picker-tab="sticker" onclick="renderComposerPicker('sticker')">Sticker</button>
+            <button data-picker-tab="gif" onclick="renderComposerPicker('gif')">GIF</button>
+          </div>
+          <div class="composer-picker-body" id="composerPickerBody"></div>
+        </div>
       </div>
 
       <div id="commentList"></div>
       <div class="fb-hidden-note"><b>◉ Lihat balasan yang disembunyikan</b><span>Komentar disembunyikan karena mungkin menyinggung, di luar topik, atau spam.</span></div>
+
+      <section class="post-comment-recs">
+        <div class="rec-section">
+          <div class="rec-head"><h3>Rekomendasi Berita</h3><a href="#" onclick="showHome();return false">Lihat semua</a></div>
+          <div class="rec-grid">
+            <article class="rec-card" onclick="showDetail()"><div class="rec-img" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600&q=80')"></div><span>NEWS</span><h4>Perkembangan terbaru Purbalingga dan wilayah sekitarnya</h4></article>
+            <article class="rec-card" onclick="showDetail()"><div class="rec-img" style="background-image:url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80')"></div><span>EKONOMI</span><h4>Aktivitas ekonomi lokal terus tumbuh dan berkembang</h4></article>
+            <article class="rec-card" onclick="showDetail()"><div class="rec-img" style="background-image:url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&q=80')"></div><span>DAERAH</span><h4>Pelayanan publik dan pembangunan menjadi perhatian warga</h4></article>
+            <article class="rec-card" onclick="showDetail()"><div class="rec-img" style="background-image:url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&q=80')"></div><span>GAYA HIDUP</span><h4>Inspirasi komunitas dan kreativitas anak muda daerah</h4></article>
+          </div>
+        </div>
+
+        <div class="rec-section">
+          <div class="rec-head"><h3>Rekomendasi Loker</h3><a href="loker.html">Lihat semua</a></div>
+          <div class="rec-grid">
+            <a class="rec-card rec-job" href="loker.html"><div class="rec-badge">HSE</div><span>FULL TIME</span><h4>HSE / Safety Officer — Purbalingga</h4><p>Perusahaan Nasional · Purbalingga</p></a>
+            <a class="rec-card rec-job" href="loker.html"><div class="rec-badge">OP</div><span>FULL TIME</span><h4>Operator Produksi — Area Jawa Tengah</h4><p>Industri Manufaktur · Jawa Tengah</p></a>
+            <a class="rec-card rec-job" href="loker.html"><div class="rec-badge">ADM</div><span>STAFF</span><h4>Admin Operasional — Purbalingga</h4><p>Perusahaan Lokal · Purbalingga</p></a>
+            <a class="rec-card rec-job" href="loker.html"><div class="rec-badge">MKT</div><span>SALES</span><h4>Marketing & Sales Representative</h4><p>Retail & Distribution · Purbalingga</p></a>
+          </div>
+        </div>
+
+        <div class="rec-section">
+          <div class="rec-head"><h3>Rekomendasi Shop</h3><a href="shop.html">Lihat semua</a></div>
+          <div class="rec-grid">
+            <a class="rec-card rec-product" href="shop.html"><div class="rec-img" style="background-image:url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80')"></div><span>PRODUK LOKAL</span><h4>Kopi Lokal Purbalingga Premium</h4><b>Rp45.000</b></a>
+            <a class="rec-card rec-product" href="shop.html"><div class="rec-img" style="background-image:url('https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=600&q=80')"></div><span>FASHION</span><h4>Batik Purbalingga Pilihan</h4><b>Rp129.000</b></a>
+            <a class="rec-card rec-product" href="shop.html"><div class="rec-img" style="background-image:url('https://images.unsplash.com/photo-1605196560547-1f3a5b1c147f?w=600&q=80')"></div><span>UMKM</span><h4>Camilan Khas Lokal</h4><b>Rp25.000</b></a>
+            <a class="rec-card rec-product" href="shop.html"><div class="rec-img" style="background-image:url('https://images.unsplash.com/photo-1519947486511-46149fa0a254?w=600&q=80')"></div><span>KERAJINAN</span><h4>Kerajinan Handmade Lokal</h4><b>Rp89.000</b></a>
+          </div>
+        </div>
+      </section>
     </div>
     <div style="height:40px;"></div>
   </main>
@@ -918,11 +976,6 @@ function renderReply(r){
     </div>
   </div>`;
 }
-function toggleDislike(event,id){
-  const btn=event.currentTarget;
-  btn.classList.toggle("active");
-  if(btn.classList.contains("active")) btn.setAttribute("aria-pressed","true"); else btn.removeAttribute("aria-pressed");
-}
 function initials(name){
   return name.split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase();
 }
@@ -1048,6 +1101,172 @@ function postComment(){
   clearPendingSticker();
   renderComments();
 }
+/* ---------- V2.4 comment composer overrides ---------- */
+const emojiSet = [
+  "😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😍","🥰","😘","😋","😛","😜","🤪",
+  "🤨","🧐","🤓","😎","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😭","😤","😡","🤬",
+  "🤯","😳","🥺","😱","😨","😰","😥","🤗","🤔","🫣","🤭","🫢","🤫","🤥","😶","😐","😑","😬","🙄","😯",
+  "😮","😲","🥱","😴","🤤","😵","🤐","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👻","💀","🤖",
+  "👍","👎","👏","🙌","🫶","🙏","💪","👌","✌️","🤞","🤟","🤘","👊","❤️","🧡","💛","💚","💙","💜","🖤",
+  "🤍","🤎","💔","💕","💖","💯","🔥","✨","🎉","🎊","⭐","🌟","⚡","💥","✅","❌","❗","❓","🇮🇩"
+];
+let composerTarget={type:"comment",id:null};
+let composerTab="emoji";
+const pendingReplyMedia={};
+
+function scrollToComments(){ document.querySelector(".comments-head")?.scrollIntoView({behavior:"smooth",block:"start"}); }
+
+function toggleArticleReactionPicker(e){
+  e?.stopPropagation();
+  const picker=document.getElementById("articleReactionPicker");
+  if(!picker)return;
+  picker.innerHTML=reactionDefs.map(r=>`<button type="button" onclick="pickMainReaction('${r.key}')"><img src="${r.file}" alt="${r.label}"><span>${r.label}</span></button>`).join("");
+  picker.classList.toggle("show");
+}
+function showMainPopup(){ document.getElementById("articleReactionPicker")?.classList.add("show"); }
+function hideMainPopupNow(){ document.getElementById("articleReactionPicker")?.classList.remove("show"); }
+function scheduleHideMainPopup(){ setTimeout(hideMainPopupNow,220); }
+function handleMainReactClick(){ userReaction=userReaction||"suka"; renderMainReaction(); }
+function pickMainReaction(key){
+  userReaction=(userReaction===key)?null:key;
+  hideMainPopupNow();
+  renderMainReaction();
+}
+function renderMainReaction(){
+  document.querySelectorAll("[data-reaction-dot]").forEach(dot=>{
+    dot.innerHTML=userReaction?`<img src="${reactionByKey(userReaction).file}" alt="">`:"";
+    dot.classList.toggle("on",!!userReaction);
+  });
+  const target=document.getElementById("reactSummary");
+  if(target){
+    const total=reactionDefs.reduce((sum,r)=>sum+r.count+(userReaction===r.key?1:0),0);
+    const top=[...reactionDefs].sort((a,b)=>b.count-a.count).slice(0,3);
+    target.innerHTML=`<span class="stack">${top.map(r=>`<img src="${r.file}" alt="${r.label}">`).join("")}</span><span>${fmt(total)} orang bereaksi</span>`;
+  }
+}
+function toggleBookmark(){
+  bookmarked=!bookmarked;
+  document.querySelectorAll("[data-bookmark]").forEach(btn=>btn.classList.toggle("active",bookmarked));
+  const legacy=document.getElementById("bookmarkLabel"); if(legacy) legacy.textContent=bookmarked?"Tersimpan":"Simpan";
+}
+document.addEventListener("click",e=>{
+  const picker=document.getElementById("articleReactionPicker");
+  if(picker && !picker.contains(e.target) && !e.target.closest("[onclick*='toggleArticleReactionPicker']")) picker.classList.remove("show");
+});
+
+function renderThread(c){
+  const replies=comments.filter(r=>r.parent===c.id);
+  const pending=pendingReplyMedia[c.id];
+  return `<div class="comment">
+    <div class="c-head">
+      <div class="avatar">${initials(c.name)}</div>
+      <div class="c-body">
+        <span class="c-name">${c.name}</span><span class="c-time">${c.time}</span>
+        <div class="c-text">${c.text}</div>
+        ${c.sticker?`<img src="${c.sticker}" class="comment-sticker-img" alt="media">`:""}
+        <div class="c-actions">
+          <span class="fb-reply" onclick="toggleReply(${c.id})">Balas</span>
+          ${reactControlHTML(c)}
+        </div>
+        ${c.replyOpen?`<div class="reply-compose">
+          ${pending?`<div class="reply-media-preview"><img src="${pending.file}" alt="${pending.kind}"><button onclick="clearReplyMedia(${c.id})">×</button></div>`:""}
+          <div class="reply-box"><button class="reply-media-btn" onclick="openComposerPicker('reply',${c.id})">😊</button><textarea id="reply-${c.id}" rows="1" placeholder="Tulis balasan..."></textarea><button onclick="postReply(${c.id})">Kirim</button></div>
+        </div>`:""}
+      </div>
+    </div>
+    ${replies.length?`<div class="replies">${replies.map(r=>renderReply(r)).join("")}</div>`:""}
+  </div>`;
+}
+function renderReply(r){
+  return `<div class="comment reply-comment">
+    <div class="c-head">
+      <div class="avatar">${initials(r.name)}</div>
+      <div class="c-body">
+        <span class="c-name">${r.name}</span><span class="c-time">${r.time}</span>
+        <div class="c-text">${r.text}</div>
+        ${r.sticker?`<img src="${r.sticker}" class="comment-sticker-img" alt="media">`:""}
+        <div class="c-actions"><span class="fb-reply" onclick="toggleReply(${r.parent})">Balas</span>${reactControlHTML(r)}</div>
+      </div>
+    </div>
+  </div>`;
+}
+function openComposerPicker(type,id=null){
+  composerTarget={type,id};
+  const picker=document.getElementById("composerPicker");
+  if(!picker)return;
+  const targetKey=type+":"+(id??"");
+  if(picker.classList.contains("show") && picker.dataset.target===targetKey){ picker.classList.remove("show"); return; }
+  picker.dataset.target=targetKey;
+  picker.classList.add("show");
+  renderComposerPicker(composerTab);
+}
+function renderComposerPicker(tab="emoji"){
+  composerTab=tab;
+  const picker=document.getElementById("composerPicker");
+  const body=document.getElementById("composerPickerBody");
+  if(!picker||!body)return;
+  picker.querySelectorAll("[data-picker-tab]").forEach(b=>b.classList.toggle("active",b.dataset.pickerTab===tab));
+  if(tab==="emoji"){
+    body.className="composer-picker-body emoji-grid";
+    body.innerHTML=emojiSet.map(e=>`<button type="button" onclick="insertComposerEmoji('${e}')">${e}</button>`).join("");
+  }else{
+    const items=tab==="gif"?reactionDefs.map(r=>({label:r.label,file:r.file})):[...allStickers];
+    body.className="composer-picker-body media-grid";
+    body.innerHTML=items.map(m=>`<button type="button" onclick="pickComposerMedia('${m.file}','${tab}')"><img src="${m.file}" alt="${m.label}"><span>${m.label}</span></button>`).join("");
+  }
+}
+function insertComposerEmoji(emoji){
+  const id=composerTarget.type==="reply"?"reply-"+composerTarget.id:"newComment";
+  const ta=document.getElementById(id); if(!ta)return;
+  const start=ta.selectionStart??ta.value.length,end=ta.selectionEnd??ta.value.length;
+  ta.value=ta.value.slice(0,start)+emoji+ta.value.slice(end);
+  ta.focus(); ta.selectionStart=ta.selectionEnd=start+emoji.length;
+}
+function pickComposerMedia(file,kind){
+  if(composerTarget.type==="reply"){
+    pendingReplyMedia[composerTarget.id]={file,kind};
+    const id=composerTarget.id;
+    document.getElementById("composerPicker")?.classList.remove("show");
+    renderComments();
+    setTimeout(()=>document.getElementById("reply-"+id)?.focus(),0);
+  }else{
+    pendingSticker=file;
+    const img=document.getElementById("stickerPreviewImg"); if(img)img.src=file;
+    const label=document.getElementById("stickerPreviewLabel"); if(label)label.textContent=(kind==="gif"?"GIF":"Sticker")+" siap dikirim";
+    const prev=document.getElementById("stickerPreview"); if(prev)prev.style.display="flex";
+    document.getElementById("composerPicker")?.classList.remove("show");
+    document.getElementById("newComment")?.focus();
+  }
+}
+function clearReplyMedia(id){ delete pendingReplyMedia[id]; renderComments(); setTimeout(()=>document.getElementById("reply-"+id)?.focus(),0); }
+function toggleStickerPopup(){ openComposerPicker("comment"); }
+function closeStickerPopup(){ document.getElementById("composerPicker")?.classList.remove("show"); }
+function renderStickerPopup(){ renderComposerPicker(composerTab); }
+function clearPendingSticker(){
+  pendingSticker=null;
+  const prev=document.getElementById("stickerPreview"); if(prev)prev.style.display="none";
+}
+function postReply(parentId){
+  const ta=document.getElementById("reply-"+parentId);
+  const text=ta?.value.trim()||"";
+  const media=pendingReplyMedia[parentId];
+  if(!text&&!media)return;
+  comments.push({id:nextId++,parent:parentId,name:"Anda",text,sticker:media?.file||null,time:"Baru saja",likes:0,reaction:null});
+  delete pendingReplyMedia[parentId];
+  const c=comments.find(x=>x.id===parentId); if(c)c.replyOpen=false;
+  renderComments();
+}
+function postComment(){
+  const ta=document.getElementById("newComment");
+  const text=ta?.value.trim()||"";
+  if(!text&&!pendingSticker)return;
+  comments.push({id:nextId++,parent:null,name:"Anda",text,sticker:pendingSticker,time:"Baru saja",likes:0,reaction:null,replyOpen:false});
+  if(ta)ta.value="";
+  clearPendingSticker();
+  document.getElementById("composerPicker")?.classList.remove("show");
+  renderComments();
+}
+
 </script>
 <script src="v2.js"></script>
 </body>
