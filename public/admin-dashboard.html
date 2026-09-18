@@ -142,6 +142,26 @@ tr:last-child td{border-bottom:none;}
 .mark{background-color:transparent!important;background-image:url("brand-icon-transparent.png")!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;color:transparent!important;overflow:hidden!important}
 .logo .word,.pword{letter-spacing:-.55px}
 .sidebar .brand-purba{color:#fff} .sidebar .brand-link{color:#FF4960}
+
+.article-generator-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+.gen-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}
+.gen-card h3{margin:0 0 14px;font-size:15px}
+.gen-field{margin-bottom:12px}
+.gen-field label{display:block;font-size:11.5px;font-weight:800;color:var(--ink-2);margin-bottom:6px}
+.gen-field input,.gen-field select,.gen-field textarea{width:100%;border:1.5px solid var(--line);border-radius:8px;padding:10px 11px;font:inherit;font-size:13px;outline:none;background:#fff;color:var(--ink)}
+.gen-field textarea{min-height:96px;resize:vertical}
+.gen-field input:focus,.gen-field select:focus,.gen-field textarea:focus{border-color:var(--teal-600)}
+.gen-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gen-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.gen-actions button{border:0;border-radius:8px;padding:9px 13px;font-size:12px;font-weight:800}
+.gen-primary{background:var(--teal-700);color:#fff}.gen-secondary{background:var(--teal-50);color:var(--teal-700)}
+.gen-output{min-height:540px}
+.gen-output-toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.gen-output-toolbar .score{font-size:11px;background:#e6f7ee;color:var(--green);font-weight:800;padding:5px 8px;border-radius:6px}
+.gen-preview{border:1px solid var(--line);border-radius:10px;padding:16px;min-height:470px;background:#fbfdff;overflow:auto}
+.gen-preview h1{font-size:24px;line-height:1.3;margin:0 0 10px}.gen-preview h2{font-size:18px;margin:22px 0 8px}.gen-preview p,.gen-preview li{font-size:14px;line-height:1.75;color:#344054}
+.gen-meta-box{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.gen-meta-item{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:9px}.gen-meta-item b{display:block;font-size:10px;text-transform:uppercase;color:var(--ink-2);margin-bottom:3px}.gen-meta-item span{font-size:12px}
+@media(max-width:980px){.article-generator-grid{grid-template-columns:1fr}.gen-output{min-height:auto}}
 </style>
 <link rel="stylesheet" href="v2.css">
 </head>
@@ -421,9 +441,19 @@ function genericTable(title, rows, cols){
 function tabHTML(tab){
   switch(tab){
     case "dashboard": return dashboardHTML();
-    case "artikel": return genericTable("Semua Artikel",
-      articles.map(a=>`<tr><td>${a.t}</td><td>${a.cat}</td><td><span class="status ${statusClass[a.status]}">${a.status}</span></td><td>${a.date}</td><td class="row-actions"><button>Edit</button><button>Hapus</button></td></tr>`).join(""),
-      ["Judul","Kategori","Status","Tanggal","Aksi"]);
+    case "artikel": return `
+      <div class="tabbar">
+        <button class="active" onclick="switchArticleSubtab(this,'list')">Daftar Artikel</button>
+        <button onclick="switchArticleSubtab(this,'generator')">AI Article Generator</button>
+      </div>
+      <div id="articleSubtabList">
+        ${genericTable("Semua Artikel",
+          articles.map(a=>`<tr><td>${a.t}</td><td>${a.cat}</td><td><span class="status ${statusClass[a.status]}">${a.status}</span></td><td>${a.date}</td><td class="row-actions"><button>Edit</button><button>Hapus</button></td></tr>`).join(""),
+          ["Judul","Kategori","Status","Tanggal","Aksi"])}
+      </div>
+      <div id="articleSubtabGenerator" style="display:none;">
+        ${articleGeneratorHTML()}
+      </div>`;
     case "komentar": return genericTable("Semua Komentar",
       `<tr><td>Budi Santoso</td><td>Beritanya sangat informatif...</td><td>Pemulihan Gunung Lewotobi</td><td>2 jam lalu</td><td class="row-actions"><button>Hapus</button></td></tr>
        <tr><td>Sari Dewi</td><td>Setuju Pak Budi.</td><td>Pemulihan Gunung Lewotobi</td><td>1 jam lalu</td><td class="row-actions"><button>Hapus</button></td></tr>
@@ -561,6 +591,104 @@ function tabHTML(tab){
 
     default: return `<div class="panel"><p class="empty-note">Halaman belum tersedia.</p></div>`;
   }
+}
+
+
+function articleGeneratorHTML(){
+  return `
+  <div class="article-generator-grid">
+    <div class="gen-card">
+      <h3>AI Article Generator — High Value Content</h3>
+      <div class="gen-field"><label>Topik / Keyword Utama</label><input id="genTopic" placeholder="Contoh: harga beras Purbalingga September 2026"></div>
+      <div class="gen-row">
+        <div class="gen-field"><label>Kategori</label><select id="genCategory"><option>Nasional</option><option>Daerah</option><option>Ekonomi</option><option>Bisnis</option><option>Teknologi</option><option>Olahraga</option><option>Gaya Hidup</option><option>Hiburan</option><option>Otomotif</option></select></div>
+        <div class="gen-field"><label>Intent</label><select id="genIntent"><option value="news">Berita / News</option><option value="explainer">Explainer</option><option value="guide">Panduan</option><option value="analysis">Analisis</option><option value="evergreen">Evergreen</option></select></div>
+      </div>
+      <div class="gen-row">
+        <div class="gen-field"><label>Target Panjang</label><select id="genLength"><option value="900">±900 kata</option><option value="1400" selected>±1.400 kata</option><option value="2000">±2.000 kata</option><option value="3000">±3.000 kata</option></select></div>
+        <div class="gen-field"><label>Gaya Bahasa</label><select id="genTone"><option>Jurnalistik Profesional</option><option>Ringan & Informatif</option><option>Formal</option><option>Analitis</option><option>SEO Editorial</option></select></div>
+      </div>
+      <div class="gen-field"><label>Fakta / Sumber / Catatan Wajib</label><textarea id="genFacts" placeholder="Masukkan fakta, kutipan, angka, sumber, atau poin yang wajib dipakai. Generator tidak boleh mengarang fakta yang tidak diberikan."></textarea></div>
+      <div class="gen-field"><label>Audience</label><input id="genAudience" value="Pembaca Indonesia, terutama Jawa Tengah dan Purbalingga"></div>
+      <div class="gen-field"><label>Instruksi Tambahan</label><textarea id="genExtra" placeholder="Contoh: hindari clickbait, tambahkan FAQ, sertakan ringkasan poin penting, meta description, slug, tag, internal link suggestion."></textarea></div>
+      <div class="gen-actions">
+        <button class="gen-primary" onclick="generateHighValueArticle()">Generate Artikel</button>
+        <button class="gen-secondary" onclick="fillGeneratorDemo()">Isi Contoh</button>
+        <button class="gen-secondary" onclick="clearGenerator()">Reset</button>
+      </div>
+    </div>
+    <div class="gen-card gen-output">
+      <div class="gen-output-toolbar"><h3>Hasil Artikel</h3><span class="score" id="genScore">Belum dianalisis</span></div>
+      <div class="gen-preview" id="genPreview"><div class="empty-note">Hasil artikel akan muncul di sini.</div></div>
+      <div class="gen-actions">
+        <button class="gen-primary" onclick="saveGeneratedDraft()">Simpan sebagai Draft</button>
+        <button class="gen-secondary" onclick="copyGeneratedArticle()">Copy HTML</button>
+      </div>
+    </div>
+  </div>`;
+}
+function switchArticleSubtab(btn,mode){
+  btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active")); btn.classList.add("active");
+  document.getElementById("articleSubtabList").style.display=mode==="list"?"block":"none";
+  document.getElementById("articleSubtabGenerator").style.display=mode==="generator"?"block":"none";
+}
+function fillGeneratorDemo(){
+  document.getElementById("genTopic").value="Strategi UMKM Purbalingga Meningkatkan Penjualan Online 2026";
+  document.getElementById("genFacts").value="Fokus pada marketplace, konten video pendek, optimasi katalog, pelayanan pelanggan, dan kepercayaan pembeli. Jangan membuat data statistik tanpa sumber.";
+  document.getElementById("genExtra").value="Buat struktur H1-H2-H3, FAQ, meta description, slug, tag, rekomendasi internal link, dan CTA yang tidak memaksa.";
+}
+function clearGenerator(){
+  ["genTopic","genFacts","genExtra"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  document.getElementById("genPreview").innerHTML='<div class="empty-note">Hasil artikel akan muncul di sini.</div>';
+  document.getElementById("genScore").textContent="Belum dianalisis";
+}
+function escapeHTML(v){return String(v||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));}
+function buildLocalHighValueDraft(){
+  const topic=document.getElementById("genTopic").value.trim()||"Topik Artikel";
+  const facts=document.getElementById("genFacts").value.trim();
+  const audience=document.getElementById("genAudience").value.trim();
+  const category=document.getElementById("genCategory").value;
+  const safe=escapeHTML(topic);
+  const slug=topic.toLowerCase().replace(/[^a-z0-9\s-]/g,"").trim().replace(/\s+/g,"-").slice(0,80);
+  const factText=facts?escapeHTML(facts):"Tambahkan fakta terverifikasi sebelum artikel diterbitkan.";
+  return {title:topic,slug,category,html:`
+    <h1>${safe}</h1>
+    <p><strong>Ringkasan:</strong> Artikel ini membahas ${safe.toLowerCase()} secara komprehensif untuk ${escapeHTML(audience)} dengan fokus pada manfaat praktis, konteks, dan informasi yang dapat ditindaklanjuti.</p>
+    <h2>Mengapa topik ini penting?</h2>
+    <p>${factText}</p>
+    <h2>Konteks dan hal yang perlu dipahami</h2>
+    <p>Bagian ini menjelaskan latar belakang, istilah penting, dan faktor yang memengaruhi topik. Semua klaim faktual sebaiknya ditautkan ke sumber primer atau sumber tepercaya sebelum publikasi.</p>
+    <h2>Poin utama yang perlu diperhatikan</h2>
+    <ul><li>Gunakan data dan fakta yang dapat diverifikasi.</li><li>Jawab kebutuhan pembaca secara langsung, bukan sekadar mengejar keyword.</li><li>Berikan contoh, konteks lokal, dan langkah praktis bila relevan.</li><li>Hindari judul menyesatkan, klaim bombastis, dan pengulangan keyword.</li></ul>
+    <h2>Analisis dan dampaknya bagi pembaca</h2>
+    <p>High value content harus menjelaskan apa yang berubah, siapa yang terdampak, mengapa hal tersebut penting, serta apa yang sebaiknya diperhatikan selanjutnya.</p>
+    <h2>FAQ</h2>
+    <h3>Apa inti dari topik ini?</h3><p>Intinya adalah memahami informasi utama secara utuh dan memisahkan fakta, konteks, serta opini.</p>
+    <h3>Apa yang harus dilakukan pembaca?</h3><p>Gunakan informasi terverifikasi, cek sumber, dan sesuaikan keputusan dengan kebutuhan masing-masing.</p>
+    <h2>Kesimpulan</h2>
+    <p>${safe} perlu dibahas dengan akurat, jelas, dan bermanfaat. Sebelum terbit, editor harus memastikan semua angka, nama, tanggal, kutipan, dan klaim telah diverifikasi.</p>`,
+    meta:`Panduan lengkap tentang ${topic}. Simak konteks, poin penting, dampak, dan FAQ dalam artikel PURBALINK yang informatif dan mudah dipahami.`.slice(0,158),
+    tags:[category,topic.split(" ").slice(0,3).join(" "),"PURBALINK"]
+  };
+}
+async function generateHighValueArticle(){
+  const topic=document.getElementById("genTopic").value.trim();
+  if(!topic){alert("Isi topik terlebih dahulu.");return;}
+  const preview=document.getElementById("genPreview"),score=document.getElementById("genScore");
+  preview.innerHTML='<div class="empty-note">Menyusun artikel high value...</div>'; score.textContent="Memproses";
+  const draft=buildLocalHighValueDraft();
+  window.__generatedArticle=draft;
+  preview.innerHTML=draft.html+`<div class="gen-meta-box"><div class="gen-meta-item"><b>Meta Description</b><span>${escapeHTML(draft.meta)}</span></div><div class="gen-meta-item"><b>Slug</b><span>${escapeHTML(draft.slug)}</span></div><div class="gen-meta-item"><b>Tag</b><span>${draft.tags.map(escapeHTML).join(", ")}</span></div><div class="gen-meta-item"><b>Quality Guardrail</b><span>Fact-check wajib sebelum publish</span></div></div>`;
+  score.textContent="High Value Draft";
+}
+function saveGeneratedDraft(){
+  if(!window.__generatedArticle){alert("Generate artikel terlebih dahulu.");return;}
+  articles.unshift({t:window.__generatedArticle.title,cat:window.__generatedArticle.category,status:"Draft",date:new Date().toLocaleDateString("id-ID")});
+  alert("Artikel disimpan sebagai Draft di sesi dashboard ini.");
+}
+async function copyGeneratedArticle(){
+  if(!window.__generatedArticle){alert("Generate artikel terlebih dahulu.");return;}
+  try{await navigator.clipboard.writeText(window.__generatedArticle.html);alert("HTML artikel berhasil disalin.");}catch{alert("Browser tidak mengizinkan copy otomatis.");}
 }
 
 const titles = {
