@@ -52,3 +52,31 @@ Endpoint used by the frontend:
 - \`POST /api/jobs/jooble\`
 
 The integration targets the Indonesian Jooble endpoint. If the secret is absent or Jooble is unavailable, PURBALINK automatically falls back to locally managed jobs.
+
+
+## Multi-provider AI Article Generator
+The admin Article Generator calls `POST /api/ai/article` through the Cloudflare Worker. API keys must be stored as Cloudflare Secrets, never in frontend code or GitHub.
+
+Supported secrets:
+- `OPENAI_API_KEY`
+- `GEMINI_API_KEY`
+- `DEEPSEEK_API_KEY`
+- `GROQ_API_KEY`
+- `MISTRAL_API_KEY`
+- `ANTHROPIC_API_KEY`
+- `OPENROUTER_API_KEY`
+- `TOGETHER_API_KEY`
+
+Optional model variables:
+- `OPENAI_MODEL`
+- `GEMINI_MODEL`
+- `DEEPSEEK_MODEL`
+- `GROQ_MODEL`
+- `MISTRAL_MODEL`
+- `ANTHROPIC_MODEL`
+- `OPENROUTER_MODEL`
+- `TOGETHER_MODEL`
+
+Default economy order is configured with `AI_PROVIDER_ORDER`. The Worker only tries the next provider when the current provider is unavailable, has no configured key, or returns an error. The admin UI also caches identical successful prompts locally for 24 hours.
+
+Rewrite from URL fetches a public HTML page server-side, extracts readable text, and asks the selected model to create an independently structured article with source attribution. Editorial review remains required for factual accuracy, quotations, licensing, and publication rights.
