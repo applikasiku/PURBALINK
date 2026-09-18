@@ -123,6 +123,28 @@ async function getStatus(request, env) {
   return json(data, res.ok ? 200 : (res.status === 404 ? 404 : 502));
 }
 
+
+async function searchJooble(request, env) {
+  if (!env.JOOBLE_API_KEY) {
+    return json({ configured: false, jobs: [], error: 'Jooble API belum dikonfigurasi. Tambahkan secret JOOBLE_API_KEY di Cloudflare.' }, 503);
+  }
+  let body;
+  try { body = await request.json(); } catch { return json({ error: 'Body JSON tidak valid.' }, 400); }
+  const keywords = cleanText(body.keywords || 'lowongan', 100);
+  const location = cleanText(body.location || 'Purbalingga', 100);
+  const page = Math.max(1, Math.min(20, Math.round(Number(body.page) || 1)));
+  const res = await fetch(\`https://id.jooble.org/api/\${encodeURIComponent(env.JOOBLE_API_KEY)}\`, {
+    method: 'POST',
+    headers: { accept: 'application/json', 'content-type': 'application/json' },
+    body: JSON.stringify({ keywords, location, page, ResultOnPage: 20 })
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return json({ error: data.error || data.message || 'Jooble menolak permintaan.', details: data }, res.status >= 500 ? 502 : res.status);
+  }
+  return json({ configured: true, totalCount: data.totalCount || 0, jobs: Array.isArray(data.jobs) ? data.jobs : [] });
+}
+
 async function verifyNotification(request, env) {
   if (!env.MIDTRANS_SERVER_KEY) return json({ error: 'MIDTRANS_SERVER_KEY belum dikonfigurasi.' }, 503);
   let body;
@@ -145,6 +167,7 @@ export default {
     }
 
     try {
+      if (url.pathname === '/api/jobs/jooble' && request.method === 'POST') return searchJooble(request, env);
       if (url.pathname === '/api/health') {
         return json({ ok: true, app: 'PURBALINK', payment_gateway: 'Midtrans', mode: mode(env), midtrans_configured: Boolean(env.MIDTRANS_SERVER_KEY) });
       }
