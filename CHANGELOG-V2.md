@@ -1,3 +1,16 @@
+# PURBALINK V2.7.0
+
+- Replaced oversized dashboard quick-action buttons with a compact 5-column icon launcher.
+- Added 10 admin shortcuts: Article, Jobs, Product, Orders, Video, Comments, Sticker, Ads, Users, Settings.
+- Disabled all frontend ad rendering on admin-dashboard.html, including anchor/sticky ads.
+- Added bulk sticker upload with a maximum of 50 files per batch.
+- Bulk uploader auto-generates package and category names from filenames; both remain editable.
+- Added package cards with sticker counts, active counts, rename/category customization, and package delete.
+- Sticker images are compressed in-browser before persistence to reduce storage and improve dashboard performance.
+- Admin sticker library is synchronized to the article comment sticker picker.
+- Refined mobile sticker manager and preserved Giphy for GIF content.
+- Bumped PWA cache to V2.7.
+
 # PURBALINK V2.6.0
 
 - Added a new Monetization → Iklan & AdSense admin page.
