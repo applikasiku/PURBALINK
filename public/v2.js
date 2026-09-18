@@ -3,7 +3,9 @@
   const VERSION='2.6.0';
   const DB_KEY='purbalink_v2_db';
   const DOMAIN='https://purbalink.web.id';
-  const page=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  let page=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  const ADMIN_HOST='admin.purbalink.web.id';
+  if(location.hostname.toLowerCase()===ADMIN_HOST && (page==='index.html'||page==='')) page='admin-dashboard.html';
 
   const seed={
     version:2,
