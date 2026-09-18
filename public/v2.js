@@ -497,7 +497,9 @@
     const box=makeAd(slot);if(where==='before')target.parentNode.insertBefore(box,target);else if(where==='after')target.parentNode.insertBefore(box,target.nextSibling);else target.appendChild(box)
   }
   function renderAds(){
-    const a=adsConfig();document.querySelectorAll('.pv2-ad').forEach(x=>x.remove());if(!a.enabled)return;
+    document.querySelectorAll('.pv2-ad').forEach(x=>x.remove());
+    if(page==='admin-dashboard.html')return;
+    const a=adsConfig();if(!a.enabled)return;
     const active=a.slots.filter(x=>x.enabled!==false);
     const by=p=>active.find(x=>x.placement===p);
     let s;
