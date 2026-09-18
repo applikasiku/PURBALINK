@@ -159,7 +159,7 @@ function aiProviderConfig(name, env, requestedModel = '') {
   return map[name] || null;
 }
 function aiOrder(env) {
-  return String(env.AI_PROVIDER_ORDER || 'openrouter,groq,gemini,deepseek,mistral,together,openai,anthropic').split(',').map(x => x.trim().toLowerCase()).filter(Bolean));
+  return String(env.AI_PROVIDER_ORDER || 'openrouter,groq,gemini,deepseek,mistral,together,openai,anthropic').split(',').map(x => x.trim().toLowerCase()).filter(Boolean);
 }
 function maxTokensForWords(words) {
   const n = Math.max(500, Math.min(2200, Number(words) || 1000));
