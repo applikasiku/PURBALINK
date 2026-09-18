@@ -1,4 +1,4 @@
-PURBALINK V2.3.0 — Editorial News UI + Facebook-style Comments
+PURBALINK V2.4.0 — Article Actions + Rich Comments + Recommendations
 Build date: 2026-09-18
 Domain target: https://purbalink.web.id
 Cloudflare Worker: purbalink
