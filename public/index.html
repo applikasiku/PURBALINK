@@ -272,113 +272,125 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
 
 <!-- ============ HOME VIEW ============ -->
 <div id="homeView">
-
-<div class="topbar">
-  <div class="wrap">
-    <span class="date" id="todayDate"></span>
-    <span class="links"><a href="#">Foto</a><a href="#">Video</a><a href="#">Indeks</a></span>
-  </div>
-</div>
-
-<header class="site">
-  <div class="wrap header-row">
-    <a class="logo" href="#" onclick="showHome();return false;">
-      <div class="mark">P</div>
-      <div>
-        <div class="word"><span class="brand-purba">PURBA</span><span class="brand-link">LINK</span></div>
-        <div class="tag">Purbalingga, Lebih Dekat, Lebih Cepat</div>
-      </div>
+<header class="p6-header">
+  <div class="p6-head-row wrap">
+    <a class="p6-brand" href="#" onclick="showHome();return false;">
+      <img src="brand-icon-transparent.png" alt="PURBALINK">
+      <span><b class="brand-purba">PURBA</b><b class="brand-link">LINK</b></span>
     </a>
-    <div class="search">
-      <input type="text" placeholder="Cari berita, topik, atau tokoh...">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    </div>
-    <div class="header-actions">
-      <a class="btn btn-ghost" href="login.html">Masuk</a>
-      <a class="btn btn-primary" href="register.html">Daftar</a>
+    <div class="p6-head-actions">
+      <a class="p6-icon-btn" href="profile.html" aria-label="Profil">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg>
+      </a>
+      <button class="p6-icon-btn" type="button" aria-label="Menu" onclick="document.getElementById('p6MoreMenu').classList.toggle('show')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M17 14v6M14 17h6"/></svg>
+      </button>
     </div>
   </div>
-  <nav class="navrow">
+  <div class="p6-more-menu" id="p6MoreMenu">
+    <a href="loker.html">Loker</a><a href="shop.html">Shop</a><a href="video.html">Video</a><a href="profile.html">Profil</a>
+  </div>
+  <nav class="p6-tabs">
     <div class="wrap">
-      <a href="#" class="active">Nasional</a>
-      <a href="#">Politik</a>
-      <a href="#">Ekonomi</a>
-      <a href="#">Bisnis</a>
-      <a href="#">Teknologi</a>
-      <a href="#">Dunia</a>
-      <a href="#">Olahraga</a>
-      <a href="#">Gaya Hidup</a>
-      <a href="#">Hiburan</a>
-      <a href="#">Otomotif</a>
+      <a class="active" href="#utama">Berita Utama</a>
+      <a href="#terkini">Terkini</a>
+      <a href="#populer">Populer</a>
+      <a href="#rekomendasi">Rekomendasi</a>
     </div>
   </nav>
 </header>
 
-<div class="breaking">
+<main class="p6-main">
   <div class="wrap">
-    <span class="badge">BREAKING</span>
-    <span class="txt">Gempa Magnitudo 5,6 Guncang Kabupaten Bandung, Tidak Berpotensi Tsunami</span>
-    <span class="time">14:32 WIB</span>
-  </div>
-</div>
-
-<main>
-  <div class="wrap grid">
-    <div>
-      <div class="hero-card" onclick="showDetail()">
-        <div class="hero-img" style="background-image:url('https://images.unsplash.com/photo-1601134467661-3d775b999c8b?w=900&q=80')">
-          <span class="pill">NASIONAL</span>
-        </div>
-        <div class="hero-body">
+    <section id="utama" class="p6-hero" onclick="showDetail()">
+      <div class="p6-hero-img" style="background-image:url('https://images.unsplash.com/photo-1601134467661-3d775b999c8b?w=1200&q=82')">
+        <div class="p6-hero-overlay">
+          <span class="p6-kicker">Berita Utama</span>
           <h1>Pemerintah Percepat Pemulihan Pascaerupsi Gunung Lewotobi</h1>
-          <p>Pemerintah menyiapkan bantuan darurat dan relokasi sementara bagi warga terdampak erupsi Gunung Lewotobi di NTT, sembari memastikan layanan dasar tetap berjalan dengan baik.</p>
-          <div class="meta"><b>Tim PURBALINK</b> · 12 Okt 2024 · 14:20 WIB</div>
+          <span class="p6-time">46 menit lalu</span>
         </div>
       </div>
+    </section>
 
-      <div class="ad-slot">
-        <span class="ad-tag">IKLAN</span>
-        <a href="#" target="_blank" rel="noopener">
-          <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?w=1000&q=80" alt="Contoh iklan produk">
-        </a>
-      </div>
+    <section class="p6-grid2 p6-quick">
+      <article class="p6-mini" onclick="showDetail()"><div class="p6-mini-img" style="background-image:url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80')"></div><h3>Ekonomi Digital Lokal Terus Tumbuh, UMKM Makin Adaptif</h3><span>1 jam lalu</span></article>
+      <article class="p6-mini" onclick="showDetail()"><div class="p6-mini-img" style="background-image:url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=700&q=80')"></div><h3>Olahraga Purbalingga Bersiap Hadapi Agenda Kompetisi Daerah</h3><span>1 jam lalu</span></article>
+      <article class="p6-mini" onclick="showDetail()"><div class="p6-mini-img" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=700&q=80')"></div><h3>Internet Desa Diperluas, Pelayanan Publik Makin Terhubung</h3><span>2 jam lalu</span></article>
+      <article class="p6-mini" onclick="showDetail()"><div class="p6-mini-img" style="background-image:url('https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=700&q=80')"></div><h3>Agenda Pemerintahan Daerah Fokus pada Pelayanan Warga</h3><span>2 jam lalu</span></article>
+    </section>
 
-      <div class="section-head" style="margin-top:8px;">
-        <h2>Berita Terkini</h2>
-        <a class="more" href="#">Lihat Semua →</a>
+    <section id="populer" class="p6-popular-box">
+      <div class="p6-section-title"><span class="p6-title-icon">↗</span><h2>Terpopuler</h2></div>
+      <div id="popularList"></div>
+      <a class="p6-more" href="#terkini">Selengkapnya ›</a>
+    </section>
+
+    <section class="p6-video-section">
+      <div class="p6-section-title"><span></span><h2>Video</h2><a href="video.html">Selengkapnya ›</a></div>
+      <div class="p6-video-feature" onclick="location.href='video.html'">
+        <div class="p6-video-cover" style="background-image:url('https://images.unsplash.com/photo-1500534623283-312aade485b7?w=1200&q=80')"><span class="p6-play">▶</span></div>
+        <div class="p6-video-copy"><b>PURBALINK+</b><p>Menjelajah kabar, cerita warga, dan perkembangan terbaru Purbalingga</p></div>
       </div>
-      <div class="tabs">
-        <span class="tab active">Semua</span>
-        <span class="tab">Nasional</span>
-        <span class="tab">Ekonomi</span>
-        <span class="tab">Teknologi</span>
-        <span class="tab">Olahraga</span>
+      <div class="p6-video-rail">
+        <a href="video.html" class="p6-video-tile"><div style="background-image:url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=500&q=80')"><span>▶ 02:17</span></div></a>
+        <a href="video.html" class="p6-video-tile"><div style="background-image:url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=500&q=80')"><span>▶ 01:37</span></div></a>
+        <a href="video.html" class="p6-video-tile"><div style="background-image:url('https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=500&q=80')"><span>▶ 01:31</span></div></a>
       </div>
+    </section>
+
+    <section class="p6-choice">
+      <div class="p6-section-title"><span></span><h2>Berita Pilihan</h2></div>
+      <article class="p6-choice-main" onclick="showDetail()">
+        <div class="p6-choice-img" style="background-image:url('https://images.unsplash.com/photo-1461696114087-397271a7aedc?w=1100&q=80')"></div>
+        <span>12 menit lalu</span>
+        <h3>Pembangunan dan Pelayanan Publik Jadi Sorotan Warga</h3>
+        <p>Pemerintah daerah terus mempercepat perbaikan layanan dan fasilitas masyarakat di sejumlah wilayah...</p>
+      </article>
+      <div id="editorList" class="p6-choice-list"></div>
+    </section>
+
+    <section id="terkini" class="p6-news-section">
+      <div class="p6-section-title"><span></span><h2>News</h2></div>
+      <article class="p6-news-lead" onclick="showDetail()">
+        <div class="p6-news-lead-img" style="background-image:url('https://images.unsplash.com/photo-1601134467661-3d775b999c8b?w=1100&q=80')"></div>
+        <h3>PURBALINK Hadirkan Berita Lokal Lebih Dekat dan Lebih Cepat</h3>
+      </article>
       <div class="cardgrid" id="newsGrid"></div>
-    </div>
+    </section>
 
-    <aside>
-      <div class="side-card">
-        <div class="section-head"><h2>Terpopuler</h2><a class="more" href="#">Lihat Semua</a></div>
-        <div id="popularList"></div>
+    <section class="p6-photo-section">
+      <div class="p6-section-title"><span></span><h2>Foto Pilihan</h2><a href="#">Selengkapnya ›</a></div>
+      <div class="p6-photo-stack">
+        <article style="background-image:url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1100&q=80')"><span class="p6-photo-count">▧ 7 Foto</span><h3>Wajah Purbalingga dari Sudut yang Berbeda</h3></article>
+        <article style="background-image:url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd4297?w=1100&q=80')"><span class="p6-photo-count">▧ 5 Foto</span><h3>Momen Warga dan Alam dalam Satu Cerita</h3></article>
+        <article style="background-image:url('https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1100&q=80')"><span class="p6-photo-count">▧ 6 Foto</span><h3>Pemandangan Hijau yang Menjadi Kebanggaan Daerah</h3></article>
       </div>
-      <div class="side-card">
-        <div class="section-head"><h2>Pilihan Editor</h2><a class="more" href="#">Lihat Semua</a></div>
-        <div id="editorList"></div>
+    </section>
+
+    <section id="rekomendasi" class="p6-showbiz">
+      <div class="p6-section-title"><span></span><h2>ShowBiz</h2></div>
+      <article class="p6-show-main" onclick="showDetail()"><div style="background-image:url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1100&q=80')"></div><h3>Musik, Kreativitas, dan Cerita Anak Muda Purbalingga</h3></article>
+      <div class="p6-grid2">
+        <article class="p6-mini"><div class="p6-mini-img" style="background-image:url('https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=700&q=80')"></div><h3>Komunitas Kreatif Gelar Panggung Akhir Pekan</h3><span>44 menit lalu</span></article>
+        <article class="p6-mini"><div class="p6-mini-img" style="background-image:url('https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=700&q=80')"></div><h3>Talenta Lokal Makin Percaya Diri Berkarya</h3><span>53 menit lalu</span></article>
       </div>
-    </aside>
+    </section>
   </div>
 </main>
 
-<footer>
+<footer class="p6-footer">
   <div class="wrap">
-    <div>
-      <div class="fbrand">PURBALINK</div>
-      <p style="max-width:280px;font-size:12.5px;line-height:1.6;">Portal berita terpercaya untuk Indonesia. Cepat, berimbang, dan dekat dengan masyarakat.</p>
+    <div class="p6-footer-brand"><img src="brand-icon-transparent.png" alt=""><b><span class="brand-purba">PURBA</span><span class="brand-link">LINK</span></b></div>
+    <div class="p6-footer-links">
+      <a href="kontak.html">Kontak</a><a href="redaksi.html">Redaksi</a>
+      <a href="privacy.html">Disclaimer & Privasi</a><a href="terms.html">Kode Etik & Ketentuan</a>
+      <a href="pedoman-media-siber.html">Pedoman Media Siber</a><a href="tentang.html">Tentang Kami</a>
+      <a href="loker.html">Karir / Loker</a><a href="kontak.html">Hak Jawab dan Koreksi</a>
     </div>
-    <div style="font-size:12.5px;line-height:2;">Nasional<br>Politik<br>Ekonomi<br>Teknologi</div>
-    <div style="font-size:12.5px;line-height:2;"><a href="tentang.html">Tentang Kami</a><br><a href="redaksi.html">Redaksi</a><br><a href="pedoman-media-siber.html">Pedoman Media Siber</a><br><a href="kontak.html">Kontak</a><br><a href="privacy.html">Privasi</a></div>
-    <div style="font-size:12px;opacity:.7;">© <span data-year>2026</span> PURBALINK. Semua hak dilindungi.<br>#PurbalinggaDigital<br><a href="admin-dashboard.html" style="color:#B7CEF3;font-weight:700;">Dashboard Admin →</a></div>
+    <div class="p6-footer-network"><b>Layanan PURBALINK</b><span>Berita</span><span>Loker</span><span>Shop</span><span>Video</span></div>
+    <div class="p6-social-title">Connect with us</div>
+    <div class="p6-socials"><span>▶</span><span>f</span><span>𝕏</span><span>◎</span><span>☏</span><span>♪</span></div>
+    <div class="p6-copy">Copyright © <span data-year>2026</span> PURBALINK. Semua hak dilindungi.</div>
   </div>
 </footer>
 </div>
@@ -448,8 +460,9 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
 
         <div class="action-row">
           <button class="act-btn" id="bookmarkBtn" onclick="toggleBookmark()">🔖 <span id="bookmarkLabel">Simpan</span></button>
+          <button class="act-btn" onclick="document.querySelector('.comments-head').scrollIntoView({behavior:'smooth',block:'start'})">💬 Komentar</button>
           <button class="act-btn" onclick="shareArticle()">↗ Bagikan</button>
-          <button class="act-btn gift" onclick="toggleGift()">🎁 Kirim Gift</button>
+          <button class="act-btn gift" onclick="toggleGift()">🎁 Gift</button>
         </div>
       </div>
 
@@ -464,6 +477,10 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
         <div class="gift-note" id="giftFeedback">Dukungan Anda membantu jurnalisme berkualitas.</div>
       </div>
 
+      <div class="fb-comments-summary">
+        <div><span>😆</span><span>👍</span><span>😮</span><b>Anda + 486</b></div>
+        <b>15 kali dibagikan</b>
+      </div>
       <div class="comments-head">
         <h3 id="commentCount">Komentar (128)</h3>
         <select class="sort" id="sortSel" onchange="renderComments()">
@@ -487,6 +504,7 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
       </div>
 
       <div id="commentList"></div>
+      <div class="fb-hidden-note"><b>◉ Lihat balasan yang disembunyikan</b><span>Komentar disembunyikan karena mungkin menyinggung, di luar topik, atau spam.</span></div>
     </div>
     <div style="height:40px;"></div>
   </main>
@@ -582,30 +600,27 @@ let giftAmount = 10000;
 document.getElementById("todayDate").textContent = new Date().toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 
 function renderHome(){
-  document.getElementById("newsGrid").innerHTML = newsData.map(n=>`
-    <div class="card" onclick="showDetail()">
-      <div class="card-img" style="background-image:url('${n.img}')"></div>
-      <div class="card-body">
-        <span class="cat">${n.cat}</span>
-        <h3>${n.title}</h3>
-        <div class="meta">${n.meta}</div>
-      </div>
-    </div>`).join("");
+  const grid=document.getElementById("newsGrid");
+  if(grid) grid.innerHTML = newsData.map((n,i)=>`
+    <article class="p6-mini p6-news-card" onclick="showDetail()">
+      <div class="p6-mini-img" style="background-image:url('${n.img}')"></div>
+      <h3>${n.title}</h3>
+      <span>${i===0?'39 menit lalu':n.meta}</span>
+    </article>`).join("");
 
-  document.getElementById("popularList").innerHTML = popularData.map((p,i)=>`
-    <div class="rank-item">
-      <div class="rank-num">${i+1}</div>
-      <div class="rank-txt"><a href="#" onclick="showDetail();return false;">${p.t}</a><div class="rank-meta">${p.m}</div></div>
-    </div>`).join("");
+  const pop=document.getElementById("popularList");
+  if(pop) pop.innerHTML = popularData.slice(0,4).map((p,i)=>`
+    <article class="p6-pop-row" onclick="showDetail()">
+      <div class="p6-pop-thumb" style="background-image:url('${newsData[i%newsData.length].img}')"></div>
+      <div><h3>${p.t}</h3><span>${i%2?'Peristiwa':'News'}</span></div>
+    </article>`).join("");
 
-  document.getElementById("editorList").innerHTML = editorData.map(e=>`
-    <div class="rank-item" style="border:none;padding:9px 0;">
-      <div class="rank-txt">
-        <span class="cat">${e.tag}</span>
-        <a href="#" style="margin-top:3px;">${e.t}</a>
-        <div class="rank-meta">Oleh ${e.by}</div>
-      </div>
-    </div>`).join("");
+  const editor=document.getElementById("editorList");
+  if(editor) editor.innerHTML = editorData.map((e,i)=>`
+    <article class="p6-choice-row" onclick="showDetail()">
+      <div class="p6-choice-thumb" style="background-image:url('${newsData[(i+2)%newsData.length].img}')"></div>
+      <div><span>${16+i*8} menit lalu</span><h3>${e.t}</h3></div>
+    </article>`).join("");
 }
 renderHome();
 
@@ -866,8 +881,11 @@ function renderThread(c){
         <div class="c-text">${c.text}</div>
         ${c.sticker ? `<img src="${c.sticker}" class="comment-sticker-img" alt="stiker">` : ''}
         <div class="c-actions">
+          <span class="fb-reply" onclick="toggleReply(${c.id})">Balas</span>
           ${reactControlHTML(c)}
-          <span onclick="toggleReply(${c.id})">Balas</span>
+          <span class="fb-action-spacer"></span>
+          <button class="fb-vote" onclick="pickCommentReaction(${c.id},'suka')" aria-label="Suka">👍</button>
+          <button class="fb-vote" onclick="toggleDislike(event,${c.id})" aria-label="Tidak suka">👎</button>
         </div>
         ${c.replyOpen? `
         <div class="reply-box">
@@ -889,11 +907,20 @@ function renderReply(r){
         <div class="c-text">${r.text}</div>
         ${r.sticker ? `<img src="${r.sticker}" class="comment-sticker-img" alt="stiker">` : ''}
         <div class="c-actions">
+          <span class="fb-reply">Balas</span>
           ${reactControlHTML(r)}
+          <span class="fb-action-spacer"></span>
+          <button class="fb-vote" onclick="pickCommentReaction(${r.id},'suka')" aria-label="Suka">👍</button>
+          <button class="fb-vote" onclick="toggleDislike(event,${r.id})" aria-label="Tidak suka">👎</button>
         </div>
       </div>
     </div>
   </div>`;
+}
+function toggleDislike(event,id){
+  const btn=event.currentTarget;
+  btn.classList.toggle("active");
+  if(btn.classList.contains("active")) btn.setAttribute("aria-pressed","true"); else btn.removeAttribute("aria-pressed");
 }
 function initials(name){
   return name.split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase();
