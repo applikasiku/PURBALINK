@@ -1,10 +1,10 @@
-PURBALINK V2.6.0 — Ads Monetization + Admin Precision
+PURBALINK V2.7.0 — Compact Admin Grid + Bulk Sticker Packages
 Build date: 2026-09-19
 Domain target: https://purbalink.web.id
-Admin: Functional V5.1 + Ads/AdSense Manager
-Ad slots: top header, header banner, native, article top/middle/bottom, sidebar, footer, anchor, reward
-Ad providers: Direct / Mandiri + Google AdSense
-Performance: lazy ad loading, async AdSense, CLS-safe containers, responsive admin
+Admin launcher: compact 5-column grid
+Admin ads: disabled on admin-dashboard.html
+Sticker manager: bulk upload max 50, auto package/category, rename/delete package
+Sticker storage: compressed browser assets + PURBALINK sticker library
+GIF provider: Giphy
 Cloudflare Worker: purbalink
-Jobs API: Jooble via Cloudflare Worker
 Payment gateway: Midtrans Snap
