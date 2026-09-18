@@ -1,3 +1,19 @@
+# PURBALINK V2.8.0
+
+- Split the public portal and admin dashboard by hostname.
+- Public portal remains at https://purbalink.web.id.
+- Admin dashboard is served at https://admin.purbalink.web.id/.
+- Removed the Dashboard Admin link from the public profile UI.
+- Public requests to /admin-dashboard.html and /admin/* now return 404.
+- Added Cloudflare Access header enforcement on the admin hostname.
+- Only the configured ADMIN_EMAIL value is accepted; current value is amelianewsid@gmail.com.
+- Admin HTML and assets are marked noindex/nofollow/noarchive and use no-store where appropriate.
+- Admin root / now serves admin-dashboard.html internally.
+- Public and admin custom domains are declared in Wrangler.
+- Worker now runs first for all routes so host-level separation can be enforced before static assets.
+- Ads remain disabled on the admin dashboard.
+- Bumped PWA cache to V2.8.
+
 # PURBALINK V2.7.0
 
 - Replaced text-heavy admin quick actions with a precise 5-column icon grid for Artikel, Lowongan, Produk, Pesanan, Video, Komentar, Sticker, Iklan, Pengaturan, and Integrasi.
