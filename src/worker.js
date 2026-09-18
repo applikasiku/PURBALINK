@@ -145,6 +145,102 @@ async function searchJooble(request, env) {
   return json({ configured: true, totalCount: data.totalCount || 0, jobs: Array.isArray(data.jobs) ? data.jobs : [] });
 }
 
+function aiProviderConfig(name, env, requestedModel = '') {
+  const map = {
+    openai: { key: env.OPENAI_API_KEY, model: requestedModel || env.OPENAI_MODEL || 'gpt-5.6-luna' },
+    gemini: { key: env.GEMINI_API_KEY, model: requestedModel || env.GEMINI_MODEL || 'gemini-3.5-flash-lite' },
+    deepseek: { key: env.DEEPSEEK_API_KEY, model: requestedModel || env.DEEPSEEK_MODEL || 'deepseek-flash' },
+    groq: { key: env.GROQ_API_KEY, model: requestedModel || env.GROQ_MODEL || 'openai/gpt-oss-20b' },
+    mistral: { key: env.MISTRAL_API_KEY, model: requestedModel || env.MISTRAL_MODEL || 'mistral-small-latest' },
+    anthropic: { key: env.ANTHROPIC_API_KEY, model: requestedModel || env.ANTHROPIC_MODEL || 'claude-haiku-4-5-20251001' },
+    openrouter: { key: env.OPENROUTER_API_KEY, model: requestedModel || env.OPENROUTER_MODEL || 'openrouter/free' },
+    together: { key: env.TOGETHER_API_KEY, model: requestedModel || env.TOGETHER_MODEL || 'openai/gpt-oss-120b' }
+  };
+  return map[name] || null;
+}
+function aiOrder(env) {
+  return String(env.AI_PROVIDER_ORDER || 'openrouter,groq,gemini,deepseek,mistral,together,openai,anthropic').split(',').map(x => x.trim().toLowerCase()).filter(Bolean));
+}
+function maxTokensForWords(words) {
+  const n = Math.max(500, Math.min(2200, Number(words) || 1000));
+  return Math.max(1400, Math.min(5200, Math.round(n * 2.15)));
+}
+function htmlToText(html) {
+  return String(html || '').replace(/<script[\s\S]*?<\/script>/gi,' ').replace(/<style[\s\S]*?<\/style>/gi,' ').replace(/<noscript[\s\S]*?<\/noscript>/gi,' ').replace(/<svg[\s\S]*?<\/svg>/gi,' ').replace(/<(br|\/p|\/div|\/li|\/h[1-6])>/gi,'\n').replace(/<[^>]+>/g,' ').replace(/&nbsp;/gi,' ').replace(/&amp;/gi,'&').replace(/&quot;/gi,'"').replace(/&#39;|&apos;/gi,"'").replace(/&lt;/gi,'<').replace(/&gt;/gi,'>').replace(/[ \t]+/g,' ').replace(/\n\s*\n+/g,'\n').trim();
+}
+function safeRemoteUrl(raw) {
+  let u; try { u = new URL(String(raw || '')); } catch { return null; }
+  if (!['http:','https:'].includes(u.protocol)) return null;
+  const h=u.hostname.toLowerCase();
+  if (h==='localhost'||h.endsWith('.local')||h==='0.0.0.0'||h==='::1') return null;
+  if (/^(10|127)\./.test(h)||/^192\.168\./.test(h)||/^169\.254\./.test(h)) return null;
+  const m=h.match(/^172\.(\d+)\./); if(m&&Number(m[1])>=16&&Number(m[1])<=31) return null;
+  return u;
+}
+async function fetchSourceArticle(rawUrl) {
+  const u=safeRemoteUrl(rawUrl); if(!u) throw new Error('URL sumber tidak valid atau tidak diizinkan.');
+  const res=await fetch(u.toString(),{headers:{'user-agent':'PURBALINK-Editorial/1.0',accept:'text/html,application/xhtml+xml'},redirect:'follow'});
+  if(!res.ok) throw new Error('Gagal mengambil artikel sumber.');
+  const ct=res.headers.get('content-type')||''; if(!ct.includes('text/html')&&!ct.includes('application/xhtml+xml')) throw new Error('Sumber harus berupa halaman HTML.');
+  const html=(await res.text()).slice(0,300000), match=html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  const title=(match&&match[1]?match[1]:'').replace(/<[^>]+>/g,' ').trim(), text=htmlToText(html).slice(0,50000);
+  if(text.length<250) throw new Error('Isi artikel sumber terlalu sedikit atau tidak dapat dibaca.');
+  return {url:u.toString(),title,text};
+}
+function buildArticlePrompt(body,source=null){
+  const category=cleanText(body.category||'Daerah',50),intent=cleanText(body.intent||'news',30),tone=cleanText(body.tone||'Jurnalistik Profesional',80),audience=cleanText(body.audience||'Pembaca Indonesia',180),facts=cleanText(body.facts||'',8000),extra=cleanText(body.extra||'',3000),words=Math.max(500,Math.min(2200,Number(body.length)||1000)),topic=cleanText(body.topic||(source&&source.title)||'Artikel PURBALINK',180);
+  const sourceBlock=source?'SOURCE URL: '+source.url+'\nSOURCE TITLE: '+source.title+'\nSOURCE MATERIAL:\n'+source.text+'\n':'';
+  const system='Anda adalah editor senior portal berita PURBALINK. Tulis artikel bernilai tinggi dalam Bahasa Indonesia yang akurat, jelas, bermanfaat, tidak clickbait, dan tidak mengarang fakta. Pisahkan fakta dari analisis. Untuk rewrite sumber, buat sintesis baru dengan susunan, pembukaan, urutan informasi, dan redaksi yang benar-benar baru; jangan meniru gaya sumber dan jangan menyalin frasa panjang. Kutipan langsung hanya jika benar-benar tersedia dan singkat. Cantumkan sumber dengan wajar. Hasil WAJIB berupa JSON valid tanpa markdown fence.';
+  const prompt=sourceBlock+'\nTASK: '+(source?'REWRITE / ORIGINAL SYNTHESIS FROM SOURCE':'CREATE ORIGINAL ARTICLE')+'\nTOPIC: '+topic+'\nCATEGORY: '+category+'\nINTENT: '+intent+'\nTONE: '+tone+'\nTARGET LENGTH: sekitar '+words+' kata\nAUDIENCE: '+audience+'\nEDITOR FACTS/NOTES: '+(facts||'Tidak ada fakta tambahan. Jangan membuat angka, nama, tanggal, atau kutipan yang tidak tersedia.')+'\nEXTRA INSTRUCTIONS: '+(extra||'Tambahkan ringkasan, struktur H2/H3 yang natural, FAQ bila relevan, dan penutup yang informatif.')+'\n\nOUTPUT JSON SCHEMA:\n{"title":"judul informatif, menarik, tidak sensasional","html":"HTML artikel lengkap hanya memakai h1,h2,h3,p,ul,ol,li,strong,em,a","meta":"meta description 120-160 karakter","slug":"slug-url","tags":["tag1","tag2","tag3"],"quality_notes":["catatan verifikasi editorial","catatan sumber"]}\nPastikan HTML berdiri sendiri.'+(source?'\nSertakan tautan atribusi ke '+source.url+' dalam artikel atau quality_notes. Buat redaksi orisinal dan tetap hormati atribusi sumber.':'');
+  return {system,prompt,words};
+}
+function parseArticleResult(text){
+  const raw=String(text||'').trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/i,'').trim(); let data;
+  try{data=JSON.parse(raw)}catch{const m=raw.match(/\{[\s\S]*\}/);if(m){try{data=JSON.parse(m[0])}catch{}}}
+  if(!data||typeof data!=='object') throw new Error('Respons AI bukan JSON artikel yang valid.');
+  return {title:cleanText(data.title||'Artikel PURBALINK',220),html:String(data.html||'').slice(0,120000),meta:cleanText(data.meta||'',180),slug:cleanText(data.slug||'',120).toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-'),tags:Array.isArray(data.tags)?data.tags.slice(0,10).map(x=>cleanText(x,50)):[],quality_notes:Array.isArray(data.quality_notes)?data.quality_notes.slice(0,8).map(x=>cleanText(x,250)):[]};
+}
+async function callOpenAI(system,prompt,cfg,maxTokens){
+  const res=await fetch('https://api.openai.com/v1/responses',{method:'POST',headers:{authorization:'Bearer '+cfg.key,'content-type':'application/json'},body:JSON.stringify({model:cfg.model,input:[{role:'system',content:[{type:'input_text',text:system}]},{role:'user',content:[{type:'input_text',text:prompt}]}],max_output_tokens:maxTokens})});
+  const data=await res.json().catch(()=>({})); if(!res.ok) throw Object.assign(new Error((data.error&&data.error.message)||'OpenAI gagal.'),{status:res.status});
+  let text=data.output_text||''; if(!text&&Array.isArray(data.output)){for(const item of data.output)for(const c of(item.content||[]))if(c.type==='output_text'&&c.text)text+=c.text} return text;
+}
+async function callGemini(system,prompt,cfg,maxTokens){
+  const endpoint='https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(cfg.model)+':generateContent?key='+encodeURIComponent(cfg.key);
+  const res=await fetch(endpoint,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({system_instruction:{parts:[{text:system}]},contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:maxTokens,responseMimeType:'application/json'}})});
+  const data=await res.json().catch(()=>({})); if(!res.ok) throw Object.assign(new Error((data.error&&data.error.message)||'Gemini gagal.'),{status:res.status});
+  const cand=(data.candidates||[])[0]||{}, parts=(cand.content&&cand.content.parts)||[]; return parts.map(p=>p.text||'').join('');
+}
+async function callAnthropic(system,prompt,cfg,maxTokens){
+  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'x-api-key':cfg.key,'anthropic-version':'2023-06-01','content-type':'application/json'},body:JSON.stringify({model:cfg.model,max_tokens:maxTokens,system,messages:[{role:'user',content:prompt}]})});
+  const data=await res.json().catch(()=>({})); if(!res.ok) throw Object.assign(new Error((data.error&&data.error.message)||'Anthropic gagal.'),{status:res.status}); return (data.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('');
+}
+async function callOpenAICompatible(provider,system,prompt,cfg,maxTokens){
+  const endpoints={deepseek:'https://api.deepseek.com/chat/completions',groq:'https://api.groq.com/openai/v1/chat/completions',mistral:'https://api.mistral.ai/v1/chat/completions',openrouter:'https://openrouter.ai/api/v1/chat/completions',together:'https://api.together.xyz/v1/chat/completions'};
+  const headers={authorization:'Bearer '+cfg.key,'content-type':'application/json'}; if(provider==='openrouter'){headers['HTTP-Referer']='https://purbalink.web.id';headers['X-Title']='PURBALINK'}
+  const res=await fetch(endpoints[provider],{method:'POST',headers,body:JSON.stringify({model:cfg.model,messages:[{role:'system',content:system},{role:'user',content:prompt}],max_tokens:maxTokens})});
+  const data=await res.json().catch(()=>({})); if(!res.ok) throw Object.assign(new Error((data.error&&data.error.message)||(provider+' gagal.')),{status:res.status});
+  return data.choices&&data.choices[0]&&data.choices[0].message?data.choices[0].message.content:'';
+}
+async function callAIProvider(provider,system,prompt,cfg,maxTokens){
+  if(provider==='openai') return callOpenAI(system,prompt,cfg,maxTokens);
+  if(provider==='gemini') return callGemini(system,prompt,cfg,maxTokens);
+  if(provider==='anthropic') return callAnthropic(system,prompt,cfg,maxTokens);
+  return callOpenAICompatible(provider,system,prompt,cfg,maxTokens);
+}
+async function generateAIArticle(request,env){
+  let body; try{body=await request.json()}catch{return json({error:'Body JSON tidak valid.'},400)}
+  const modeName=body.mode==='rewrite_url'?'rewrite_url':'generate'; let source=null;
+  if(modeName==='rewrite_url'){if(!body.source_url)return json({error:'URL sumber wajib diisi.'},400);source=await fetchSourceArticle(body.source_url)}
+  else if(!cleanText(body.topic,180))return json({error:'Topik wajib diisi.'},400);
+  const built=buildArticlePrompt(body,source),maxTokens=maxTokensForWords(built.words),requested=cleanText(body.provider||'auto',30).toLowerCase(),providers=requested==='auto'?aiOrder(env):[requested],errors=[];
+  for(const provider of providers){const cfg=aiProviderConfig(provider,env,cleanText(body.model||'',120));if(!cfg||!cfg.key){errors.push(provider+': API key belum ada');continue}
+    try{const text=await callAIProvider(provider,built.system,built.prompt,cfg,maxTokens),article=parseArticleResult(text);return json({...article,provider,model:cfg.model,source_url:source?source.url:null,fallback_attempts:errors.length})}
+    catch(error){errors.push(provider+': '+String((error&&error.message)||error).slice(0,180));if(requested!=='auto')break}
+  }
+  return json({error:'Semua provider AI gagal atau belum dikonfigurasi.',details:errors},503);
+}
+
 async function verifyNotification(request, env) {
   if (!env.MIDTRANS_SERVER_KEY) return json({ error: 'MIDTRANS_SERVER_KEY belum dikonfigurasi.' }, 503);
   let body;
@@ -168,8 +264,9 @@ export default {
 
     try {
       if (url.pathname === '/api/jobs/jooble' && request.method === 'POST') return searchJooble(request, env);
+      if (url.pathname === '/api/ai/article' && request.method === 'POST') return generateAIArticle(request, env);
       if (url.pathname === '/api/health') {
-        return json({ ok: true, app: 'PURBALINK', payment_gateway: 'Midtrans', mode: mode(env), midtrans_configured: Boolean(env.MIDTRANS_SERVER_KEY) });
+        return json({ ok: true, app: 'PURBALINK', payment_gateway: 'Midtrans', mode: mode(env), midtrans_configured: Boolean(env.MIDTRANS_SERVER_KEY), ai: { openai:Boolean(env.OPENAI_API_KEY), gemini:Boolean(env.GEMINI_API_KEY), deepseek:Boolean(env.DEEPSEEK_API_KEY), groq:Boolean(env.GROQ_API_KEY), mistral:Boolean(env.MISTRAL_API_KEY), anthropic:Boolean(env.ANTHROPIC_API_KEY), openrouter:Boolean(env.OPENROUTER_API_KEY), together:Boolean(env.TOGETHER_API_KEY) } });
       }
       if (url.pathname === '/api/midtrans/transaction' && request.method === 'POST') return createTransaction(request, env);
       if (url.pathname === '/api/midtrans/status' && request.method === 'GET') return getStatus(request, env);
