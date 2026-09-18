@@ -1,9 +1,8 @@
-PURBALINK V2.7.0 — Multi-Provider AI Generator + URL Rewrite
-Build date: 2026-09-18
+PURBALINK V2.5.0 — Functional Admin Dashboard V5
+Build date: 2026-09-19
 Domain target: https://purbalink.web.id
-Admin: responsive PWA dashboard + AI Article Generator
-AI providers: OpenAI, Gemini, DeepSeek, Groq, Mistral, Anthropic, OpenRouter, Together
-AI mode: Auto Hemat fallback + browser cache + URL rewrite
+Admin: CRUD Article, Loker, Shop, Video, Users, Moderation, Sticker/GIF, Settings, Integrations
+Cloudflare Worker: purbalink
 Jobs API: Jooble via Cloudflare Worker
 Payment gateway: Midtrans Snap
 Brand: Blue #0B5ED7 + Red #E3062C
