@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Daftar — PURBALINK</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#093A8A">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --teal-900:#093A8A;--teal-700:#0B5ED7;--teal-600:#1D6FE8;--teal-50:#EEF5FF;
+  --ink:#101828;--ink-2:#5B6574;--line:#DCE6F5;--paper:#ffffff;--bg:#F5F8FC;--green:#1a9f5c;
+}
+*{box-sizing:border-box;}
+html{overflow-x:hidden;}
+body{margin:0;overflow-x:hidden;max-width:100vw;font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+a{color:inherit;text-decoration:none;}
+.card{width:100%;max-width:420px;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:36px 32px;box-shadow:0 10px 30px rgba(16,24,64,.06);}
+.logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:26px;}
+.mark{width:38px;height:38px;border-radius:9px;background:linear-gradient(150deg,var(--teal-600),var(--teal-900));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;}
+.word{font-size:22px;font-weight:800;letter-spacing:-.7px;color:var(--teal-900);}
+h1{font-size:20px;text-align:center;margin:0 0 4px;font-weight:800;}
+.sub{text-align:center;color:var(--ink-2);font-size:13.5px;margin:0 0 24px;}
+.btn-google{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;height:46px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-size:14px;font-weight:600;color:var(--ink);}
+.btn-google:hover{background:#fafbff;border-color:#C8D8F2;}
+.divider{display:flex;align-items:center;gap:12px;margin:22px 0;color:var(--ink-2);font-size:12px;}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line);}
+label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-2);margin:0 0 6px;}
+.field{margin-bottom:15px;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+input[type=text],input[type=email],input[type=password]{width:100%;height:44px;border:1.5px solid var(--line);border-radius:9px;padding:0 14px;font-size:14px;outline:none;font-family:inherit;}
+input:focus{border-color:var(--teal-600);}
+.pw-row{position:relative;}
+.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:700;color:var(--teal-700);background:none;border:none;cursor:pointer;}
+.strength{height:4px;border-radius:2px;background:var(--line);margin-top:7px;overflow:hidden;}
+.strength-bar{height:100%;width:0%;background:#E3062C;transition:all .2s;}
+.strength-label{font-size:11px;color:var(--ink-2);margin-top:5px;}
+.check{display:flex;gap:8px;font-size:12.5px;color:var(--ink-2);margin:6px 0 18px;line-height:1.5;}
+.check a{color:var(--teal-700);font-weight:600;}
+.btn-primary{width:100%;height:46px;background:var(--teal-600);color:#fff;border:none;border-radius:10px;font-size:14.5px;font-weight:700;}
+.btn-primary:hover{opacity:.92;}
+.foot{text-align:center;font-size:13px;color:var(--ink-2);margin-top:22px;}
+.foot a{color:var(--teal-700);font-weight:700;}
+.err{background:#FFF0F3;border:1px solid #F3BBC6;color:#B80F24;font-size:12.5px;padding:10px 12px;border-radius:8px;margin-bottom:16px;display:none;}
+.err.show{display:block;}
+.back{display:block;text-align:center;font-size:12.5px;color:var(--ink-2);margin-bottom:18px;}
+
+/* ===== PURBALINK 2026 BRAND SYSTEM — visual only, feature logic unchanged ===== */
+.brand-purba{color:#0B5ED7}.brand-link{color:#E3062C}
+.mark{background-color:transparent!important;background-image:url("brand-icon-transparent.png")!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;color:transparent!important;overflow:hidden!important}
+.logo .word,.pword{letter-spacing:-.55px}
+</style>
+<link rel="stylesheet" href="v2.css">
+</head>
+<body>
+
+<div class="card">
+  <a class="back" href="index.html">← Kembali ke Beranda</a>
+  <div class="logo"><div class="mark">P</div><div class="word"><span class="brand-purba">PURBA</span><span class="brand-link">LINK</span></div></div>
+  <h1>Buat Akun Baru</h1>
+  <p class="sub">Gabung dan dukung jurnalisme berkualitas dari Indonesia</p>
+
+  <div class="err" id="regErr"></div>
+
+  <button class="btn-google" onclick="googleRegister()">
+    <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.5 29.3 35.5 24 35.5c-6.4 0-11.5-5.1-11.5-11.5S17.6 12.5 24 12.5c2.9 0 5.6 1.1 7.6 2.9l6-6C34 5.9 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.2-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 12.5 24 12.5c2.9 0 5.6 1.1 7.6 2.9l6-6C34 5.9 29.3 4 24 4c-7.7 0-14.3 4.4-17.7 10.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-4.9l-6.3-5.3c-2 1.4-4.5 2.2-7.2 2.2-5.3 0-9.7-3.4-11.3-8.1l-6.5 5C9.6 39.6 16.2 44 24 44z"/><path fill="#0B5ED7" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.3 5.3C39.9 36.7 44 31 44 24c0-1.2-.1-2.4-.4-3.5z"/></svg>
+    Daftar dengan Google
+  </button>
+
+  <div class="divider">atau daftar dengan email</div>
+
+  <form id="regForm" onsubmit="return handleRegister(event)">
+    <div class="two">
+      <div class="field"><label>Nama Depan</label><input type="text" id="fname" required></div>
+      <div class="field"><label>Nama Belakang</label><input type="text" id="lname" required></div>
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="regEmail" placeholder="nama@email.com" required>
+    </div>
+    <div class="field">
+      <label>Kata Sandi</label>
+      <div class="pw-row">
+        <input type="password" id="regPass" placeholder="Minimal 8 karakter" oninput="checkStrength()" required>
+        <button type="button" class="pw-toggle" onclick="togglePw('regPass',this)">Lihat</button>
+      </div>
+      <div class="strength"><div class="strength-bar" id="strBar"></div></div>
+      <div class="strength-label" id="strLabel">Gunakan kombinasi huruf, angka, dan simbol</div>
+    </div>
+    <label class="check"><input type="checkbox" id="agree" required style="margin-top:2px;">
+      Saya menyetujui <a href="#">Syarat & Ketentuan</a> dan <a href="#">Kebijakan Privasi</a> PURBALINK.
+    </label>
+    <button type="submit" class="btn-primary">Buat Akun</button>
+  </form>
+
+  <p class="foot">Sudah punya akun? <a href="login.html">Masuk di sini</a></p>
+</div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+// Ganti dengan URL Worker Anda setelah `wrangler deploy`, dan Client ID dari Google Cloud Console.
+const API_BASE = window.location.origin;
+const GOOGLE_CLIENT_ID = "";
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+function togglePw(id, btn){
+  const el = document.getElementById(id);
+  const showing = el.type === "text";
+  el.type = showing ? "password" : "text";
+  btn.textContent = showing ? "Lihat" : "Sembunyi";
+}
+
+window.addEventListener("load", () => {
+  if (!GOOGLE_CLIENT_ID || typeof google === "undefined" || !google.accounts) return;
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: async (response) => {
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/google`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id_token: response.credential }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Gagal daftar dengan Google.");
+        localStorage.setItem("purbalink_token", data.token);
+        localStorage.setItem("purbalink_user", JSON.stringify(data.user));
+        window.location.href = "purbalink-home.html";
+      } catch (e) {
+        showErr(e.message);
+      }
+    },
+  });
+});
+function showErr(msg){
+  const err = document.getElementById("regErr");
+  err.textContent = msg;
+  err.classList.add("show");
+}
+function checkStrength(){
+  const v = document.getElementById("regPass").value;
+  let score = 0;
+  if(v.length>=8) score++;
+  if(/[A-Z]/.test(v)) score++;
+  if(/[0-9]/.test(v)) score++;
+  if(/[^A-Za-z0-9]/.test(v)) score++;
+  const bar = document.getElementById("strBar");
+  const label = document.getElementById("strLabel");
+  const levels = [
+    {w:"0%",c:"#E3062C",t:"Gunakan kombinasi huruf, angka, dan simbol"},
+    {w:"25%",c:"#E3062C",t:"Lemah"},
+    {w:"50%",c:"#f5a623",t:"Sedang"},
+    {w:"75%",c:"#0B5ED7",t:"Kuat"},
+    {w:"100%",c:"#1a9f5c",t:"Sangat kuat"},
+  ];
+  const lv = levels[v.length===0?0:score];
+  bar.style.width = lv.w;
+  bar.style.background = lv.c;
+  label.textContent = lv.t;
+  label.style.color = lv.c;
+}
+function googleRegister(){
+  if (typeof google !== "undefined" && google.accounts) {
+    google.accounts.id.prompt();
+  } else {
+    showErr("Layanan Google belum siap. Coba lagi sebentar.");
+  }
+}
+async function handleRegister(e){
+  e.preventDefault();
+  const err = document.getElementById("regErr");
+  err.classList.remove("show");
+  const name = `${document.getElementById("fname").value.trim()} ${document.getElementById("lname").value.trim()}`.trim();
+  const email = document.getElementById("regEmail").value.trim();
+  const pass = document.getElementById("regPass").value;
+  if(pass.length < 8){
+    showErr("Kata sandi minimal 8 karakter.");
+    return false;
+  }
+  if(!document.getElementById("agree").checked){
+    showErr("Anda harus menyetujui Syarat & Ketentuan.");
+    return false;
+  }
+  try{
+    const res = await fetch(`${API_BASE}/api/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password: pass }),
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || "Gagal mendaftar.");
+    localStorage.setItem("purbalink_token", data.token);
+    localStorage.setItem("purbalink_user", JSON.stringify(data.user));
+    window.location.href = "purbalink-home.html";
+  } catch(e){
+    showErr(e.message);
+  }
+  return false;
+}
+</script>
+<script src="v2.js"></script>
+</body>
+</html>

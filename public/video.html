@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Video — PURBALINK</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --teal-700:#1D6FE8;--teal-500:#2D7CF1;--red-800:#B80F24;--red-500:#E3062C;
+  --paper:#ffffff;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;height:100%;background:#000;overflow:hidden;}
+body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#fff;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+a{color:inherit;text-decoration:none;}
+
+.topbar{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:center;gap:26px;padding:calc(env(safe-area-inset-top) + 12px) 0 10px;background:linear-gradient(rgba(0,0,0,.5),transparent);}
+.topbar span{font-size:14.5px;font-weight:700;opacity:.6;padding-bottom:8px;}
+.topbar span.active{opacity:1;border-bottom:2.5px solid #fff;}
+
+.feed{height:100vh;height:100dvh;overflow-y:scroll;scroll-snap-type:y mandatory;scrollbar-width:none;}
+.feed::-webkit-scrollbar{display:none;}
+.item{height:100vh;height:100dvh;scroll-snap-align:start;position:relative;display:flex;align-items:flex-end;background-size:cover;background-position:center;}
+.item::after{content:"";position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.15) 40%, rgba(0,0,0,.35) 100%);}
+
+.item-content{position:relative;z-index:5;width:100%;display:flex;justify-content:space-between;align-items:flex-end;padding:0 14px calc(env(safe-area-inset-bottom) + 76px);}
+
+.left-info{max-width:76%;}
+.uname{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.uname b{font-size:14.5px;font-weight:800;}
+.follow-btn{border:1.5px solid #fff;border-radius:6px;padding:2px 10px;font-size:11px;font-weight:800;}
+.follow-btn.following{background:rgba(255,255,255,.2);}
+.caption{font-size:13.5px;line-height:1.5;margin-bottom:8px;}
+.music-row{display:flex;align-items:center;gap:6px;font-size:12px;opacity:.9;}
+
+.right-actions{display:flex;flex-direction:column;align-items:center;gap:19px;flex-shrink:0;padding-left:10px;}
+.ract{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.ract .ic-circle{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:21px;backdrop-filter:blur(2px);}
+.ract .ic-circle.liked{color:var(--red-500);}
+.ract span{font-size:11px;font-weight:700;}
+.avatar-ring{width:46px;height:46px;border-radius:50%;border:2px solid #fff;background-size:cover;background-position:center;position:relative;margin-bottom:6px;}
+.avatar-plus{position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);width:19px;height:19px;border-radius:50%;background:var(--red-500);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
+
+/* comments sheet */
+.sheet-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:80;display:none;}
+.sheet-backdrop.show{display:block;}
+.comment-sheet{position:fixed;left:0;right:0;bottom:0;background:#181818;border-radius:18px 18px 0 0;z-index:90;max-height:65vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .25s;padding-bottom:env(safe-area-inset-bottom);}
+.comment-sheet.show{transform:translateY(0);}
+.sheet-head{text-align:center;padding:12px 0 8px;font-size:13.5px;font-weight:700;border-bottom:1px solid #2c2c2c;position:relative;}
+.sheet-close{position:absolute;right:14px;top:10px;font-size:20px;opacity:.7;}
+.sheet-body{flex:1;overflow-y:auto;padding:12px 16px;}
+.sheet-comment{display:flex;gap:10px;margin-bottom:16px;}
+.sc-avatar{width:32px;height:32px;border-radius:50%;background:var(--teal-700);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.sc-name{font-size:12px;font-weight:700;opacity:.75;}
+.sc-text{font-size:13.5px;margin-top:2px;line-height:1.4;}
+.sc-like{font-size:11px;opacity:.6;margin-top:4px;}
+.sheet-input{display:flex;gap:10px;padding:10px 14px;border-top:1px solid #2c2c2c;}
+.sheet-input input{flex:1;background:#2a2a2a;border:none;border-radius:20px;padding:10px 16px;color:#fff;font-size:13px;outline:none;}
+.sheet-input button{color:var(--teal-500);font-weight:800;font-size:13px;padding:0 6px;}
+
+.mute-btn{position:absolute;top:calc(env(safe-area-inset-top) + 54px);right:14px;z-index:10;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;font-size:15px;}
+
+nav.bottomnav{background:rgba(10,10,10,.92) !important;border-top:1px solid rgba(255,255,255,.08) !important;}
+nav.bottomnav .bn-item{color:rgba(255,255,255,.6) !important;}
+nav.bottomnav .bn-item.active{color:#2D7CF1 !important;}
+
+/* ===== PURBALINK 2026 BRAND SYSTEM — visual only, feature logic unchanged ===== */
+.brand-purba{color:#0B5ED7}.brand-link{color:#E3062C}
+.mark{background-color:transparent!important;background-image:url("brand-icon-transparent.png")!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;color:transparent!important;overflow:hidden!important}
+.logo .word,.pword{letter-spacing:-.55px}
+</style>
+<link rel="stylesheet" href="v2.css">
+</head>
+<body>
+
+<div class="topbar"><span>Mengikuti</span><span class="active">Untuk Kamu</span><span>Purbalingga</span></div>
+
+<button class="mute-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
+
+<div class="feed" id="feed"></div>
+
+<div class="sheet-backdrop" id="sheetBackdrop" onclick="closeComments()"></div>
+<div class="comment-sheet" id="commentSheet">
+  <div class="sheet-head"><span id="commentCountLabel">Komentar</span><span class="sheet-close" onclick="closeComments()">✕</span></div>
+  <div class="sheet-body" id="commentBody"></div>
+  <div class="sheet-input">
+    <input type="text" id="commentInput" placeholder="Tambahkan komentar...">
+    <button onclick="postVideoComment()">Kirim</button>
+  </div>
+</div>
+
+<nav class="bottomnav"></nav>
+
+<style>
+.bottomnav{position:fixed;left:0;right:0;bottom:0;display:flex;z-index:60;padding-bottom:env(safe-area-inset-bottom);}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 7px;}
+.bn-ic{width:22px;height:22px;}
+.bn-label{font-size:10.5px;font-weight:700;}
+</style>
+
+<script>
+if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js").catch(()=>{}); }
+document.querySelector("nav.bottomnav").innerHTML = `
+  <a href="index.html" class="bn-item">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10"/></svg>
+    <span class="bn-label">Beranda</span>
+  </a>
+  <a href="loker.html" class="bn-item">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+    <span class="bn-label">Loker</span>
+  </a>
+  <a href="shop.html" class="bn-item">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <span class="bn-label">Shop</span>
+  </a>
+  <a href="video.html" class="bn-item active">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="18" rx="3"/><path d="M17 8l4-2v12l-4-2z"/></svg>
+    <span class="bn-label">Video</span>
+  </a>
+  <a href="profile.html" class="bn-item">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg>
+    <span class="bn-label">Profile</span>
+  </a>`;
+
+const videos = [
+  {id:1,user:"kulinerpurbalingga",caption:"Sensasi keripik tempe krispi khas Purbalingga 🔥 wajib coba!",music:"Audio Asli · kulinerpurbalingga",img:"https://images.unsplash.com/photo-1626200419199-391ae4be7a41?w=700&q=80",likes:2840,comments:[
+      {name:"Rina S.",text:"Enak banget ini beneran, aku langsung order 😍",likes:24},
+      {name:"Dedi P.",text:"Lokasinya dimana kak?",likes:8},
+    ]},
+  {id:2,user:"purbalink.jobs",caption:"3 tips lolos interview kerja pertama kali! Simak sampai habis 👀",music:"Suara Trending · Podcast Karir",img:"https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=700&q=80",likes:5310,comments:[
+      {name:"Fajar A.","text":"Makasih infonya kak, sangat membantu!",likes:41},
+      {name:"Wulan D.",text:"Ada loker admin nggak ya buat fresh graduate?",likes:12},
+    ]},
+  {id:3,user:"wisata.purbalingga",caption:"Golden sunrise di Purbalingga pagi ini ☀️ siapa yang kangen suasana desa?",music:"Audio Asli · wisata.purbalingga",img:"https://images.unsplash.com/photo-1500534623283-312aade485b7?w=700&q=80",likes:9120,comments:[
+      {name:"Bagus T.",text:"Indah banget pemandangannya masyaAllah",likes:56},
+    ]},
+  {id:4,user:"raihaanakids.store",caption:"Unboxing mainan edukasi kayu terbaru buat si kecil 🧸",music:"Audio Asli · raihaanakids.store",img:"https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=700&q=80",likes:1870,comments:[
+      {name:"Mira K.",text:"Lucu banget, aman ga buat balita?",likes:9},
+    ]},
+  {id:5,user:"purbalink.news",caption:"Update pembangunan jalan lingkar Purbalingga, sudah sejauh mana?",music:"Audio Asli · purbalink.news",img:"https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=700&q=80",likes:3420,comments:[
+      {name:"Anton W.",text:"Semoga cepat selesai, macet terus soalnya",likes:33},
+    ]},
+];
+
+const feed = document.getElementById("feed");
+feed.innerHTML = videos.map(v => `
+  <section class="item" data-id="${v.id}" style="background-image:url('${v.img}')">
+    <div class="item-content">
+      <div class="left-info">
+        <div class="uname">
+          <b>@${v.user}</b>
+          <button class="follow-btn" onclick="toggleFollow(this)">+ Ikuti</button>
+        </div>
+        <div class="caption">${v.caption}</div>
+        <div class="music-row">🎵 <span>${v.music}</span></div>
+      </div>
+      <div class="right-actions">
+        <div class="avatar-ring" style="background-image:url('${v.img}')"><span class="avatar-plus">+</span></div>
+        <div class="ract">
+          <button class="ic-circle" onclick="toggleLike(this, ${v.id})">❤️</button>
+          <span class="like-count">${fmt(v.likes)}</span>
+        </div>
+        <div class="ract">
+          <button class="ic-circle" onclick="openComments(${v.id})">💬</button>
+          <span>${fmt(v.comments.length)}</span>
+        </div>
+        <div class="ract">
+          <button class="ic-circle" onclick="shareVideo(${v.id})">↗</button>
+          <span>Bagikan</span>
+        </div>
+        <div class="ract">
+          <button class="ic-circle" onclick="toggleBookmark(this)">🔖</button>
+          <span>Simpan</span>
+        </div>
+      </div>
+    </div>
+  </section>
+`).join("");
+
+function fmt(n){ return n>=1000 ? (n/1000).toFixed(1).replace(".0","")+"K" : n; }
+
+function toggleFollow(btn){
+  const following = btn.classList.toggle("following");
+  btn.textContent = following ? "Mengikuti" : "+ Ikuti";
+}
+function toggleLike(btn, id){
+  const liked = btn.classList.toggle("liked");
+  const countEl = btn.parentElement.querySelector(".like-count");
+  const v = videos.find(x=>x.id===id);
+  countEl.textContent = fmt(v.likes + (liked?1:0));
+}
+function toggleBookmark(btn){
+  btn.classList.toggle("liked");
+}
+function shareVideo(id){
+  const url = `https://purbalink.web.id/video/${id}`;
+  if(navigator.share){ navigator.share({url}).catch(()=>{}); }
+  else { navigator.clipboard && navigator.clipboard.writeText(url); }
+}
+let muted = true;
+function toggleMute(){
+  muted = !muted;
+  document.getElementById("muteBtn").textContent = muted ? "🔇" : "🔊";
+}
+
+/* comments sheet */
+let activeVideoId = null;
+function openComments(id){
+  activeVideoId = id;
+  const v = videos.find(x=>x.id===id);
+  document.getElementById("commentCountLabel").textContent = `${v.comments.length} Komentar`;
+  renderVideoComments(v);
+  document.getElementById("sheetBackdrop").classList.add("show");
+  document.getElementById("commentSheet").classList.add("show");
+}
+function closeComments(){
+  document.getElementById("sheetBackdrop").classList.remove("show");
+  document.getElementById("commentSheet").classList.remove("show");
+}
+function renderVideoComments(v){
+  document.getElementById("commentBody").innerHTML = v.comments.map(c=>`
+    <div class="sheet-comment">
+      <div class="sc-avatar">${c.name.split(" ").map(w=>w[0]).slice(0,2).join("")}</div>
+      <div>
+        <div class="sc-name">${c.name}</div>
+        <div class="sc-text">${c.text}</div>
+        <div class="sc-like">❤️ ${c.likes}</div>
+      </div>
+    </div>`).join("");
+}
+function postVideoComment(){
+  const input = document.getElementById("commentInput");
+  const text = input.value.trim();
+  if(!text || !activeVideoId) return;
+  const v = videos.find(x=>x.id===activeVideoId);
+  v.comments.push({name:"Anda",text,likes:0});
+  input.value = "";
+  document.getElementById("commentCountLabel").textContent = `${v.comments.length} Komentar`;
+  renderVideoComments(v);
+  document.querySelector(`.item[data-id="${activeVideoId}"] .ract:nth-child(2) span`).textContent = fmt(v.comments.length);
+}
+</script>
+<script src="v2.js"></script>
+</body>
+</html>

@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>PURBALINK — Beranda, Loker, Shop, Video</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#093A8A">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --teal-900:#093A8A;
+  --teal-700:#0B5ED7;
+  --teal-600:#1D6FE8;
+  --teal-50:#EEF5FF;
+  --red-800:#B80F24;
+  --ink:#101828;
+  --ink-2:#5B6574;
+  --line:#DCE6F5;
+  --paper:#ffffff;
+  --bg:#F5F8FC;
+  --amber:#e0900c;
+  --radius:10px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;overflow-x:hidden;overscroll-behavior-x:none;max-width:100vw;}
+body{
+  font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:64px;
+}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+img{max-width:100%;display:block;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px;}
+
+/* ===== bottom nav (5 menu) ===== */
+.bottomnav{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);display:flex;z-index:60;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -3px 14px rgba(9,58,138,.08);}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 7px;color:var(--ink-2);}
+.bn-ic{width:22px;height:22px;}
+.bn-label{font-size:10.5px;font-weight:700;}
+.bn-item.active{color:var(--teal-700);}
+.bn-item:active{opacity:.7;}
+
+/* ===== Top utility bar ===== */
+.topbar{background:var(--teal-900);color:#D9E7FF;font-size:12.5px;}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;height:34px;}
+.topbar .date{opacity:.85;}
+.topbar .links a{margin-left:16px;opacity:.85;}
+.topbar .links a:hover{opacity:1;}
+
+/* ===== Header ===== */
+header.site{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40;}
+.header-row{display:flex;align-items:center;gap:28px;height:74px;}
+.logo{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.logo .mark{
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(150deg,var(--teal-600),var(--teal-900));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:800;font-size:15px;letter-spacing:-.5px;
+}
+.logo .word{font-size:23px;font-weight:800;letter-spacing:-.7px;color:var(--teal-900);}
+.logo .tag{font-size:10px;color:var(--ink-2);letter-spacing:.2px;margin-top:-3px;}
+.search{flex:1;max-width:440px;position:relative;}
+.search input{
+  width:100%;height:42px;border-radius:21px;border:1.5px solid var(--line);
+  background:var(--teal-50);padding:0 44px 0 18px;font-size:14px;color:var(--ink);
+  outline:none;transition:border-color .15s;
+}
+.search input:focus{border-color:var(--teal-600);}
+.search svg{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--ink-2);}
+.header-actions{display:flex;gap:10px;align-items:center;margin-left:auto;flex-shrink:0;}
+.btn{display:inline-block;border:none;border-radius:8px;font-size:14px;font-weight:600;padding:10px 18px;transition:transform .1s,opacity .15s;}
+.btn:active{transform:scale(.97);}
+.btn-ghost{background:transparent;color:var(--teal-700);}
+.btn-ghost:hover{background:var(--teal-50);}
+.btn-primary{background:var(--teal-600);color:#fff;}
+.btn-primary:hover{opacity:.92;}
+.navrow{border-top:1px solid var(--line);}
+.navrow .wrap{display:flex;gap:26px;height:46px;align-items:center;overflow-x:auto;}
+.navrow a{font-size:13.5px;font-weight:600;color:var(--ink-2);white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent;}
+.navrow a.active,.navrow a:hover{color:var(--teal-700);border-color:var(--teal-600);}
+
+/* ===== Breaking bar ===== */
+.breaking{background:var(--red-800);color:#fff;}
+.breaking .wrap{display:flex;align-items:center;gap:14px;height:42px;font-size:13.5px;}
+.breaking .badge{background:#fff;color:var(--red-800);font-weight:800;font-size:11px;letter-spacing:.4px;padding:4px 9px;border-radius:5px;flex-shrink:0;}
+.breaking .txt{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-weight:500;}
+.breaking .time{opacity:.85;font-size:12px;flex-shrink:0;}
+
+/* ===== Layout ===== */
+main{padding:26px 0 60px;}
+.grid{display:grid;grid-template-columns:1fr 320px;gap:24px;}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
+.section-head h2{font-size:16px;margin:0;font-weight:800;}
+.section-head .more{font-size:12.5px;font-weight:700;color:var(--teal-700);}
+.pill{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.3px;padding:3px 9px;border-radius:5px;background:var(--teal-600);color:#fff;}
+
+/* hero */
+.hero-card{background:var(--paper);border-radius:14px;overflow:hidden;border:1px solid var(--line);cursor:pointer;transition:box-shadow .15s;}
+.hero-card:hover{box-shadow:0 8px 22px rgba(16,24,64,.09);}
+.hero-img{aspect-ratio:16/9;background:#173B7A center/cover no-repeat;position:relative;}
+.hero-img .pill{position:absolute;top:14px;left:14px;}
+.hero-body{padding:20px 22px 22px;}
+.hero-body h1{font-size:23px;line-height:1.28;margin:10px 0 8px;font-weight:800;}
+.hero-body p{color:var(--ink-2);font-size:14px;line-height:1.55;margin:0 0 10px;}
+.meta{font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:center;}
+.meta b{color:var(--ink);}
+
+/* side list */
+.side-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:20px;}
+.rank-item{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);}
+.rank-item:last-child{border:none;padding-bottom:0;}
+.rank-item:first-child{padding-top:0;}
+.rank-num{width:22px;height:22px;border-radius:6px;background:var(--teal-50);color:var(--teal-700);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rank-txt a{font-size:13.5px;font-weight:600;line-height:1.4;display:block;}
+.rank-txt a:hover{color:var(--teal-700);}
+.rank-meta{font-size:11.5px;color:var(--ink-2);margin-top:4px;}
+
+.ad-slot{position:relative;border-radius:12px;overflow:hidden;margin:22px 0;background:#eef1f8;}
+.ad-slot img{width:100%;height:auto;display:block;}
+.ad-tag{position:absolute;top:8px;left:8px;background:rgba(16,24,32,.55);color:#fff;font-size:9.5px;font-weight:700;letter-spacing:.3px;padding:2px 8px;border-radius:5px;}
+
+/* article grid cards */
+.tabs{display:flex;gap:6px;margin-bottom:16px;}
+.tab{font-size:12.5px;font-weight:700;padding:7px 14px;border-radius:20px;background:var(--paper);border:1px solid var(--line);color:var(--ink-2);}
+.tab.active{background:var(--teal-600);color:#fff;border-color:var(--teal-600);}
+.cardgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;transition:box-shadow .15s,transform .1s;}
+.card:hover{box-shadow:0 8px 20px rgba(16,24,64,.08);transform:translateY(-1px);}
+.card-img{aspect-ratio:16/10;background-size:cover;background-position:center;}
+.card-body{padding:14px 16px 16px;}
+.cat{font-size:10.5px;font-weight:800;color:var(--teal-700);letter-spacing:.3px;}
+.card h3{font-size:14.5px;line-height:1.38;margin:7px 0 8px;font-weight:700;}
+.card .meta{font-size:11.5px;}
+
+footer{background:var(--teal-900);color:#C7D6F2;padding:34px 0 24px;margin-top:20px;}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;font-size:13px;}
+footer .fbrand{font-size:19px;font-weight:800;color:#fff;}
+
+/* ===== Article detail ===== */
+#detailView{display:none;}
+.article-wrap{max-width:800px;margin:0 auto;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:32px 36px 8px;}
+.back-link{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--teal-700);margin:0 auto 16px;max-width:800px;}
+.art-title{font-size:29px;font-weight:800;line-height:1.28;margin:14px 0 14px;}
+.art-byline{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-2);padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:18px;}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--teal-600);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;}
+.art-figure img{border-radius:10px;width:100%;}
+.art-figure figcaption{font-size:12px;color:var(--ink-2);margin-top:6px;}
+.art-body{font-size:15.5px;line-height:1.85;color:#27364D;margin:20px 0;}
+.art-body p{margin:0 0 16px;}
+
+/* engagement bar */
+.engage{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0;margin:22px 0;}
+.engage .q{font-size:13.5px;font-weight:700;color:var(--ink-2);margin-bottom:12px;}
+
+/* ---- Facebook-style reaction button + popup ---- */
+.react-row{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:18px;}
+.react-main{position:relative;}
+.react-main-btn{display:flex;align-items:center;gap:8px;background:var(--teal-50);border:1.5px solid transparent;border-radius:22px;padding:8px 16px 8px 13px;font-size:13.5px;font-weight:700;color:var(--ink-2);transition:background .12s,border-color .12s;user-select:none;touch-action:manipulation;}
+.react-main-btn:hover{border-color:var(--teal-600);}
+.react-main-btn .ric{width:20px;height:20px;flex-shrink:0;}
+.react-main-btn img.ric{border-radius:50%;object-fit:cover;}
+.react-main-btn.picked{background:var(--teal-50);}
+.react-popup{position:absolute;bottom:calc(100% + 10px);left:0;background:#fff;border-radius:32px;box-shadow:0 10px 28px rgba(9,58,138,.2);padding:8px 9px;display:flex;gap:5px;opacity:0;pointer-events:none;transform:translateY(8px) scale(.88);transform-origin:bottom left;transition:opacity .15s,transform .15s;z-index:40;}
+.react-popup.show{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
+.react-popup img{width:40px;height:40px;cursor:pointer;border-radius:50%;transition:transform .12s;display:block;}
+.react-popup img:hover{transform:scale(1.3) translateY(-6px);}
+.react-summary{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2);}
+.react-summary .stack{display:inline-flex;}
+.react-summary .stack img{width:19px;height:19px;border-radius:50%;border:2px solid #fff;margin-left:-7px;object-fit:cover;}
+.react-summary .stack img:first-child{margin-left:0;}
+
+.rating-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px;}
+.stars{font-size:20px;letter-spacing:2px;color:#D9E2EF;cursor:pointer;}
+.stars span{transition:color .1s;}
+.stars span.on{color:var(--amber);}
+.rating-summary{font-size:13px;color:var(--ink-2);}
+.rating-summary b{color:var(--ink);font-size:14px;}
+.action-row{display:flex;gap:10px;}
+.act-btn{display:flex;align-items:center;gap:7px;background:var(--paper);border:1.5px solid var(--line);border-radius:9px;padding:10px 16px;font-size:13.5px;font-weight:700;color:var(--ink-2);}
+.act-btn:hover{border-color:var(--teal-600);color:var(--teal-700);}
+.act-btn.on{background:var(--teal-50);border-color:var(--teal-600);color:var(--teal-700);}
+.act-btn.gift{border-color:#F7C7D1;color:#D71935;background:#FFF4F6;margin-left:auto;}
+.act-btn.gift:hover{border-color:#D71935;}
+
+/* gift panel */
+.gift-panel{background:linear-gradient(135deg,#FFF0F3,#F8F5FF);border:1px solid #EAD5E4;border-radius:14px;padding:22px 24px;margin:22px 0;}
+.gift-panel .label{font-size:11px;font-weight:800;letter-spacing:.5px;color:#D71935;margin-bottom:10px;}
+.gift-author-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.gift-author-row b{font-size:14.5px;}
+.gift-author-row .role{font-size:12px;color:var(--ink-2);display:block;}
+.gift-noms{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px;}
+.nom{background:#fff;border:1.5px solid #F2C6D0;border-radius:9px;padding:9px 16px;font-weight:700;font-size:13.5px;color:#D71935;}
+.nom.active{background:#D71935;color:#fff;border-color:#D71935;}
+.gift-send{background:#D71935;color:#fff;border:none;border-radius:9px;padding:11px 22px;font-weight:700;font-size:13.5px;}
+.gift-send:hover{opacity:.9;}
+.gift-note{font-size:12px;color:var(--ink-2);margin-top:10px;}
+
+/* comments */
+.comments-head{display:flex;justify-content:space-between;align-items:center;margin:26px 0 16px;}
+.comments-head h3{font-size:17px;font-weight:800;margin:0;}
+select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font-size:12.5px;background:var(--paper);color:var(--ink-2);font-weight:600;}
+.compose textarea{flex:1;border:1.5px solid var(--line);border-radius:10px;padding:11px 14px;font-size:13.5px;font-family:inherit;resize:none;min-height:42px;outline:none;}
+.compose textarea:focus{border-color:var(--teal-600);}
+.compose button{background:var(--teal-600);color:#fff;border:none;border-radius:9px;padding:0 18px;font-weight:700;font-size:13px;}
+.comment{margin-bottom:16px;}
+.c-head{display:flex;gap:10px;}
+.c-body{flex:1;}
+.c-name{font-size:13.5px;font-weight:700;}
+.c-time{font-size:11.5px;color:var(--ink-2);font-weight:500;margin-left:6px;}
+.c-text{font-size:13.5px;line-height:1.55;margin:3px 0 6px;color:#2b3348;}
+.c-actions{display:flex;gap:16px;font-size:12px;font-weight:700;color:var(--ink-2);}
+.c-actions span{cursor:pointer;}
+.c-actions span:hover{color:var(--teal-700);}
+.c-actions .liked{color:var(--red-800);}
+.replies{margin-left:44px;margin-top:12px;border-left:2px solid var(--line);padding-left:16px;}
+.reply-box{display:flex;gap:8px;margin-top:10px;margin-left:44px;}
+.reply-box textarea{flex:1;border:1.5px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;resize:none;min-height:34px;}
+.reply-box button{background:var(--teal-600);color:#fff;border:none;border-radius:7px;padding:0 14px;font-size:12.5px;font-weight:700;}
+.see-more{font-size:12.5px;font-weight:700;color:var(--teal-700);cursor:pointer;margin:6px 0 0 44px;}
+
+/* ---- comment/reply reactions (smaller popup) ---- */
+.c-react-wrap{position:relative;display:inline-block;}
+.c-react-trigger{display:inline-flex;align-items:center;gap:4px;cursor:pointer;}
+.c-react-trigger.liked{font-weight:800;}
+.c-react-icon{width:14px;height:14px;border-radius:50%;object-fit:cover;vertical-align:-2px;}
+.c-react-popup{position:absolute;bottom:calc(100% + 8px);left:-8px;background:#fff;border-radius:26px;box-shadow:0 8px 22px rgba(9,58,138,.2);padding:6px 7px;display:flex;gap:4px;opacity:0;pointer-events:none;transform:translateY(8px) scale(.88);transform-origin:bottom left;transition:opacity .15s,transform .15s;z-index:35;}
+.c-react-popup.show{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
+.c-react-popup img{width:28px;height:28px;cursor:pointer;border-radius:50%;transition:transform .1s;display:block;}
+.c-react-popup img:hover{transform:scale(1.3) translateY(-4px);}
+
+/* ---- sticker/GIF picker for comment compose ---- */
+.compose-wrap{position:relative;margin-bottom:22px;}
+.compose{display:flex;gap:8px;align-items:flex-end;}
+.sticker-btn{width:42px;height:42px;flex-shrink:0;border:1.5px solid var(--line);background:var(--paper);border-radius:10px;font-size:18px;display:flex;align-items:center;justify-content:center;}
+.sticker-btn:hover{border-color:var(--teal-600);}
+.sticker-btn.on{background:var(--teal-50);border-color:var(--teal-600);}
+.sticker-popup{position:absolute;bottom:calc(100% + 8px);left:0;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 30px rgba(9,58,138,.16);padding:12px;display:none;grid-template-columns:repeat(4,1fr);gap:10px;width:260px;z-index:40;}
+.sticker-popup.show{display:grid;}
+.sticker-popup .stk{border-radius:9px;overflow:hidden;cursor:pointer;background:var(--teal-50);transition:transform .1s;border:1.5px solid transparent;}
+.sticker-popup .stk:hover{transform:scale(1.05);border-color:var(--teal-600);}
+.sticker-popup .stk img{width:100%;display:block;}
+.sticker-popup .stk span{display:block;font-size:9.5px;text-align:center;font-weight:700;color:var(--ink-2);padding:2px 0 4px;}
+.sticker-preview{display:flex;align-items:center;gap:10px;margin-bottom:8px;background:var(--teal-50);border-radius:10px;padding:8px 10px;}
+.sticker-preview img{width:52px;border-radius:8px;}
+.sticker-preview button{margin-left:auto;font-size:11.5px;font-weight:700;color:var(--red-800);border:none;background:none;cursor:pointer;}
+.comment-sticker-img{width:120px;border-radius:10px;margin-top:6px;display:block;}
+
+@media(max-width:920px){
+  .grid{grid-template-columns:1fr;}
+  .cardgrid{grid-template-columns:1fr 1fr;}
+  .article-wrap{padding:22px 18px 8px;}
+}
+@media(max-width:600px){
+  .search{display:none;}
+  .cardgrid{grid-template-columns:1fr;}
+  .header-row{height:64px;}
+  .art-title{font-size:23px;}
+}
+
+/* ===== PURBALINK 2026 BRAND SYSTEM — visual only, feature logic unchanged ===== */
+.brand-purba{color:#0B5ED7}.brand-link{color:#E3062C}
+.mark{background-color:transparent!important;background-image:url("brand-icon-transparent.png")!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;color:transparent!important;overflow:hidden!important}
+.logo .word,.pword{letter-spacing:-.55px}
+</style>
+<link rel="stylesheet" href="v2.css">
+</head>
+<body>
+
+<!-- ============ HOME VIEW ============ -->
+<div id="homeView">
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="date" id="todayDate"></span>
+    <span class="links"><a href="#">Foto</a><a href="#">Video</a><a href="#">Indeks</a></span>
+  </div>
+</div>
+
+<header class="site">
+  <div class="wrap header-row">
+    <a class="logo" href="#" onclick="showHome();return false;">
+      <div class="mark">P</div>
+      <div>
+        <div class="word"><span class="brand-purba">PURBA</span><span class="brand-link">LINK</span></div>
+        <div class="tag">Purbalingga, Lebih Dekat, Lebih Cepat</div>
+      </div>
+    </a>
+    <div class="search">
+      <input type="text" placeholder="Cari berita, topik, atau tokoh...">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </div>
+    <div class="header-actions">
+      <a class="btn btn-ghost" href="login.html">Masuk</a>
+      <a class="btn btn-primary" href="register.html">Daftar</a>
+    </div>
+  </div>
+  <nav class="navrow">
+    <div class="wrap">
+      <a href="#" class="active">Nasional</a>
+      <a href="#">Politik</a>
+      <a href="#">Ekonomi</a>
+      <a href="#">Bisnis</a>
+      <a href="#">Teknologi</a>
+      <a href="#">Dunia</a>
+      <a href="#">Olahraga</a>
+      <a href="#">Gaya Hidup</a>
+      <a href="#">Hiburan</a>
+      <a href="#">Otomotif</a>
+    </div>
+  </nav>
+</header>
+
+<div class="breaking">
+  <div class="wrap">
+    <span class="badge">BREAKING</span>
+    <span class="txt">Gempa Magnitudo 5,6 Guncang Kabupaten Bandung, Tidak Berpotensi Tsunami</span>
+    <span class="time">14:32 WIB</span>
+  </div>
+</div>
+
+<main>
+  <div class="wrap grid">
+    <div>
+      <div class="hero-card" onclick="showDetail()">
+        <div class="hero-img" style="background-image:url('https://images.unsplash.com/photo-1601134467661-3d775b999c8b?w=900&q=80')">
+          <span class="pill">NASIONAL</span>
+        </div>
+        <div class="hero-body">
+          <h1>Pemerintah Percepat Pemulihan Pascaerupsi Gunung Lewotobi</h1>
+          <p>Pemerintah menyiapkan bantuan darurat dan relokasi sementara bagi warga terdampak erupsi Gunung Lewotobi di NTT, sembari memastikan layanan dasar tetap berjalan dengan baik.</p>
+          <div class="meta"><b>Tim PURBALINK</b> · 12 Okt 2024 · 14:20 WIB</div>
+        </div>
+      </div>
+
+      <div class="ad-slot">
+        <span class="ad-tag">IKLAN</span>
+        <a href="#" target="_blank" rel="noopener">
+          <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?w=1000&q=80" alt="Contoh iklan produk">
+        </a>
+      </div>
+
+      <div class="section-head" style="margin-top:8px;">
+        <h2>Berita Terkini</h2>
+        <a class="more" href="#">Lihat Semua →</a>
+      </div>
+      <div class="tabs">
+        <span class="tab active">Semua</span>
+        <span class="tab">Nasional</span>
+        <span class="tab">Ekonomi</span>
+        <span class="tab">Teknologi</span>
+        <span class="tab">Olahraga</span>
+      </div>
+      <div class="cardgrid" id="newsGrid"></div>
+    </div>
+
+    <aside>
+      <div class="side-card">
+        <div class="section-head"><h2>Terpopuler</h2><a class="more" href="#">Lihat Semua</a></div>
+        <div id="popularList"></div>
+      </div>
+      <div class="side-card">
+        <div class="section-head"><h2>Pilihan Editor</h2><a class="more" href="#">Lihat Semua</a></div>
+        <div id="editorList"></div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="fbrand">PURBALINK</div>
+      <p style="max-width:280px;font-size:12.5px;line-height:1.6;">Portal berita terpercaya untuk Indonesia. Cepat, berimbang, dan dekat dengan masyarakat.</p>
+    </div>
+    <div style="font-size:12.5px;line-height:2;">Nasional<br>Politik<br>Ekonomi<br>Teknologi</div>
+    <div style="font-size:12.5px;line-height:2;"><a href="tentang.html">Tentang Kami</a><br><a href="redaksi.html">Redaksi</a><br><a href="pedoman-media-siber.html">Pedoman Media Siber</a><br><a href="kontak.html">Kontak</a><br><a href="privacy.html">Privasi</a></div>
+    <div style="font-size:12px;opacity:.7;">© <span data-year>2026</span> PURBALINK. Semua hak dilindungi.<br>#PurbalinggaDigital<br><a href="admin-dashboard.html" style="color:#B7CEF3;font-weight:700;">Dashboard Admin →</a></div>
+  </div>
+</footer>
+</div>
+
+<!-- ============ ARTICLE DETAIL VIEW ============ -->
+<div id="detailView">
+  <header class="site">
+    <div class="wrap header-row">
+      <a class="logo" href="#" onclick="showHome();return false;">
+        <div class="mark">P</div>
+        <div><div class="word"><span class="brand-purba">PURBA</span><span class="brand-link">LINK</span></div><div class="tag">Purbalingga, Lebih Dekat, Lebih Cepat</div></div>
+      </a>
+      <div class="header-actions" style="margin-left:auto;">
+        <a class="btn btn-ghost" href="login.html">Masuk</a>
+        <a class="btn btn-primary" href="register.html">Daftar</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <a class="back-link wrap" href="#" onclick="showHome();return false;">← Kembali ke Beranda</a>
+
+    <div class="article-wrap">
+      <span class="pill">NASIONAL</span>
+      <h1 class="art-title">Pemerintah Percepat Pemulihan Pascaerupsi Gunung Lewotobi</h1>
+      <div class="art-byline">
+        <div class="avatar">TA</div>
+        <div>
+          <b style="color:var(--ink);">Tim PURBALINK</b> · Reporter<br>
+          12 Okt 2024 · 14:20 WIB · 5 menit baca
+        </div>
+      </div>
+
+      <figure class="art-figure">
+        <img src="https://images.unsplash.com/photo-1601134467661-3d775b999c8b?w=900&q=80" alt="Gunung Lewotobi">
+        <figcaption>Aktivitas Gunung Lewotobi terlihat dari Desa Nobo, Flores Timur, NTT (12/10/2024). Foto: ANTARA</figcaption>
+      </figure>
+
+      <div class="art-body">
+        <p>Pemerintah menyiapkan bantuan darurat dan relokasi sementara bagi warga terdampak erupsi Gunung Lewotobi di Nusa Tenggara Timur (NTT) dengan menyalurkan bantuan darurat, menyiapkan lokasi relokasi sementara, serta memastikan layanan dasar tetap berjalan dengan baik bagi masyarakat terdampak.</p>
+        <p>Badan Nasional Penanggulangan Bencana (BNPB) menyatakan bahwa proses evakuasi warga di zona berbahaya telah berjalan lancar, dengan ribuan warga telah dipindahkan ke titik pengungsian yang telah disiapkan di beberapa kecamatan terdekat.</p>
+        <p>Pemerintah daerah bersama kementerian terkait juga tengah menyusun rencana relokasi jangka panjang bagi warga yang berada di zona rawan bencana, sembari memastikan kebutuhan dasar seperti air bersih, logistik, dan layanan kesehatan tetap terpenuhi selama masa tanggap darurat.</p>
+      </div>
+
+      <div class="engage">
+        <div class="q">Apakah artikel ini bermanfaat?</div>
+        <div class="react-row">
+          <div class="react-main" id="reactMain">
+            <button class="react-main-btn" id="mainReactBtn"
+              onclick="handleMainReactClick()"
+              onmouseenter="mainHoverStart()" onmouseleave="mainHoverEnd()"
+              ontouchstart="mainPressStart(event)" ontouchend="mainPressEnd(event)">
+              <span class="ric" id="mainReactIconWrap"></span>
+              <span id="mainReactLabel">Suka</span>
+            </button>
+            <div class="react-popup" id="reactPopup" onmouseenter="mainPopupEnter()" onmouseleave="mainPopupLeave()"></div>
+          </div>
+          <div class="react-summary" id="reactSummary"></div>
+        </div>
+
+        <div class="rating-row">
+          <div>
+            <div class="stars" id="starsRow"></div>
+          </div>
+          <div class="rating-summary"><b id="ratingAvg">4.6</b> ★ · <span id="ratingCount">328</span> rating</div>
+        </div>
+
+        <div class="action-row">
+          <button class="act-btn" id="bookmarkBtn" onclick="toggleBookmark()">🔖 <span id="bookmarkLabel">Simpan</span></button>
+          <button class="act-btn" onclick="shareArticle()">↗ Bagikan</button>
+          <button class="act-btn gift" onclick="toggleGift()">🎁 Kirim Gift</button>
+        </div>
+      </div>
+
+      <div class="gift-panel" id="giftPanel" style="display:none;">
+        <div class="label">DUKUNG PENULIS</div>
+        <div class="gift-author-row">
+          <div class="avatar" style="background:#D71935;">DP</div>
+          <div><b>Dini Pratama</b><span class="role">Jurnalis PURBALINK — menulis isu sosial, lingkungan, dan kemanusiaan</span></div>
+        </div>
+        <div class="gift-noms" id="giftNoms"></div>
+        <button class="gift-send" onclick="sendGift()">Kirim Gift Rp <span id="giftAmt">10.000</span></button>
+        <div class="gift-note" id="giftFeedback">Dukungan Anda membantu jurnalisme berkualitas.</div>
+      </div>
+
+      <div class="comments-head">
+        <h3 id="commentCount">Komentar (128)</h3>
+        <select class="sort" id="sortSel" onchange="renderComments()">
+          <option value="baru">Terbaru</option>
+          <option value="populer">Terpopuler</option>
+        </select>
+      </div>
+
+      <div class="compose-wrap">
+        <div class="sticker-preview" id="stickerPreview" style="display:none;">
+          <img id="stickerPreviewImg" src="" alt="stiker">
+          <span style="font-size:12px;color:var(--ink-2);">Stiker siap dikirim</span>
+          <button onclick="clearPendingSticker()">Hapus</button>
+        </div>
+        <div class="compose">
+          <button class="sticker-btn" id="stickerToggleBtn" onclick="toggleStickerPopup()" title="Kirim stiker GIF">😊</button>
+          <textarea id="newComment" rows="1" placeholder="Tulis komentar..."></textarea>
+          <button onclick="postComment()">Kirim</button>
+        </div>
+        <div class="sticker-popup" id="stickerPopup"></div>
+      </div>
+
+      <div id="commentList"></div>
+    </div>
+    <div style="height:40px;"></div>
+  </main>
+</div>
+
+<nav class="bottomnav">
+  <a href="index.html" class="bn-item active">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10"/></svg>
+    <span class="bn-label">Beranda</span>
+  </a>
+  <a href="loker.html" class="bn-item">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+    <span class="bn-label">Loker</span>
+  </a>
+  <a href="shop.html" class="bn-item">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <span class="bn-label">Shop</span>
+  </a>
+  <a href="video.html" class="bn-item">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="18" rx="3"/><path d="M17 8l4-2v12l-4-2z"/></svg>
+    <span class="bn-label">Video</span>
+  </a>
+  <a href="profile.html" class="bn-item">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg>
+    <span class="bn-label">Profile</span>
+  </a>
+</nav>
+
+<script>
+/* ---------- API config ---------- */
+const API_BASE = window.location.origin;
+const ARTICLE_ID = 1;              // id artikel ini di database (lihat schema.sql seed)
+const ARTICLE_SLUG = "pemulihan-gunung-lewotobi";
+function authToken(){ return localStorage.getItem("purbalink_token"); }
+function isLoggedIn(){ return !!authToken(); }
+
+/* ---------- data ---------- */
+const newsData = [
+  {cat:"POLITIK",title:"Prabowo Tegaskan Komitmen Lanjutkan Program Pembangunan untuk Rakyat",meta:"12 Okt 2024 · 11:05 WIB",img:"https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=500&q=80"},
+  {cat:"BISNIS",title:"Startup Indonesia Catat Pendanaan Rp2,3 Triliun di Kuartal III-2024",meta:"12 Okt 2024 · 10:42 WIB",img:"https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80"},
+  {cat:"DUNIA",title:"PBB Serukan Gencatan Senjata di Timur Tengah",meta:"12 Okt 2024 · 09:30 WIB",img:"https://images.unsplash.com/photo-1544928147-79a2dbc1f389?w=500&q=80"},
+  {cat:"EKONOMI",title:"Rupiah Menguat ke Rp15.410 per Dolar AS, Pasar Sambut Positif",meta:"12 Okt 2024 · 13:45 WIB",img:"https://images.unsplash.com/photo-1621981386829-9b458a2cddde?w=500&q=80"},
+  {cat:"TEKNOLOGI",title:"Indonesia Luncurkan Satelit Nusantara-3, Perkuat Akses Internet Nasional",meta:"12 Okt 2024 · 12:10 WIB",img:"https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&q=80"},
+  {cat:"OLAHRAGA",title:"Timnas Indonesia Siap Hadapi Bahrain, Shin Tae-yong: Kami Lebih Percaya Diri",meta:"12 Okt 2024 · 11:20 WIB",img:"https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=500&q=80"},
+];
+const popularData = [
+  {t:"Gempa Magnitudo 5,6 Guncang Kabupaten Bandung, Tidak Berpotensi Tsunami",m:"12 Okt 2024 · 152K dibaca"},
+  {t:"Harga BBM Terbaru Oktober 2024 di Seluruh SPBU Indonesia",m:"12 Okt 2024 · 98K dibaca"},
+  {t:"Prabowo Bertemu Sejumlah Tokoh Nasional di Kertanegara",m:"12 Okt 2024 · 76K dibaca"},
+  {t:"Daftar Lengkap Kabinet Merah Putih 2024–2029",m:"12 Okt 2024 · 64K dibaca"},
+  {t:"Fenomena Aurora di Langit Indonesia, Ini Penjelasan BMKG",m:"12 Okt 2024 · 58K dibaca"},
+];
+const editorData = [
+  {tag:"ANALISIS",t:"Menuju Indonesia Emas 2045: Tantangan dan Peluang",by:"Redaksi PURBALINK"},
+  {tag:"OPINI",t:"Literasi Digital, Kunci Melawan Disinformasi",by:"Siti Rahma"},
+  {tag:"SOSOK",t:"Mengenal Sosok di Balik Satelit Nusantara-3",by:"Andika Pratama"},
+];
+
+let comments = [
+  {id:1,parent:null,name:"Budi Santoso",text:"Beritanya sangat informatif. Semoga semua warga terdampak diberikan kekuatan dan segera pulih. Terima kasih untuk semua pihak yang sudah membantu.",sticker:null,time:"2 jam lalu",likes:56,reaction:null,replyOpen:false,reactPopupOpen:false},
+  {id:2,parent:1,name:"Sari Dewi",text:"@BudiSantoso setuju sekali. Kadang kita cuma bisa saling bantu.",sticker:null,time:"1 jam lalu",likes:24,reaction:null,reactPopupOpen:false},
+  {id:3,parent:null,name:"Ahmad Rizki",text:"Pemerintah harus memastikan relokasi benar-benar aman dan layak.",sticker:null,time:"3 jam lalu",likes:42,reaction:null,replyOpen:false,reactPopupOpen:false},
+  {id:4,parent:3,name:"Maya Lestari",text:"@AhmadRizki betul, dan perlu transparansi juga soal penyaluran bantuannya.",sticker:null,time:"2 jam lalu",likes:18,reaction:null,reactPopupOpen:false},
+  {id:5,parent:null,name:"Rudi Hartono",text:"Luar biasa kerja cepat tim di lapangan 🙏",sticker:null,time:"4 jam lalu",likes:31,reaction:null,replyOpen:false,reactPopupOpen:false},
+];
+let nextId = 6;
+
+/* Reaction set built from the uploaded GIF stickers */
+const reactionDefs = [
+  {key:"suka",  label:"Suka",  file:"SUKA.gif",   count:1200, color:"#0B5ED7"},
+  {key:"love",  label:"Love",  file:"LOVE.gif",   count:865,  color:"#E3062C"},
+  {key:"haha",  label:"Haha",  file:"HAHAHA.gif", count:93,   color:"#e0900c"},
+  {key:"heran", label:"Wow",   file:"HERAN.gif",  count:241,  color:"#c77d05"},
+  {key:"sedih", label:"Sedih", file:"SEDIH.gif",  count:54,   color:"#5B6574"},
+  {key:"marah", label:"Marah", file:"MARAH.gif",  count:31,   color:"#c0392b"},
+];
+/* Extra GIF sticker(s) available in the comment sticker picker (not a "reaction") */
+const bonusStickers = [
+  {label:"Gabung", file:"GABUNG.gif"},
+];
+function reactionByKey(key){ return reactionDefs.find(r=>r.key===key); }
+
+let userReaction = null;
+let pendingSticker = null;      // filename queued to be sent with the next comment
+let activeCommentPopup = null;  // id of the comment/reply whose reaction popup is open
+
+let userRating = 0;
+let baseRatingCount = 328;
+let bookmarked = false;
+let giftAmount = 10000;
+
+/* ---------- init ---------- */
+document.getElementById("todayDate").textContent = new Date().toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+function renderHome(){
+  document.getElementById("newsGrid").innerHTML = newsData.map(n=>`
+    <div class="card" onclick="showDetail()">
+      <div class="card-img" style="background-image:url('${n.img}')"></div>
+      <div class="card-body">
+        <span class="cat">${n.cat}</span>
+        <h3>${n.title}</h3>
+        <div class="meta">${n.meta}</div>
+      </div>
+    </div>`).join("");
+
+  document.getElementById("popularList").innerHTML = popularData.map((p,i)=>`
+    <div class="rank-item">
+      <div class="rank-num">${i+1}</div>
+      <div class="rank-txt"><a href="#" onclick="showDetail();return false;">${p.t}</a><div class="rank-meta">${p.m}</div></div>
+    </div>`).join("");
+
+  document.getElementById("editorList").innerHTML = editorData.map(e=>`
+    <div class="rank-item" style="border:none;padding:9px 0;">
+      <div class="rank-txt">
+        <span class="cat">${e.tag}</span>
+        <a href="#" style="margin-top:3px;">${e.t}</a>
+        <div class="rank-meta">Oleh ${e.by}</div>
+      </div>
+    </div>`).join("");
+}
+renderHome();
+
+function showDetail(){
+  document.getElementById("homeView").style.display="none";
+  document.getElementById("detailView").style.display="block";
+  window.scrollTo(0,0);
+  renderMainReaction();
+  renderStars();
+  renderGiftNoms();
+  renderStickerPopup();
+  renderComments();
+}
+function showHome(){
+  document.getElementById("detailView").style.display="none";
+  document.getElementById("homeView").style.display="block";
+  window.scrollTo(0,0);
+}
+
+/* ---------- main article reaction (Facebook-style popup) ---------- */
+let mainHoverTimer=null, mainHideTimer=null, mainLongPressTimer=null, mainLongPressFired=false;
+
+function showMainPopup(){ clearTimeout(mainHideTimer); document.getElementById("reactPopup").classList.add("show"); }
+function hideMainPopupNow(){ document.getElementById("reactPopup").classList.remove("show"); }
+function scheduleHideMainPopup(){ clearTimeout(mainHideTimer); mainHideTimer=setTimeout(hideMainPopupNow, 260); }
+
+function mainHoverStart(){ clearTimeout(mainHoverTimer); mainHoverTimer=setTimeout(showMainPopup, 420); }
+function mainHoverEnd(){ clearTimeout(mainHoverTimer); scheduleHideMainPopup(); }
+function mainPopupEnter(){ clearTimeout(mainHideTimer); }
+function mainPopupLeave(){ scheduleHideMainPopup(); }
+
+function mainPressStart(){
+  mainLongPressFired = false;
+  mainLongPressTimer = setTimeout(()=>{
+    mainLongPressFired = true;
+    showMainPopup();
+    if(navigator.vibrate) navigator.vibrate(12);
+  }, 380);
+}
+function mainPressEnd(e){
+  clearTimeout(mainLongPressTimer);
+  if(mainLongPressFired){ e.preventDefault(); } // swallow the synthetic click that follows touchend
+}
+
+function handleMainReactClick(){
+  const popup = document.getElementById("reactPopup");
+  if(popup.classList.contains("show")){
+    hideMainPopupNow();
+    return;
+  }
+  pickMainReaction("suka");
+}
+
+function pickMainReaction(key){
+  userReaction = (userReaction===key) ? null : key;
+  hideMainPopupNow();
+  renderMainReaction();
+}
+
+function renderMainReaction(){
+  const btn = document.getElementById("mainReactBtn");
+  const iconWrap = document.getElementById("mainReactIconWrap");
+  const label = document.getElementById("mainReactLabel");
+  if(userReaction){
+    const r = reactionByKey(userReaction);
+    iconWrap.innerHTML = `<img src="${r.file}" class="ric" alt="${r.label}">`;
+    label.textContent = r.label;
+    label.style.color = r.color;
+    btn.classList.add("picked");
+  } else {
+    iconWrap.innerHTML = `<svg class="ric" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11v10H4a1 1 0 01-1-1v-8a1 1 0 011-1h3zm0 0l4-8a2 2 0 012 2v5h5a2 2 0 012 2l-1.5 7a2 2 0 01-2 1.5H9a2 2 0 01-2-2v-8z"/></svg>`;
+    label.textContent = "Suka";
+    label.style.color = "";
+    btn.classList.remove("picked");
+  }
+  document.getElementById("reactPopup").innerHTML = reactionDefs.map(r=>
+    `<img src="${r.file}" title="${r.label}" alt="${r.label}" onclick="pickMainReaction('${r.key}')">`
+  ).join("");
+  renderReactSummary();
+}
+
+function renderReactSummary(){
+  const withCounts = reactionDefs
+    .map(r => ({...r, total: r.count + (userReaction===r.key?1:0)}))
+    .sort((a,b) => b.total - a.total);
+  const total = withCounts.reduce((s,r) => s+r.total, 0);
+  const top = withCounts.filter(r=>r.total>0).slice(0,3);
+  document.getElementById("reactSummary").innerHTML = `
+    <span class="stack">${top.map(r=>`<img src="${r.file}" alt="${r.label}">`).join("")}</span>
+    <span>${fmt(total)} orang bereaksi</span>`;
+}
+
+document.addEventListener("click", (e)=>{
+  const main = document.getElementById("reactMain");
+  if(main && !main.contains(e.target)) hideMainPopupNow();
+  const stickerWrap = document.querySelector(".compose-wrap");
+  if(stickerWrap && !stickerWrap.contains(e.target)) closeStickerPopup();
+  if(activeCommentPopup!==null && !e.target.closest(".c-react-wrap")) hideCommentPopup(activeCommentPopup);
+});
+
+function fmt(n){ return n>=1000 ? (n/1000).toFixed(1).replace(".0","")+"K" : n; }
+
+/* ---------- rating ---------- */
+function renderStars(){
+  let html = "";
+  for(let i=1;i<=5;i++){
+    html += `<span data-v="${i}" class="${i<=userRating?'on':''}" onclick="setRating(${i})">★</span>`;
+  }
+  document.getElementById("starsRow").innerHTML = html;
+}
+function setRating(v){
+  const wasRated = userRating>0;
+  userRating = v;
+  renderStars();
+  if(!wasRated){
+    baseRatingCount++;
+    document.getElementById("ratingCount").textContent = baseRatingCount;
+  }
+}
+
+/* ---------- bookmark / share ---------- */
+function toggleBookmark(){
+  bookmarked = !bookmarked;
+  const btn = document.getElementById("bookmarkBtn");
+  document.getElementById("bookmarkLabel").textContent = bookmarked ? "Tersimpan" : "Simpan";
+  btn.classList.toggle("on", bookmarked);
+}
+function shareArticle(){
+  const url = "https://purbalink.web.id/berita/pemulihan-gunung-lewotobi";
+  const title = "Pemerintah Percepat Pemulihan Pascaerupsi Gunung Lewotobi — PURBALINK";
+  if(navigator.share){
+    navigator.share({title, url}).catch(()=>{});
+  } else {
+    navigator.clipboard && navigator.clipboard.writeText(url);
+    alert("Tautan disalin: "+url);
+  }
+}
+
+/* ---------- gift ---------- */
+function toggleGift(){
+  const p = document.getElementById("giftPanel");
+  p.style.display = p.style.display==="none" ? "block" : "none";
+  if(p.style.display==="block") p.scrollIntoView({behavior:"smooth",block:"center"});
+}
+function renderGiftNoms(){
+  const noms = [5000,10000,20000,50000];
+  document.getElementById("giftNoms").innerHTML = noms.map(n=>
+    `<span class="nom ${n===giftAmount?'active':''}" onclick="pickGift(${n})">Rp${(n/1000)}K</span>`
+  ).join("") + `<span class="nom" onclick="pickGiftCustom()">Lainnya</span>`;
+  document.getElementById("giftAmt").textContent = giftAmount.toLocaleString("id-ID");
+}
+function pickGift(n){
+  giftAmount = n;
+  renderGiftNoms();
+}
+function pickGiftCustom(){
+  const v = prompt("Masukkan nominal gift (Rp):","25000");
+  if(v && !isNaN(v) && Number(v)>0){
+    giftAmount = Number(v);
+    renderGiftNoms();
+  }
+}
+async function sendGift(){
+  const feedback = document.getElementById("giftFeedback");
+  const sendBtn = document.querySelector(".gift-send");
+
+  if(!isLoggedIn()){
+    feedback.textContent = "Silakan masuk terlebih dahulu untuk mengirim gift.";
+    setTimeout(()=>{ window.location.href = "login.html"; }, 900);
+    return;
+  }
+
+  sendBtn.disabled = true;
+  const originalLabel = sendBtn.textContent;
+  sendBtn.textContent = "Memproses...";
+  feedback.textContent = "Menghubungkan ke DOKU...";
+
+  try{
+    const res = await fetch(`${API_BASE}/api/articles/${ARTICLE_ID}/gift`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${authToken()}`,
+      },
+      body: JSON.stringify({
+        amount: giftAmount,
+        message: document.querySelector(".gift-panel textarea")?.value || null,
+        anonymous: false,
+      }),
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || "Gagal membuat pembayaran.");
+
+    feedback.textContent = "Mengarahkan ke halaman pembayaran DOKU...";
+    window.location.href = data.payment_url;
+  } catch(e){
+    feedback.textContent = "❌ " + e.message;
+    sendBtn.disabled = false;
+    sendBtn.textContent = originalLabel;
+  }
+}
+
+/* ---------- handle redirect back from DOKU ---------- */
+(function checkGiftReturn(){
+  const params = new URLSearchParams(window.location.search);
+  const giftStatus = params.get("gift");
+  if(!giftStatus) return;
+  showDetail();
+  const feedback = document.getElementById("giftFeedback");
+  document.getElementById("giftPanel").style.display = "block";
+  if(giftStatus === "success"){
+    feedback.textContent = "⏳ Pembayaran diterima, menunggu konfirmasi DOKU...";
+    // DOKU mengirim webhook ke server secara terpisah — polling status transaksi.
+    const invoice = params.get("invoice");
+    if(invoice){
+      let attempts = 0;
+      const poll = setInterval(async ()=>{
+        attempts++;
+        try{
+          const res = await fetch(`${API_BASE}/api/gifts/${invoice}/status`);
+          const data = await res.json();
+          if(data.status === "success"){
+            feedback.textContent = `🎉 Terima kasih! Gift Rp${data.amount.toLocaleString("id-ID")} telah dikonfirmasi.`;
+            clearInterval(poll);
+          } else if(data.status === "failed" || data.status === "expired"){
+            feedback.textContent = "❌ Pembayaran tidak berhasil. Silakan coba lagi.";
+            clearInterval(poll);
+          }
+        } catch(e){ /* ignore transient errors while polling */ }
+        if(attempts >= 15) clearInterval(poll); // stop after ~30s
+      }, 2000);
+    } else {
+      feedback.textContent = "🎉 Terima kasih atas dukungan Anda untuk penulis!";
+    }
+  } else {
+    feedback.textContent = "Pembayaran dibatalkan atau gagal. Silakan coba lagi.";
+  }
+  window.history.replaceState({}, "", window.location.pathname);
+})();
+
+/* ---------- comments ---------- */
+function renderComments(){
+  const sort = document.getElementById("sortSel").value;
+  let roots = comments.filter(c=>c.parent===null);
+  roots = sort==="populer" ? [...roots].sort((a,b)=>b.likes-a.likes) : [...roots].sort((a,b)=>b.id-a.id);
+
+  document.getElementById("commentCount").textContent = "Komentar ("+comments.length+")";
+  document.getElementById("commentList").innerHTML = roots.map(c=>renderThread(c)).join("");
+}
+function renderThread(c){
+  const replies = comments.filter(r=>r.parent===c.id);
+  return `
+  <div class="comment">
+    <div class="c-head">
+      <div class="avatar">${initials(c.name)}</div>
+      <div class="c-body">
+        <span class="c-name">${c.name}</span><span class="c-time">${c.time}</span>
+        <div class="c-text">${c.text}</div>
+        ${c.sticker ? `<img src="${c.sticker}" class="comment-sticker-img" alt="stiker">` : ''}
+        <div class="c-actions">
+          ${reactControlHTML(c)}
+          <span onclick="toggleReply(${c.id})">Balas</span>
+        </div>
+        ${c.replyOpen? `
+        <div class="reply-box">
+          <textarea id="reply-${c.id}" rows="1" placeholder="Tulis balasan..."></textarea>
+          <button onclick="postReply(${c.id})">Kirim</button>
+        </div>`:''}
+      </div>
+    </div>
+    ${replies.length? `<div class="replies">${replies.map(r=>renderReply(r)).join("")}</div>`:''}
+  </div>`;
+}
+function renderReply(r){
+  return `
+  <div class="comment" style="margin-bottom:12px;">
+    <div class="c-head">
+      <div class="avatar" style="width:28px;height:28px;font-size:11px;">${initials(r.name)}</div>
+      <div class="c-body">
+        <span class="c-name" style="font-size:13px;">${r.name}</span><span class="c-time">${r.time}</span>
+        <div class="c-text">${r.text}</div>
+        ${r.sticker ? `<img src="${r.sticker}" class="comment-sticker-img" alt="stiker">` : ''}
+        <div class="c-actions">
+          ${reactControlHTML(r)}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+function initials(name){
+  return name.split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase();
+}
+
+/* ---- per-comment reaction popup (same pattern as the main article button, scaled down) ---- */
+function reactControlHTML(c){
+  const current = c.reaction ? reactionByKey(c.reaction) : null;
+  const iconHtml = current ? `<img src="${current.file}" class="c-react-icon" alt="${current.label}">` : "";
+  const label = current ? current.label : "Suka";
+  const colorStyle = current ? `style="color:${current.color};"` : "";
+  return `
+  <span class="c-react-wrap">
+    <span class="c-react-trigger ${current?'liked':''}" ${colorStyle}
+      onclick="handleCommentReactClick(${c.id})"
+      onmouseenter="commentHoverStart(${c.id})" onmouseleave="commentHoverEnd(${c.id})"
+      ontouchstart="commentPressStart(${c.id})" ontouchend="commentPressEnd(event, ${c.id})">
+      ${iconHtml}${label}${c.likes>0? ` · ${c.likes}`:''}
+    </span>
+    <div class="c-react-popup" id="cpop-${c.id}">
+      ${reactionDefs.map(r=>`<img src="${r.file}" title="${r.label}" alt="${r.label}" onclick="pickCommentReaction(${c.id},'${r.key}')">`).join("")}
+    </div>
+  </span>`;
+}
+let cHoverTimer=null, cHideTimer=null, cLongPressTimer=null, cLongPressFired=false;
+function showCommentPopup(id){
+  if(activeCommentPopup!==null && activeCommentPopup!==id) hideCommentPopup(activeCommentPopup);
+  clearTimeout(cHideTimer);
+  const el = document.getElementById("cpop-"+id);
+  if(el){ el.classList.add("show"); activeCommentPopup = id; }
+}
+function hideCommentPopup(id){
+  const el = document.getElementById("cpop-"+id);
+  if(el) el.classList.remove("show");
+  if(activeCommentPopup===id) activeCommentPopup = null;
+}
+function scheduleHideCommentPopup(id){ clearTimeout(cHideTimer); cHideTimer=setTimeout(()=>hideCommentPopup(id), 260); }
+function commentHoverStart(id){ clearTimeout(cHoverTimer); cHoverTimer=setTimeout(()=>showCommentPopup(id), 420); }
+function commentHoverEnd(id){ clearTimeout(cHoverTimer); scheduleHideCommentPopup(id); }
+function commentPressStart(id){
+  cLongPressFired = false;
+  cLongPressTimer = setTimeout(()=>{ cLongPressFired = true; showCommentPopup(id); if(navigator.vibrate) navigator.vibrate(12); }, 380);
+}
+function commentPressEnd(e, id){
+  clearTimeout(cLongPressTimer);
+  if(cLongPressFired){ e.preventDefault(); }
+}
+function handleCommentReactClick(id){
+  const popupEl = document.getElementById("cpop-"+id);
+  if(popupEl && popupEl.classList.contains("show")){
+    hideCommentPopup(id);
+    return;
+  }
+  pickCommentReaction(id, "suka");
+}
+function pickCommentReaction(id, key){
+  const c = comments.find(x=>x.id===id);
+  const had = c.reaction;
+  if(had===key){
+    c.reaction = null;
+    c.likes = Math.max(0, c.likes-1);
+  } else {
+    if(!had) c.likes += 1;
+    c.reaction = key;
+  }
+  hideCommentPopup(id);
+  renderComments();
+}
+function toggleReply(id){
+  const c = comments.find(x=>x.id===id);
+  c.replyOpen = !c.replyOpen;
+  renderComments();
+  if(c.replyOpen){
+    setTimeout(()=>document.getElementById("reply-"+id)?.focus(),0);
+  }
+}
+function postReply(parentId){
+  const ta = document.getElementById("reply-"+parentId);
+  const text = ta.value.trim();
+  if(!text) return;
+  comments.push({id:nextId++,parent:parentId,name:"Anda",text,sticker:null,time:"Baru saja",likes:0,reaction:null});
+  const c = comments.find(x=>x.id===parentId);
+  c.replyOpen = false;
+  renderComments();
+}
+
+/* ---------- GIF sticker picker (comment compose) ---------- */
+const allStickers = [...reactionDefs.map(r=>({label:r.label,file:r.file})), ...bonusStickers];
+function renderStickerPopup(){
+  document.getElementById("stickerPopup").innerHTML = allStickers.map(s=>`
+    <div class="stk" onclick="pickSticker('${s.file}')">
+      <img src="${s.file}" alt="${s.label}">
+      <span>${s.label}</span>
+    </div>`).join("");
+}
+function toggleStickerPopup(){
+  const popup = document.getElementById("stickerPopup");
+  const btn = document.getElementById("stickerToggleBtn");
+  const willShow = !popup.classList.contains("show");
+  popup.classList.toggle("show", willShow);
+  btn.classList.toggle("on", willShow);
+}
+function closeStickerPopup(){
+  document.getElementById("stickerPopup").classList.remove("show");
+  document.getElementById("stickerToggleBtn").classList.remove("on");
+}
+function pickSticker(file){
+  pendingSticker = file;
+  document.getElementById("stickerPreviewImg").src = file;
+  document.getElementById("stickerPreview").style.display = "flex";
+  closeStickerPopup();
+  document.getElementById("newComment").focus();
+}
+function clearPendingSticker(){
+  pendingSticker = null;
+  document.getElementById("stickerPreview").style.display = "none";
+}
+function postComment(){
+  const ta = document.getElementById("newComment");
+  const text = ta.value.trim();
+  if(!text && !pendingSticker) return;
+  comments.push({id:nextId++,parent:null,name:"Anda",text,sticker:pendingSticker,time:"Baru saja",likes:0,reaction:null,replyOpen:false});
+  ta.value = "";
+  clearPendingSticker();
+  renderComments();
+}
+</script>
+<script src="v2.js"></script>
+</body>
+</html>

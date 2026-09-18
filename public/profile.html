@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Profil — PURBALINK</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#093A8A">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --teal-900:#093A8A;--teal-700:#0B5ED7;--teal-600:#1D6FE8;--teal-50:#EEF5FF;
+  --red-800:#B80F24;--red-50:#FFF0F3;
+  --ink:#101828;--ink-2:#5B6574;--line:#DCE6F5;--paper:#ffffff;--bg:#F5F8FC;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;overflow-x:hidden;overscroll-behavior-x:none;max-width:100vw;}
+body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;padding-bottom:64px;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+.wrap{max-width:620px;margin:0 auto;padding:0 16px;}
+
+.pheader{background:linear-gradient(160deg,var(--teal-900),#0A47A8);padding:calc(env(safe-area-inset-top) + 20px) 0 46px;color:#fff;position:relative;}
+.pheader .logo{display:flex;align-items:center;gap:8px;margin-bottom:18px;}
+.mark{width:30px;height:30px;border-radius:8px;background:var(--red-800);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:12.5px;}
+.pword{font-size:15px;font-weight:800;}
+
+.profile-card{background:var(--paper);border-radius:16px;box-shadow:0 10px 30px rgba(9,58,138,.1);margin-top:-32px;padding:22px 20px;color:var(--ink);}
+.pc-top{display:flex;align-items:center;gap:14px;}
+.pc-avatar{width:60px;height:60px;border-radius:50%;background:var(--teal-700);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:21px;flex-shrink:0;}
+.pc-name{font-size:16.5px;font-weight:800;}
+.pc-email{font-size:12.5px;color:var(--ink-2);margin-top:2px;}
+.pc-edit{margin-left:auto;font-size:12px;font-weight:700;color:var(--teal-700);border:1.5px solid var(--teal-700);border-radius:8px;padding:6px 12px;background:none;}
+
+.guest-card{background:var(--paper);border-radius:16px;box-shadow:0 10px 30px rgba(9,58,138,.1);margin-top:-32px;padding:26px 22px;text-align:center;}
+.guest-card p{font-size:13px;color:var(--ink-2);margin:6px 0 18px;}
+.guest-actions{display:flex;gap:10px;}
+.guest-actions a{flex:1;height:44px;display:flex;align-items:center;justify-content:center;border-radius:9px;font-weight:700;font-size:13.5px;}
+.gb-login{border:1.5px solid var(--teal-700);color:var(--teal-700);}
+.gb-register{background:var(--red-800);color:#fff;}
+
+.stats-row{display:flex;margin-top:18px;border-top:1px solid var(--line);padding-top:16px;}
+.stat{flex:1;text-align:center;}
+.stat b{display:block;font-size:17px;font-weight:800;}
+.stat span{font-size:11px;color:var(--ink-2);}
+
+.wallet-strip{display:flex;align-items:center;justify-content:space-between;background:var(--teal-50);border-radius:12px;padding:12px 16px;margin-top:16px;}
+.wallet-strip div{font-size:11.5px;color:var(--teal-900);font-weight:700;}
+.wallet-strip b{display:block;font-size:16px;margin-top:2px;}
+.wallet-strip button{background:var(--teal-700);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;}
+
+.menu-section{margin-top:20px;}
+.menu-label{font-size:11.5px;font-weight:800;color:var(--ink-2);letter-spacing:.4px;text-transform:uppercase;margin:0 4px 8px;}
+.menu-card{background:var(--paper);border-radius:14px;overflow:hidden;}
+.menu-item{display:flex;align-items:center;gap:13px;padding:13px 16px;border-bottom:1px solid var(--line);font-size:13.5px;font-weight:600;}
+.menu-item:last-child{border-bottom:none;}
+.menu-ic{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.menu-item .chev{margin-left:auto;color:var(--ink-2);font-size:14px;}
+.menu-item.danger{color:var(--red-800);}
+
+@media(min-width:760px){ .wrap{padding:0 16px;max-width:680px;} }
+
+/* ===== PURBALINK 2026 BRAND SYSTEM — visual only, feature logic unchanged ===== */
+.brand-purba{color:#0B5ED7}.brand-link{color:#E3062C}
+.mark{background-color:transparent!important;background-image:url("brand-icon-transparent.png")!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;color:transparent!important;overflow:hidden!important}
+.logo .word,.pword{letter-spacing:-.55px}
+.pheader .brand-purba{color:#fff} .pheader .brand-link{color:#FF4960}
+</style>
+<link rel="stylesheet" href="v2.css">
+</head>
+<body>
+
+<header class="pheader">
+  <div class="wrap">
+    <a class="logo" href="index.html"><div class="mark">P</div><div class="pword"><span class="brand-purba">PURBA</span><span class="brand-link">LINK</span></div></a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div id="profileArea"></div>
+
+  <div class="menu-section">
+    <div class="menu-label">Akun Saya</div>
+    <div class="menu-card">
+      <div class="menu-item"><div class="menu-ic" style="background:#fdf3e6;color:#e0900c;">🛍️</div>Pesanan Saya<span class="chev">›</span></div>
+      <div class="menu-item"><div class="menu-ic" style="background:var(--teal-50);color:var(--teal-700);">💼</div>Lamaran Loker Saya<span class="chev">›</span></div>
+      <div class="menu-item"><div class="menu-ic" style="background:var(--red-50);color:var(--red-800);">🎬</div>Video Saya<span class="chev">›</span></div>
+      <div class="menu-item"><div class="menu-ic" style="background:#eef1f8;color:#5B6574;">🔖</div>Tersimpan / Bookmark<span class="chev">›</span></div>
+    </div>
+  </div>
+
+  <div class="menu-section">
+    <div class="menu-label">Pengaturan</div>
+    <div class="menu-card">
+      <div class="menu-item"><div class="menu-ic" style="background:var(--teal-50);color:var(--teal-700);">👤</div>Edit Profil<span class="chev">›</span></div>
+      <div class="menu-item"><div class="menu-ic" style="background:var(--teal-50);color:var(--teal-700);">🔒</div>Ubah Kata Sandi<span class="chev">›</span></div>
+      <div class="menu-item"><div class="menu-ic" style="background:var(--teal-50);color:var(--teal-700);">🔔</div>Notifikasi<span class="chev">›</span></div>
+      <div class="menu-item"><div class="menu-ic" style="background:var(--teal-50);color:var(--teal-700);">🌐</div>Bahasa — Indonesia<span class="chev">›</span></div>
+    </div>
+  </div>
+
+  <div class="menu-section">
+    <div class="menu-label">Lainnya</div>
+    <div class="menu-card">
+      <div class="menu-item"><div class="menu-ic" style="background:#eef1f8;color:#5B6574;">❓</div>Pusat Bantuan<span class="chev">›</span></div>
+      <div class="menu-item"><div class="menu-ic" style="background:#eef1f8;color:#5B6574;">📄</div>Syarat & Ketentuan<span class="chev">›</span></div>
+      <a href="admin-dashboard.html" class="menu-item"><div class="menu-ic" style="background:#eef1f8;color:#5B6574;">⚙️</div>Dashboard Admin<span class="chev">›</span></a>
+      <div class="menu-item danger" id="logoutItem" onclick="logout()"><div class="menu-ic" style="background:var(--red-50);color:var(--red-800);">↪</div>Keluar</div>
+    </div>
+  </div>
+  <div style="height:20px;"></div>
+</div>
+
+<nav class="bottomnav"></nav>
+<style>
+.bottomnav{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);display:flex;z-index:60;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -3px 14px rgba(9,58,138,.08);}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 7px;color:var(--ink-2);}
+.bn-ic{width:22px;height:22px;}
+.bn-label{font-size:10.5px;font-weight:700;}
+.bn-item.active{color:var(--teal-700);}
+</style>
+
+<script>
+if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js").catch(()=>{}); }
+document.querySelector("nav.bottomnav").innerHTML = `
+  <a href="index.html" class="bn-item">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10"/></svg>
+    <span class="bn-label">Beranda</span>
+  </a>
+  <a href="loker.html" class="bn-item">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+    <span class="bn-label">Loker</span>
+  </a>
+  <a href="shop.html" class="bn-item">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <span class="bn-label">Shop</span>
+  </a>
+  <a href="video.html" class="bn-item">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="18" rx="3"/><path d="M17 8l4-2v12l-4-2z"/></svg>
+    <span class="bn-label">Video</span>
+  </a>
+  <a href="profile.html" class="bn-item active">
+    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg>
+    <span class="bn-label">Profile</span>
+  </a>`;
+
+function initials(name){ return name.split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase(); }
+
+function renderProfile(){
+  const token = localStorage.getItem("purbalink_token");
+  const userRaw = localStorage.getItem("purbalink_user");
+  const area = document.getElementById("profileArea");
+
+  if(!token || !userRaw){
+    area.innerHTML = `
+      <div class="guest-card">
+        <div class="pc-avatar" style="margin:0 auto 10px;">?</div>
+        <div style="font-weight:800;font-size:15px;">Anda belum masuk</div>
+        <p>Masuk untuk melamar loker, belanja, dan menyimpan video favorit.</p>
+        <div class="guest-actions">
+          <a class="gb-login" href="login.html">Masuk</a>
+          <a class="gb-register" href="register.html">Daftar</a>
+        </div>
+      </div>`;
+    document.getElementById("logoutItem").style.display = "none";
+    return;
+  }
+
+  const user = JSON.parse(userRaw);
+  area.innerHTML = `
+    <div class="profile-card">
+      <div class="pc-top">
+        <div class="pc-avatar">${initials(user.name || "Pengguna")}</div>
+        <div>
+          <div class="pc-name">${user.name || "Pengguna"}</div>
+          <div class="pc-email">${user.email || ""}</div>
+        </div>
+        <button class="pc-edit">Edit</button>
+      </div>
+      <div class="stats-row">
+        <div class="stat"><b>3</b><span>Lamaran</span></div>
+        <div class="stat"><b>5</b><span>Pesanan</span></div>
+        <div class="stat"><b>12</b><span>Video Disukai</span></div>
+      </div>
+      ${user.role === "author" || user.role === "admin" ? `
+      <div class="wallet-strip">
+        <div>Saldo Penulis<b>${"Rp" + (user.wallet_balance||0).toLocaleString("id-ID")}</b></div>
+        <button>Tarik Saldo</button>
+      </div>` : ''}
+    </div>`;
+}
+renderProfile();
+
+function logout(){
+  localStorage.removeItem("purbalink_token");
+  localStorage.removeItem("purbalink_user");
+  renderProfile();
+}
+</script>
+<script src="v2.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "id": "/",
+  "name": "PURBALINK — Portal Berita Purbalingga",
+  "short_name": "PURBALINK",
+  "description": "Portal Purbalingga untuk berita, lowongan kerja, UMKM Shop, video, dan layanan komunitas.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F5F8FC",
+  "theme_color": "#0B5ED7",
+  "lang": "id-ID",
+  "categories": ["news", "business", "social"],
+  "icons": [
+    {"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}

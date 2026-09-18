@@ -1,0 +1,5 @@
+PURBALINK branding applied
+Primary blue: #0B5ED7
+Primary red: #E3062C
+Background: #F5F8FC
+Existing features, routes, and JavaScript interactions were preserved.
