@@ -370,6 +370,23 @@ canvas{max-width:100%!important}
   .sidebar-overlay{position:fixed;inset:0;background:rgba(15,23,42,.38);z-index:110;display:none}
   .sidebar-overlay.show{display:block}
 }
+
+/* ===== AI MULTI PROVIDER V3 ===== */
+.ai-provider-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:10px 0 14px}
+.ai-provider-chip{border:1px solid var(--line);background:#f8fafc;border-radius:8px;padding:8px 9px;font-size:10.5px;font-weight:800;color:#475467;text-align:center}
+.ai-provider-chip small{display:block;font-size:8.5px;font-weight:600;color:#98a2b3;margin-top:2px}
+.ai-cost-note{background:#eef7ff;border:1px solid #d5e8ff;border-radius:9px;padding:10px 11px;font-size:11.5px;line-height:1.55;color:#344054;margin-bottom:12px}
+.ai-cost-note b{color:#0b5ed7}
+.gen-source-tabs{display:flex;gap:5px;background:#f2f4f7;padding:4px;border-radius:9px;margin-bottom:12px}
+.gen-source-tabs button{flex:1;border:0;border-radius:7px;padding:8px 9px;background:transparent;font-size:11.5px;font-weight:800;color:#667085}
+.gen-source-tabs button.active{background:#fff;color:#0b5ed7;box-shadow:0 1px 4px rgba(16,24,40,.08)}
+.rewrite-box{background:#fff8e8;border:1px solid #ffe0a3;border-radius:10px;padding:11px;margin-bottom:12px}
+.rewrite-box .gen-field{margin-bottom:8px}
+.gen-inline-action{display:flex;gap:7px}.gen-inline-action input{flex:1;min-width:0}.gen-inline-action button{border:0;border-radius:8px;background:#e0900c;color:#fff;font-weight:800;padding:0 13px;white-space:nowrap}
+.ai-usage-row{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 0}
+.ai-usage-pill{font-size:9.5px;background:#f2f4f7;border:1px solid #e4e7ec;border-radius:999px;padding:4px 7px;color:#667085}
+.gen-check{display:flex;align-items:center;gap:7px;font-size:11px;color:#475467;margin-top:6px}.gen-check input{width:auto!important}
+@media(max-width:760px){.ai-provider-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.gen-inline-action{flex-direction:column}.gen-inline-action button{height:40px}}
 </style>
 <link rel="stylesheet" href="v2.css">
 </head>
@@ -810,37 +827,75 @@ function tabHTML(tab){
 
 
 function articleGeneratorHTML(){
-  return `
+  return \`
   <div class="article-generator-grid">
     <div class="gen-card">
       <h3>AI Article Generator — High Value Content</h3>
-      <div class="gen-field"><label>Topik / Keyword Utama</label><input id="genTopic" placeholder="Contoh: harga beras Purbalingga September 2026"></div>
+      <div class="ai-provider-strip">
+        <div class="ai-provider-chip">OpenAI<small>GPT-5.6 Luna / custom</small></div>
+        <div class="ai-provider-chip">Gemini<small>Flash / Flash-Lite</small></div>
+        <div class="ai-provider-chip">DeepSeek<small>Flash / custom</small></div>
+        <div class="ai-provider-chip">Groq<small>GPT-OSS / Llama</small></div>
+        <div class="ai-provider-chip">Mistral<small>Small / custom</small></div>
+        <div class="ai-provider-chip">Anthropic<small>Claude Haiku / custom</small></div>
+        <div class="ai-provider-chip">OpenRouter<small>Free router / fallback</small></div>
+        <div class="ai-provider-chip">Together<small>Open models</small></div>
+      </div>
+      <div class="ai-cost-note"><b>Mode Hemat:</b> hanya satu provider dipanggil. Provider berikutnya baru dicoba jika key tidak tersedia, quota/rate-limit, atau request gagal. Cache lokal mencegah prompt identik menghabiskan kredit dua kali.</div>
+
+      <div class="gen-source-tabs">
+        <button class="active" data-gen-source="topic" onclick="switchGenSource(this,'topic')">Buat dari Topik</button>
+        <button data-gen-source="url" onclick="switchGenSource(this,'url')">Rewrite dari Link</button>
+      </div>
+
+      <div id="genTopicMode">
+        <div class="gen-field"><label>Topik / Keyword Utama</label><input id="genTopic" placeholder="Contoh: harga beras Purbalingga September 2026"></div>
+      </div>
+      <div id="genUrlMode" style="display:none">
+        <div class="rewrite-box">
+          <div class="gen-field"><label>URL Artikel Sumber</label><div class="gen-inline-action"><input id="genSourceUrl" type="url" placeholder="https://contoh.com/artikel..."><button type="button" onclick="rewriteFromUrl()">Ambil & Rewrite</button></div></div>
+          <div style="font-size:10.5px;color:#7a5a17;line-height:1.5">Hasil dibuat ulang dengan struktur dan redaksi baru, fakta dipertahankan, sumber dicantumkan. Hindari menyalin kalimat panjang dari artikel asal.</div>
+        </div>
+      </div>
+
+      <div class="gen-row">
+        <div class="gen-field"><label>Provider AI</label>
+          <select id="genProvider">
+            <option value="auto" selected>Auto Hemat — fallback otomatis</option>
+            <option value="openrouter">OpenRouter</option><option value="groq">Groq</option><option value="gemini">Google Gemini</option><option value="deepseek">DeepSeek</option>
+            <option value="mistral">Mistral AI</option><option value="together">Together AI</option><option value="openai">OpenAI</option><option value="anthropic">Anthropic Claude</option>
+          </select>
+        </div>
+        <div class="gen-field"><label>Model (opsional)</label><input id="genModel" placeholder="Kosong = model hemat default"></div>
+      </div>
       <div class="gen-row">
         <div class="gen-field"><label>Kategori</label><select id="genCategory"><option>Nasional</option><option>Daerah</option><option>Ekonomi</option><option>Bisnis</option><option>Teknologi</option><option>Olahraga</option><option>Gaya Hidup</option><option>Hiburan</option><option>Otomotif</option></select></div>
         <div class="gen-field"><label>Intent</label><select id="genIntent"><option value="news">Berita / News</option><option value="explainer">Explainer</option><option value="guide">Panduan</option><option value="analysis">Analisis</option><option value="evergreen">Evergreen</option></select></div>
       </div>
       <div class="gen-row">
-        <div class="gen-field"><label>Target Panjang</label><select id="genLength"><option value="900">±900 kata</option><option value="1400" selected>±1.400 kata</option><option value="2000">±2.000 kata</option><option value="3000">±3.000 kata</option></select></div>
+        <div class="gen-field"><label>Target Panjang</label><select id="genLength"><option value="700">±700 kata — hemat</option><option value="1000" selected>±1.000 kata — rekomendasi</option><option value="1400">±1.400 kata</option><option value="2000">±2.000 kata</option></select></div>
         <div class="gen-field"><label>Gaya Bahasa</label><select id="genTone"><option>Jurnalistik Profesional</option><option>Ringan & Informatif</option><option>Formal</option><option>Analitis</option><option>SEO Editorial</option></select></div>
       </div>
-      <div class="gen-field"><label>Fakta / Sumber / Catatan Wajib</label><textarea id="genFacts" placeholder="Masukkan fakta, kutipan, angka, sumber, atau poin yang wajib dipakai. Generator tidak boleh mengarang fakta yang tidak diberikan."></textarea></div>
+      <div class="gen-field"><label>Fakta / Sumber / Catatan Wajib</label><textarea id="genFacts" placeholder="Masukkan fakta, kutipan, angka, sumber, atau poin yang wajib dipakai. AI dilarang mengarang fakta yang tidak tersedia."></textarea></div>
       <div class="gen-field"><label>Audience</label><input id="genAudience" value="Pembaca Indonesia, terutama Jawa Tengah dan Purbalingga"></div>
-      <div class="gen-field"><label>Instruksi Tambahan</label><textarea id="genExtra" placeholder="Contoh: hindari clickbait, tambahkan FAQ, sertakan ringkasan poin penting, meta description, slug, tag, internal link suggestion."></textarea></div>
+      <div class="gen-field"><label>Instruksi Tambahan</label><textarea id="genExtra" placeholder="Contoh: tambahkan FAQ, ringkasan poin penting, meta description, slug, tag, internal link suggestion."></textarea></div>
+      <label class="gen-check"><input type="checkbox" id="genUseCache" checked> Gunakan cache browser untuk prompt yang sama (hemat kredit)</label>
       <div class="gen-actions">
-        <button class="gen-primary" onclick="generateHighValueArticle()">Generate Artikel</button>
+        <button class="gen-primary" onclick="generateHighValueArticle()">Generate dengan AI</button>
         <button class="gen-secondary" onclick="fillGeneratorDemo()">Isi Contoh</button>
         <button class="gen-secondary" onclick="clearGenerator()">Reset</button>
       </div>
+      <div class="ai-usage-row"><span class="ai-usage-pill">1 request / generate</span><span class="ai-usage-pill">Fallback hanya saat error</span><span class="ai-usage-pill">Token dibatasi target panjang</span><span class="ai-usage-pill">API key tersimpan di Cloudflare Secret</span></div>
     </div>
     <div class="gen-card gen-output">
       <div class="gen-output-toolbar"><h3>Hasil Artikel</h3><span class="score" id="genScore">Belum dianalisis</span></div>
-      <div class="gen-preview" id="genPreview"><div class="empty-note">Hasil artikel akan muncul di sini.</div></div>
+      <div class="gen-preview" id="genPreview"><div class="empty-note">Hasil artikel AI akan muncul di sini.</div></div>
       <div class="gen-actions">
         <button class="gen-primary" onclick="saveGeneratedDraft()">Simpan sebagai Draft</button>
         <button class="gen-secondary" onclick="copyGeneratedArticle()">Copy HTML</button>
       </div>
     </div>
-  </div>`;
+  </div>\`;
 }
 function openArticleGenerator(){
   const tab=document.querySelector('#articleTabbar [data-article-mode="generator"]');
@@ -852,13 +907,67 @@ function switchArticleSubtab(btn,mode){
   document.getElementById("articleSubtabList").style.display=mode==="list"?"block":"none";
   document.getElementById("articleSubtabGenerator").style.display=mode==="generator"?"block":"none";
 }
+
+function switchGenSource(btn,mode){
+  btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.toggle("active",b===btn));
+  document.getElementById("genTopicMode").style.display=mode==="topic"?"block":"none";
+  document.getElementById("genUrlMode").style.display=mode==="url"?"block":"none";
+}
+function simpleHash(str){
+  let h=2166136261;
+  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
+  return (h>>>0).toString(36);
+}
+function generatorPayload(mode="generate"){
+  return {
+    mode,
+    provider:document.getElementById("genProvider")?.value||"auto",
+    model:document.getElementById("genModel")?.value.trim()||"",
+    topic:document.getElementById("genTopic")?.value.trim()||"",
+    source_url:document.getElementById("genSourceUrl")?.value.trim()||"",
+    category:document.getElementById("genCategory")?.value||"Daerah",
+    intent:document.getElementById("genIntent")?.value||"news",
+    length:Number(document.getElementById("genLength")?.value||1000),
+    tone:document.getElementById("genTone")?.value||"Jurnalistik Profesional",
+    facts:document.getElementById("genFacts")?.value.trim()||"",
+    audience:document.getElementById("genAudience")?.value.trim()||"",
+    extra:document.getElementById("genExtra")?.value.trim()||""
+  };
+}
+function renderAIDraft(draft){
+  window.__generatedArticle=draft;
+  const preview=document.getElementById("genPreview"),score=document.getElementById("genScore");
+  const notes=Array.isArray(draft.quality_notes)?draft.quality_notes.join(" · "):(draft.quality_notes||"Fact-check sebelum publish");
+  preview.innerHTML=(draft.html||"")+\`<div class="gen-meta-box"><div class="gen-meta-item"><b>Meta Description</b><span>\${escapeHTML(draft.meta||"")}</span></div><div class="gen-meta-item"><b>Slug</b><span>\${escapeHTML(draft.slug||"")}</span></div><div class="gen-meta-item"><b>Tag</b><span>\${(draft.tags||[]).map(escapeHTML).join(", ")}</span></div><div class="gen-meta-item"><b>Provider</b><span>\${escapeHTML(draft.provider||"-")} · \${escapeHTML(draft.model||"-")}</span></div><div class="gen-meta-item" style="grid-column:1/-1"><b>Quality Guardrail</b><span>\${escapeHTML(notes)}</span></div></div>\`;
+  score.textContent=(draft.cached?"Cache · ":"AI · ")+(draft.provider||"Generated");
+}
+async function requestAIArticle(payload){
+  const useCache=document.getElementById("genUseCache")?.checked!==false;
+  const cacheKey="purbalink_ai_"+simpleHash(JSON.stringify(payload));
+  if(useCache){
+    try{const cached=JSON.parse(localStorage.getItem(cacheKey)||"null");if(cached&&Date.now()-cached.ts<86400000)return {...cached.data,cached:true}}catch{}
+  }
+  const res=await fetch("/api/ai/article",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok)throw new Error(data.error||"Generator AI gagal.");
+  if(useCache)try{localStorage.setItem(cacheKey,JSON.stringify({ts:Date.now(),data}))}catch{}
+  return data;
+}
+async function rewriteFromUrl(){
+  const url=document.getElementById("genSourceUrl")?.value.trim();
+  if(!url){alert("Masukkan URL artikel sumber.");return;}
+  const preview=document.getElementById("genPreview"),score=document.getElementById("genScore");
+  preview.innerHTML='<div class="empty-note">Mengambil sumber dan menyusun artikel orisinal...</div>';score.textContent="Rewrite AI";
+  try{renderAIDraft(await requestAIArticle(generatorPayload("rewrite_url")))}
+  catch(e){preview.innerHTML='<div class="empty-note">'+escapeHTML(e.message)+'</div>';score.textContent="Gagal"}
+}
 function fillGeneratorDemo(){
   document.getElementById("genTopic").value="Strategi UMKM Purbalingga Meningkatkan Penjualan Online 2026";
   document.getElementById("genFacts").value="Fokus pada marketplace, konten video pendek, optimasi katalog, pelayanan pelanggan, dan kepercayaan pembeli. Jangan membuat data statistik tanpa sumber.";
   document.getElementById("genExtra").value="Buat struktur H1-H2-H3, FAQ, meta description, slug, tag, rekomendasi internal link, dan CTA yang tidak memaksa.";
 }
 function clearGenerator(){
-  ["genTopic","genFacts","genExtra"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  ["genTopic","genFacts","genExtra","genSourceUrl","genModel"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
   document.getElementById("genPreview").innerHTML='<div class="empty-note">Hasil artikel akan muncul di sini.</div>';
   document.getElementById("genScore").textContent="Belum dianalisis";
 }
@@ -892,14 +1001,16 @@ function buildLocalHighValueDraft(){
   };
 }
 async function generateHighValueArticle(){
-  const topic=document.getElementById("genTopic").value.trim();
-  if(!topic){alert("Isi topik terlebih dahulu.");return;}
+  const payload=generatorPayload("generate");
+  if(!payload.topic){alert("Isi topik terlebih dahulu.");return;}
   const preview=document.getElementById("genPreview"),score=document.getElementById("genScore");
-  preview.innerHTML='<div class="empty-note">Menyusun artikel high value...</div>'; score.textContent="Memproses";
-  const draft=buildLocalHighValueDraft();
-  window.__generatedArticle=draft;
-  preview.innerHTML=draft.html+`<div class="gen-meta-box"><div class="gen-meta-item"><b>Meta Description</b><span>${escapeHTML(draft.meta)}</span></div><div class="gen-meta-item"><b>Slug</b><span>${escapeHTML(draft.slug)}</span></div><div class="gen-meta-item"><b>Tag</b><span>${draft.tags.map(escapeHTML).join(", ")}</span></div><div class="gen-meta-item"><b>Quality Guardrail</b><span>Fact-check wajib sebelum publish</span></div></div>`;
-  score.textContent="High Value Draft";
+  preview.innerHTML='<div class="empty-note">Menghubungi provider AI...</div>';score.textContent="Memproses";
+  try{renderAIDraft(await requestAIArticle(payload))}
+  catch(e){
+    const local=buildLocalHighValueDraft();
+    local.provider="Fallback Lokal";local.model="-";local.quality_notes=["AI API gagal: "+e.message,"Draft lokal dibuat agar editor tetap dapat bekerja"];
+    renderAIDraft(local);
+  }
 }
 function saveGeneratedDraft(){
   if(!window.__generatedArticle){alert("Generate artikel terlebih dahulu.");return;}
