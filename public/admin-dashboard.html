@@ -827,7 +827,7 @@ function tabHTML(tab){
 
 
 function articleGeneratorHTML(){
-  return \`
+  return `
   <div class="article-generator-grid">
     <div class="gen-card">
       <h3>AI Article Generator — High Value Content</h3>
@@ -895,7 +895,7 @@ function articleGeneratorHTML(){
         <button class="gen-secondary" onclick="copyGeneratedArticle()">Copy HTML</button>
       </div>
     </div>
-  </div>\`;
+  </div>`;
 }
 function openArticleGenerator(){
   const tab=document.querySelector('#articleTabbar [data-article-mode="generator"]');
@@ -938,7 +938,7 @@ function renderAIDraft(draft){
   window.__generatedArticle=draft;
   const preview=document.getElementById("genPreview"),score=document.getElementById("genScore");
   const notes=Array.isArray(draft.quality_notes)?draft.quality_notes.join(" · "):(draft.quality_notes||"Fact-check sebelum publish");
-  preview.innerHTML=(draft.html||"")+\`<div class="gen-meta-box"><div class="gen-meta-item"><b>Meta Description</b><span>\${escapeHTML(draft.meta||"")}</span></div><div class="gen-meta-item"><b>Slug</b><span>\${escapeHTML(draft.slug||"")}</span></div><div class="gen-meta-item"><b>Tag</b><span>\${(draft.tags||[]).map(escapeHTML).join(", ")}</span></div><div class="gen-meta-item"><b>Provider</b><span>\${escapeHTML(draft.provider||"-")} · \${escapeHTML(draft.model||"-")}</span></div><div class="gen-meta-item" style="grid-column:1/-1"><b>Quality Guardrail</b><span>\${escapeHTML(notes)}</span></div></div>\`;
+  preview.innerHTML=(draft.html||"")+`<div class="gen-meta-box"><div class="gen-meta-item"><b>Meta Description</b><span>\${escapeHTML(draft.meta||"")}</span></div><div class="gen-meta-item"><b>Slug</b><span>\${escapeHTML(draft.slug||"")}</span></div><div class="gen-meta-item"><b>Tag</b><span>\${(draft.tags||[]).map(escapeHTML).join(", ")}</span></div><div class="gen-meta-item"><b>Provider</b><span>\${escapeHTML(draft.provider||"-")} · \${escapeHTML(draft.model||"-")}</span></div><div class="gen-meta-item" style="grid-column:1/-1"><b>Quality Guardrail</b><span>\${escapeHTML(notes)}</span></div></div>`;
   score.textContent=(draft.cached?"Cache · ":"AI · ")+(draft.provider||"Generated");
 }
 async function requestAIArticle(payload){
