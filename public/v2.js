@@ -1,6 +1,6 @@
 (()=>{
   'use strict';
-  const VERSION='2.1.0';
+  const VERSION='2.2.0';
   const DB_KEY='purbalink_v2_db';
   const DOMAIN='https://purbalink.web.id';
   const page=(location.pathname.split('/').pop()||'index.html').toLowerCase();
@@ -116,6 +116,31 @@
 
   let installPrompt=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;window.dispatchEvent(new Event('purbalink-install-ready'))});
   window.PV2.installApp=async()=>{if(!installPrompt){toast('Gunakan menu browser “Install app/Tambahkan ke layar utama” jika tombol instal belum tersedia.');return}installPrompt.prompt();await installPrompt.userChoice;installPrompt=null};
+
+  function bottomNavMarkup(){
+    const active=(name)=>page===name?' active':'';
+    return `
+      <a href="index.html" class="bn-item${active('index.html')}"><svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10"/></svg><span class="bn-label">Beranda</span></a>
+      <a href="loker.html" class="bn-item${active('loker.html')}"><svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg><span class="bn-label">Loker</span></a>
+      <a href="shop.html" class="bn-item${active('shop.html')}"><svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="bn-label">Shop</span></a>
+      <a href="video.html" class="bn-item${active('video.html')}"><svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="18" rx="3"/><path d="M17 8l4-2v12l-4-2z"/></svg><span class="bn-label">Video</span></a>
+      <a href="profile.html" class="bn-item${active('profile.html')}"><svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg><span class="bn-label">Profil</span></a>`;
+  }
+  function ensureSharedChrome(){
+    document.body.dataset.pv2Page=page||'index.html';
+    const nav=document.querySelector('nav.bottomnav'); if(nav)nav.innerHTML=bottomNavMarkup();
+    const pages=['loker.html','shop.html','video.html','profile.html','login.html','register.html'];
+    if(!pages.includes(page)||document.querySelector('.pl-global-header'))return;
+    const u=currentUser();
+    const date=new Intl.DateTimeFormat('id-ID',{weekday:'long',day:'2-digit',month:'long',year:'numeric'}).format(new Date());
+    const head=document.createElement('div');head.className='pl-global-header';
+    head.innerHTML=`
+      <div class="pl-global-utility"><div class="pl-shell-wrap"><span>${date}</span><div><a href="index.html">Foto</a><a href="video.html">Video</a><a href="index.html#newsGrid">Indeks</a></div></div></div>
+      <div class="pl-global-brand"><div class="pl-shell-wrap"><a class="pl-brand-lockup" href="index.html"><img src="logo-purbalink.png" alt="PURBALINK"><span class="pl-brand-copy"><b><i>PURBA</i><em>LINK</em></b><small>Purbalingga, Lebih Dekat, Lebih Cepat</small></span></a><a class="pl-account-link" href="${u?'profile.html':'login.html'}">${u?'Profil':'Masuk'}</a></div></div>
+      <div class="pl-global-cats"><div class="pl-shell-wrap"><a href="index.html">Nasional</a><a href="index.html">Politik</a><a href="index.html">Ekonomi</a><a href="index.html">Bisnis</a><a href="index.html">Teknologi</a><a href="index.html">Olahraga</a><a href="index.html">Gaya Hidup</a><a href="index.html">Hiburan</a><a href="index.html">Otomotif</a></div></div>`;
+    document.body.insertBefore(head,document.body.firstChild);
+  }
+
   function applyGlobal(){
     document.querySelectorAll('a[href="purbalink-home.html"]').forEach(a=>a.setAttribute('href','index.html'));
     document.querySelectorAll('a[href="https://purbalink.id"],a[href="https://www.purbalink.id"]').forEach(a=>a.href=DOMAIN);
@@ -307,6 +332,7 @@
     document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().getFullYear());
   }
 
+  ensureSharedChrome();
   applyGlobal();
   if(page==='index.html'||page==='purbalink-home.html'||page==='')initHome();
   if(page==='login.html'||page==='register.html')initAuth();
