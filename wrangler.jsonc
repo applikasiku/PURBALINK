@@ -3,6 +3,10 @@
   "name": "purbalink",
   "main": "src/worker.js",
   "compatibility_date": "2026-09-18",
+  "build": {
+    "command": "node scripts/build-media.mjs",
+    "watch_dir": ["sticker", "scripts"]
+  },
   "vars": {
     "MIDTRANS_MODE": "sandbox"
   },

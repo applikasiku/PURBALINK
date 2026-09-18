@@ -11,6 +11,14 @@ Cloudflare build settings:
 
 The repository root contains `wrangler.jsonc`, `src/worker.js`, and the `public/` folder. Static assets are served by Cloudflare; `/api/*` is handled by the Worker.
 
+## Automatic stickers and Giphy
+
+Upload sticker images to `sticker/` on `main` (subfolders are supported). The Wrangler custom build automatically runs `node scripts/build-media.mjs`, copies the images into `public/sticker/`, and creates `public/media-catalog.js`. No manual list edits or changes to the Cloudflare deploy command are required. Both comment and reply pickers use this catalog. PNG, JPEG, GIF, WebP, AVIF, SVG, BMP, and ICO files are supported; other files and symlinks are ignored.
+
+For a plain static preview, run `node scripts/build-media.mjs` before serving `public/`. Generated assets are ignored by Git. Keep production builds on `main` and ensure any Cloudflare build watch filters include `sticker/` and `scripts/`.
+
+To enable Giphy search and trending GIFs, set `GIPHY_API_KEY` in the Cloudflare **build environment** and redeploy. This must be a Giphy browser API key: it is included in the public client catalog, not kept as a Worker secret. Until configured, or if Giphy fails, the GIF tab explicitly offers the existing local GIFs. Emoji and reaction definitions remain unchanged.
+
 ## Midtrans setup
 The site uses Midtrans Snap redirect flow for Shop checkout and Gift Author. The Worker creates Snap transactions on the server so the Midtrans Server Key never appears in frontend code.
 

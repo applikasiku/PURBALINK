@@ -591,6 +591,7 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
   </a>
 </nav>
 
+<script src="media-catalog.js"></script>
 <script>
 /* ---------- API config ---------- */
 const API_BASE = window.location.origin;
@@ -1056,7 +1057,7 @@ function postReply(parentId){
 }
 
 /* ---------- GIF sticker picker (comment compose) ---------- */
-const allStickers = [...reactionDefs.map(r=>({label:r.label,file:r.file})), ...bonusStickers];
+const allStickers = window.PURBALINK_MEDIA?.stickers || [...reactionDefs.map(r=>({label:r.label,file:r.file})), ...bonusStickers];
 function renderStickerPopup(){
   document.getElementById("stickerPopup").innerHTML = allStickers.map(s=>`
     <div class="stk" onclick="pickSticker('${s.file}')">
@@ -1204,10 +1205,67 @@ function renderComposerPicker(tab="emoji"){
     body.className="composer-picker-body emoji-grid";
     body.innerHTML=emojiSet.map(e=>`<button type="button" onclick="insertComposerEmoji('${e}')">${e}</button>`).join("");
   }else{
-    const items=tab==="gif"?reactionDefs.map(r=>({label:r.label,file:r.file})):[...allStickers];
+    if(tab==="gif"){ renderGiphyPicker(body); return; }
     body.className="composer-picker-body media-grid";
-    body.innerHTML=items.map(m=>`<button type="button" onclick="pickComposerMedia('${m.file}','${tab}')"><img src="${m.file}" alt="${m.label}"><span>${m.label}</span></button>`).join("");
+    renderMediaButtons(body,allStickers,"sticker");
   }
+}
+function renderMediaButtons(container,items,kind){
+  container.replaceChildren();
+  for(const item of items){
+    const button=document.createElement("button");
+    button.type="button";
+    button.addEventListener("click",()=>pickComposerMedia(item.file,kind));
+    const img=document.createElement("img");
+    img.src=item.file; img.alt=item.label; img.loading="lazy";
+    const label=document.createElement("span"); label.textContent=item.label;
+    button.append(img,label); container.append(button);
+  }
+  if(!items.length)container.textContent="Belum ada sticker atau GIF tersedia.";
+}
+function renderGiphyPicker(body){
+  body.className="composer-picker-body";
+  body.replaceChildren();
+  const key=window.PURBALINK_MEDIA?.giphyApiKey;
+  const status=document.createElement("p"); status.setAttribute("role","status");
+  const grid=document.createElement("div"); grid.className="media-grid";
+  if(!key){
+    status.textContent="Giphy belum tersedia. Pilih GIF lokal berikut.";
+    body.append(status,grid);
+    renderMediaButtons(grid,reactionDefs,"gif"); return;
+  }
+  const form=document.createElement("form");
+  const input=document.createElement("input"); input.type="search"; input.placeholder="Cari GIF di Giphy"; input.setAttribute("aria-label","Cari GIF di Giphy");
+  const submit=document.createElement("button"); submit.type="submit"; submit.textContent="Cari";
+  form.append(input,submit);
+  const attribution=document.createElement("a"); attribution.href="https://giphy.com/"; attribution.textContent="Powered by GIPHY"; attribution.target="_blank"; attribution.rel="noopener noreferrer";
+  body.append(form,attribution,status,grid);
+  let request=0;
+  async function search(){
+    const current=++request;
+    status.textContent="Memuat GIF…";
+    const query=input.value.trim();
+    const url=new URL("https://api.giphy.com/v1/gifs/"+(query?"search":"trending"));
+    url.search=new URLSearchParams({api_key:key,limit:"24",rating:"g",...(query?{q:query}:{})});
+    try{
+      const response=await fetch(url,{signal:AbortSignal.timeout(12000)});
+      if(!response.ok)throw new Error("Giphy unavailable");
+      const result=await response.json();
+      if(!Array.isArray(result.data))throw new Error("Invalid Giphy response");
+      if(current!==request||!grid.isConnected)return;
+      const items=result.data.map(g=>({label:g.title||"GIF",file:g.images?.fixed_height?.url})).filter(g=>{
+        try{const u=new URL(g.file);return u.protocol==="https:"&&(u.hostname==="giphy.com"||u.hostname.endsWith(".giphy.com"));}catch{return false;}
+      });
+      status.textContent=items.length?"":"GIF tidak ditemukan.";
+      renderMediaButtons(grid,items,"gif");
+    }catch{
+      if(current!==request||!grid.isConnected)return;
+      status.textContent="Giphy belum dapat dimuat. Coba Cari lagi, atau pilih GIF lokal.";
+      renderMediaButtons(grid,reactionDefs,"gif");
+    }
+  }
+  form.addEventListener("submit",event=>{event.preventDefault();void search();});
+  void search();
 }
 function insertComposerEmoji(emoji){
   const id=composerTarget.type==="reply"?"reply-"+composerTarget.id:"newComment";
@@ -1220,8 +1278,10 @@ function pickComposerMedia(file,kind){
   if(composerTarget.type==="reply"){
     pendingReplyMedia[composerTarget.id]={file,kind};
     const id=composerTarget.id;
+    const draft=document.getElementById("reply-"+id)?.value||"";
     document.getElementById("composerPicker")?.classList.remove("show");
     renderComments();
+    const textarea=document.getElementById("reply-"+id); if(textarea)textarea.value=draft;
     setTimeout(()=>document.getElementById("reply-"+id)?.focus(),0);
   }else{
     pendingSticker=file;
@@ -1232,7 +1292,12 @@ function pickComposerMedia(file,kind){
     document.getElementById("newComment")?.focus();
   }
 }
-function clearReplyMedia(id){ delete pendingReplyMedia[id]; renderComments(); setTimeout(()=>document.getElementById("reply-"+id)?.focus(),0); }
+function clearReplyMedia(id){
+  const draft=document.getElementById("reply-"+id)?.value||"";
+  delete pendingReplyMedia[id]; renderComments();
+  const textarea=document.getElementById("reply-"+id); if(textarea)textarea.value=draft;
+  setTimeout(()=>document.getElementById("reply-"+id)?.focus(),0);
+}
 function toggleStickerPopup(){ openComposerPicker("comment"); }
 function closeStickerPopup(){ document.getElementById("composerPicker")?.classList.remove("show"); }
 function renderStickerPopup(){ renderComposerPicker(composerTab); }
