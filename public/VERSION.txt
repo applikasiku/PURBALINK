@@ -1,10 +1,10 @@
-PURBALINK V2.7.0 — Admin Icon Grid + Bulk Sticker Packages
+PURBALINK V2.8.0 — Protected Admin Subdomain
 Build date: 2026-09-19
-Domain target: https://purbalink.web.id
-Admin Dashboard: 5-column icon shortcuts, responsive precision layout
-Ads: disabled inside admin dashboard; public ad manager remains active
-Sticker Admin: bulk upload max 50, package naming, automatic/custom categories, IndexedDB blob storage
-GIF: Giphy settings retained
-Cloudflare Worker: purbalink
-Jobs API: Jooble via Cloudflare Worker
-Payment gateway: Midtrans Snap
+Public site: https://purbalink.web.id
+Admin site: https://admin.purbalink.web.id
+Admin authorization: Cloudflare Access email header
+Allowed admin email: amelianewsid@gmail.com
+Public admin URL: blocked (404)
+Admin indexing: noindex/nofollow/noarchive
+Cloudflare Worker: host-based public/admin routing
+Ads: disabled in admin
