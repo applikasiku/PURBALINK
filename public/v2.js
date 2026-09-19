@@ -170,7 +170,7 @@
     document.querySelectorAll('[data-pl-close]').forEach(b=>b.onclick=close);
   }
   function sharedHeaderMarkup(){
-    return `<div class="pl-unified-head"><div class="pl-shell-wrap"><a class="pl-u-brand" href="index.html"><img src="logo-purbalink.png" alt="PURBALINK"><b><span>PURBA</span><em>LINK</em></b></a><div class="pl-u-actions"><a href="profile.html" aria-label="Profil"><img src="https://img.icons8.com/fluency-systems-regular/48/user.png" alt=""></a><button type="button" data-pl-menu aria-label="Menu"><img src="https://img.icons8.com/fluency-systems-regular/48/circled-menu.png" alt=""></button></div></div></div>`;
+    return `<header class="p6-header pl-unified-head"><div class="p6-head-row wrap"><a class="p6-brand" href="index.html"><img src="brand-icon-transparent.png" alt="PURBALINK"><span><b class="brand-purba">PURBA</b><b class="brand-link">LINK</b></span></a><div class="p6-head-actions pl-u-actions"><a class="p6-icon-btn" href="profile.html" aria-label="Profil"><img class="i8-icon" src="https://img.icons8.com/fluency-systems-regular/48/user.png" alt=""></a><button class="p6-icon-btn" type="button" data-pl-menu aria-label="Menu"><img class="i8-icon" src="https://img.icons8.com/fluency-systems-regular/48/circled-menu.png" alt=""></button></div></div></header>`;
   }
   function ensureSharedChrome(){
     document.body.dataset.pv2Page=page||'index.html';
