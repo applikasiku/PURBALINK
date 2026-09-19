@@ -131,19 +131,60 @@
       <a href="video.html" class="bn-item${active('video.html')}"><svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="18" rx="3"/><path d="M17 8l4-2v12l-4-2z"/></svg><span class="bn-label">Video</span></a>
       <a href="profile.html" class="bn-item${active('profile.html')}"><svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg><span class="bn-label">Profil</span></a>`;
   }
+  function sharedDrawerMarkup(){
+    const cats=[
+      ['Nasional','https://img.icons8.com/fluency/48/government.png'],['Internasional','https://img.icons8.com/fluency/48/globe.png'],['Daerah','https://img.icons8.com/fluency/48/marker.png'],['Politik','https://img.icons8.com/fluency/48/conference-call.png'],['Ekonomi','https://img.icons8.com/fluency/48/combo-chart.png'],['Finance','https://img.icons8.com/fluency/48/coins.png'],['Hukum','https://img.icons8.com/fluency/48/scales.png'],['Teknologi','https://img.icons8.com/fluency/48/processor.png'],['Olahraga','https://img.icons8.com/fluency/48/football2.png'],['Hiburan','https://img.icons8.com/fluency/48/musical-notes.png'],['Gaya Hidup','https://img.icons8.com/fluency/48/natural-food.png'],['Pendidikan','https://img.icons8.com/fluency/48/graduation-cap.png'],['Kesehatan','https://img.icons8.com/fluency/48/heart-with-pulse.png'],['Lingkungan','https://img.icons8.com/fluency/48/deciduous-tree.png']
+    ];
+    const row=(href,icon,title,sub='')=>`<a class="pl-drawer-row" href="${href}"><img src="${icon}" alt=""><span><b>${title}</b>${sub?`<small>${sub}</small>`:''}</span><i>›</i></a>`;
+    return `<div class="pl-drawer-backdrop" data-pl-close></div><aside class="pl-drawer" id="plSharedDrawer" aria-label="Menu PURBALINK">
+      <div class="pl-drawer-head"><a href="index.html"><img src="logo-purbalink.png" alt=""><b><span>PURBA</span><em>LINK</em></b></a><button type="button" data-pl-close>×</button></div>
+      <section><h3>Menu Utama</h3>
+        ${row('index.html','https://img.icons8.com/fluency/48/home.png','Beranda','Halaman utama')}
+        ${row('index.html#terkini','https://img.icons8.com/fluency/48/news.png','Berita','Berita terbaru')}
+        ${row('loker.html','https://img.icons8.com/fluency/48/briefcase.png','Loker','Lowongan kerja')}
+        ${row('shop.html','https://img.icons8.com/fluency/48/shopping-bag.png','Shop','Belanja online')}
+        ${row('video.html','https://img.icons8.com/fluency/48/video.png','Video','Video populer')}
+        ${row('redaksi.html','https://img.icons8.com/fluency/48/conference-call.png','Redaksi','Tentang redaksi')}
+        ${row('tentang.html','https://img.icons8.com/fluency/48/organization.png','Organisasi','Daftar organisasi PURBALINK')}
+      </section>
+      <section><h3>Kategori Berita</h3><div class="pl-cat-list">${cats.map(x=>row('index.html?kategori='+encodeURIComponent(x[0].toLowerCase()),x[1],x[0])).join('')}</div></section>
+      <section><h3>Media Sosial</h3>
+        ${row('#','https://img.icons8.com/fluency/48/facebook-new.png','Facebook','PURBALINK')}
+        ${row('#','https://img.icons8.com/fluency/48/instagram-new.png','Instagram','PURBALINK')}
+        ${row('#','https://img.icons8.com/fluency/48/youtube-play.png','YouTube','PURBALINK')}
+        ${row('#','https://img.icons8.com/fluency/48/tiktok.png','TikTok','PURBALINK')}
+        ${row('#','https://img.icons8.com/fluency/48/threads.png','Threads','PURBALINK')}
+      </section>
+      <section><h3>Layanan</h3>
+        <button class="pl-drawer-row" type="button" onclick="window.installPurbalinkPWA?installPurbalinkPWA():alert('Gunakan menu browser untuk Install aplikasi')"><img src="https://img.icons8.com/fluency/48/download.png" alt=""><span><b>Install PWA</b><small>Pasang PURBALINK di perangkat</small></span><i>›</i></button>
+        ${row('privacy.html','https://img.icons8.com/fluency/48/privacy.png','Privasi')}
+        ${row('terms.html','https://img.icons8.com/fluency/48/document.png','Syarat & Ketentuan')}
+        ${row('kontak.html','https://img.icons8.com/fluency/48/contacts.png','Kontak')}
+      </section>
+    </aside>`;
+  }
+  function bindSharedDrawer(){
+    const drawer=document.getElementById('plSharedDrawer'),back=document.querySelector('.pl-drawer-backdrop');if(!drawer||!back)return;
+    const close=()=>{drawer.classList.remove('show');back.classList.remove('show');document.body.classList.remove('pl-drawer-open')};
+    document.querySelectorAll('[data-pl-menu]').forEach(b=>b.onclick=()=>{drawer.classList.add('show');back.classList.add('show');document.body.classList.add('pl-drawer-open')});
+    document.querySelectorAll('[data-pl-close]').forEach(b=>b.onclick=close);
+  }
+  function sharedHeaderMarkup(){
+    return `<div class="pl-unified-head"><div class="pl-shell-wrap"><a class="pl-u-brand" href="index.html"><img src="logo-purbalink.png" alt="PURBALINK"><b><span>PURBA</span><em>LINK</em></b></a><div class="pl-u-actions"><a href="profile.html" aria-label="Profil"><img src="https://img.icons8.com/fluency-systems-regular/48/user.png" alt=""></a><button type="button" data-pl-menu aria-label="Menu"><img src="https://img.icons8.com/fluency-systems-regular/48/circled-menu.png" alt=""></button></div></div></div>`;
+  }
   function ensureSharedChrome(){
     document.body.dataset.pv2Page=page||'index.html';
     const nav=document.querySelector('nav.bottomnav'); if(nav)nav.innerHTML=bottomNavMarkup();
-    const pages=['loker.html','shop.html','video.html','profile.html','login.html','register.html'];
-    if(!pages.includes(page)||document.querySelector('.pl-global-header'))return;
-    const u=currentUser();
-    const date=new Intl.DateTimeFormat('id-ID',{weekday:'long',day:'2-digit',month:'long',year:'numeric'}).format(new Date());
-    const head=document.createElement('div');head.className='pl-global-header';
-    head.innerHTML=`
-      <div class="pl-global-utility"><div class="pl-shell-wrap"><span>${date}</span><div><a href="index.html">Foto</a><a href="video.html">Video</a><a href="index.html#newsGrid">Indeks</a></div></div></div>
-      <div class="pl-global-brand"><div class="pl-shell-wrap"><a class="pl-brand-lockup" href="index.html"><img src="logo-purbalink.png" alt="PURBALINK"><span class="pl-brand-copy"><b><i>PURBA</i><em>LINK</em></b><small>Purbalingga, Lebih Dekat, Lebih Cepat</small></span></a><a class="pl-account-link" href="${u?'profile.html':'login.html'}">${u?'Profil':'Masuk'}</a></div></div>
-      <div class="pl-global-cats"><div class="pl-shell-wrap"><a href="index.html">Nasional</a><a href="index.html">Politik</a><a href="index.html">Ekonomi</a><a href="index.html">Bisnis</a><a href="index.html">Teknologi</a><a href="index.html">Olahraga</a><a href="index.html">Gaya Hidup</a><a href="index.html">Hiburan</a><a href="index.html">Otomotif</a></div></div>`;
-    document.body.insertBefore(head,document.body.firstChild);
+    const publicPages=['loker.html','shop.html','video.html','profile.html','login.html','register.html','kontak.html','redaksi.html','tentang.html','privacy.html','terms.html','pedoman-media-siber.html'];
+    if(publicPages.includes(page)&&!document.querySelector('.pl-unified-head')){
+      const holder=document.createElement('div');holder.innerHTML=sharedHeaderMarkup()+sharedDrawerMarkup();while(holder.firstChild)document.body.insertBefore(holder.lastChild,document.body.firstChild);
+      bindSharedDrawer();
+    }
+    if(page==='index.html'&&!document.getElementById('plSharedDrawer')){
+      document.body.insertAdjacentHTML('beforeend',sharedDrawerMarkup());bindSharedDrawer();
+      const old=document.getElementById('p6MoreMenu');if(old)old.remove();
+      const menuBtn=document.querySelector('.p6-head-actions button');if(menuBtn){menuBtn.removeAttribute('onclick');menuBtn.setAttribute('data-pl-menu','');bindSharedDrawer();}
+    }
   }
 
   function applyGlobal(){
