@@ -2,7 +2,7 @@ const ADMIN_HOST = 'admin.purbalink.web.id';
 const PUBLIC_HOST = 'purbalink.web.id';
 
 function adminEmail(env) {
-  return String(env.ADMIN_EMAIL || 'amelianewsid@gmail.com').trim().toLowerCase();
+  return String(env.ADMIN_EMAIL || 'amelnewsid@gmail.com').trim().toLowerCase();
 }
 
 function accessEmail(request) {
@@ -303,8 +303,8 @@ export default {
         const email = accessEmail(request);
         if (!email || email !== adminEmail(env)) return forbiddenAdmin();
 
-        if (url.pathname === '/' || url.pathname === '/index.html' || url.pathname === '/admin-dashboard.html') {
-          const res = await serveAsset(request, env, '/admin-dashboard.html');
+        if (url.pathname === '/' || url.pathname === '/index.html' || url.pathname === '/admin-dashboard.html' || url.pathname === '/admin-dashboard') {
+          const res = await serveAsset(request, env, '/admin-dashboard');
           const headers = new Headers(res.headers);
           headers.set('cache-control', 'no-store');
           headers.set('x-robots-tag', 'noindex, nofollow, noarchive');
@@ -326,7 +326,7 @@ export default {
       }
 
       // Never expose the admin HTML on the public site.
-      if (isPublicHost && (url.pathname === '/admin-dashboard.html' || url.pathname.startsWith('/admin/'))) {
+      if (isPublicHost && (url.pathname === '/admin-dashboard.html' || url.pathname === '/admin-dashboard' || url.pathname.startsWith('/admin/'))) {
         return new Response('Not Found', { status: 404, headers: { 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow' } });
       }
 
