@@ -281,6 +281,35 @@
       list.querySelectorAll('[data-trend-id]').forEach(btn=>btn.addEventListener('click',()=>window.PV2.openArticle(btn.dataset.trendId)));
     }
     renderTrendingStrip();
+    function initFeedPage(){
+      const mode=(new URLSearchParams(location.search).get('feed')||'utama').toLowerCase();
+      const pageEl=document.getElementById('pv6FeedPage'),homeMain=document.querySelector('.p6-main'),trend=document.getElementById('p6TrendingBar');
+      document.querySelectorAll('.p6-tabs [data-feed]').forEach(a=>a.classList.toggle('active',a.dataset.feed===mode));
+      if(mode==='utama'){if(pageEl)pageEl.hidden=true;return}
+      const cfg={
+        terkini:{title:'Terkini',desc:'Update berita terbaru PURBALINK, disusun dari publikasi paling baru.'},
+        populer:{title:'Populer',desc:'Berita yang paling banyak menarik perhatian pembaca PURBALINK.'},
+        rekomendasi:{title:'Rekomendasi',desc:'Pilihan berita menarik dari berbagai kategori untuk Anda.'}
+      }[mode]||{title:'Berita',desc:'Pilihan berita PURBALINK.'};
+      if(!pageEl)return;pageEl.hidden=false;if(homeMain)homeMain.style.display='none';if(trend)trend.style.display='none';
+      document.getElementById('pv6FeedTitle').textContent=cfg.title;document.getElementById('pv6FeedDesc').textContent=cfg.desc;
+      let items=published().slice();
+      if(mode==='populer')items.sort((a,b)=>Number(b.views||0)-Number(a.views||0));
+      else if(mode==='rekomendasi')items.sort((a,b)=>(Number(b.breaking)-Number(a.breaking))||Number(b.views||0)-Number(a.views||0));
+      else items.reverse();
+      if(items.length<12){const base=items.slice();while(items.length<12&&base.length)items.push(...base.slice(0,12-items.length))}
+      const uniqueFor=(arr,n)=>arr.slice(0,Math.min(n,arr.length));
+      const carousel=document.getElementById('pv6FeedCarousel');
+      carousel.innerHTML=uniqueFor(items,6).map(a=>'<article data-feed-article="'+a.id+'" style="background-image:url(\''+esc(a.img)+'\')"><div><small>'+esc(a.cat)+'</small><h2>'+esc(a.title)+'</h2><span>'+readMinutes(a)+' menit baca</span></div></article>').join('');
+      const gridEl=document.getElementById('pv6FeedGrid');
+      gridEl.innerHTML=uniqueFor(items.slice(1),9).map(a=>'<article data-feed-article="'+a.id+'"><div class="pv6-feed-poster" style="background-image:url(\''+esc(a.img)+'\')"><span>'+esc(a.cat)+'</span></div><h3>'+esc(a.title)+'</h3><small>'+readMinutes(a)+' menit</small></article>').join('');
+      const listEl=document.getElementById('pv6FeedList');
+      listEl.innerHTML=uniqueFor(items.slice(4),10).map(a=>'<article data-feed-article="'+a.id+'"><div class="pv6-feed-thumb" style="background-image:url(\''+esc(a.img)+'\')"></div><div><small>'+esc(a.cat)+'</small><h3>'+esc(a.title)+'</h3><p>'+esc(a.summary||'')+'</p><span>'+esc(a.date)+' · '+readMinutes(a)+' menit baca</span></div><i class="fa-solid fa-chevron-right"></i></article>').join('');
+      pageEl.querySelectorAll('[data-feed-article]').forEach(el=>el.onclick=()=>PV2.openArticle(el.dataset.feedArticle));
+      document.title=cfg.title+' — PURBALINK';
+    }
+    initFeedPage();
+
 
     const breaking=db.articles.filter(a=>a.breaking&&a.status==='Terbit');
     const breakingEl=document.querySelector('.breaking .txt');let bi=0;
