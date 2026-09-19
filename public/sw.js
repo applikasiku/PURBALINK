@@ -1,11 +1,11 @@
-const CACHE = "purbalink-v5-2-anchor-rebuild-20260920";
+const CACHE = "purbalink-v5-3-stability-20260920";
 const ASSETS = [
   "./","./index.html","./purbalink-home.html","./loker.html","./shop.html","./video.html","./profile.html","./login.html","./register.html","./admin-dashboard.html",
   "./tentang.html","./redaksi.html","./pedoman-media-siber.html","./privacy.html","./terms.html","./kontak.html",
   "./v2.js","./v2.css","./info.css","./manifest.json","./icon-192.png","./icon-512.png","./brand-icon-transparent.png","./logo-purbalink.png",
   "./SUKA.gif","./LOVE.gif","./HAHAHA.gif","./HERAN.gif","./SEDIH.gif","./MARAH.gif","./GABUNG.gif"
 ];
-self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
+self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(cache=>Promise.allSettled(ASSETS.map(asset=>fetch(asset,{cache:"reload"}).then(res=>{if(res.ok)return cache.put(asset,res);throw new Error("asset "+asset)})))))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim()});
 self.addEventListener("fetch",e=>{
   if(e.request.method!=="GET")return;
