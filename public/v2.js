@@ -301,12 +301,14 @@
     function jobCard(j){
       const source=j.external?'<span class="job-source">Jooble</span>':'<span class="job-source local">PURBALINK</span>';
       const salary=j.salary?esc(j.salary):'Gaji tidak dicantumkan';
-      return `<article class="job-card" data-job-id="${esc(jobId(j))}">
-        <div class="job-top"><div class="job-logo">${jobLogo(j)}</div><div class="job-info"><div class="job-title">${esc(j.title)} ${source}</div><div class="job-company">${esc(j.company||j.source||'Perusahaan')}</div></div><button class="job-save-mini ${saved.has(jobId(j))?'saved':''}" data-save-job="${esc(jobId(j))}" aria-label="Simpan">${saved.has(jobId(j))?'♥':'♡'}</button></div>
-        <div class="job-location">⌖ ${esc(j.loc||'Indonesia')}</div>
-        <div class="job-salary">${salary}</div>
+      return `<article class="job-card job-feed-card" data-job-id="${esc(jobId(j))}">
+        <div class="job-card-brand"><div class="job-logo">${jobLogo(j)}</div><div class="job-company">${esc(j.company||j.source||'Perusahaan')}</div><span>${source}</span></div>
+        <h2 class="job-title">${esc(j.title)}</h2>
+        <div class="job-meta-line"><img src="https://img.icons8.com/ios/50/clock--v1.png" alt=""><span>${esc(j.type||'Lowongan kerja')}</span></div>
+        <div class="job-meta-line"><img src="https://img.icons8.com/ios/50/marker--v1.png" alt=""><span>${esc(j.loc||'Indonesia')}</span></div>
+        <div class="job-meta-line"><img src="https://img.icons8.com/ios/50/money--v1.png" alt=""><span>${salary}</span></div>
         ${j.snippet?`<p class="job-snippet">${esc(j.snippet)}</p>`:''}
-        <div class="job-footer"><span>${esc(j.type||'Lowongan kerja')}</span><span>${esc(j.posted||'Terbaru')}</span></div>
+        <div class="job-card-bottom"><span>${esc(j.posted||'Terbaru')}</span><button class="job-hide-mini" type="button" aria-label="Sembunyikan">◉</button><button class="job-save-mini ${saved.has(jobId(j))?'saved':''}" data-save-job="${esc(jobId(j))}" aria-label="Simpan"><img src="https://img.icons8.com/ios/50/bookmark-ribbon--v1.png" alt=""></button></div>
       </article>`;
     }
     function allJobs(){return [...externalJobs,...localJobs]}
@@ -355,8 +357,8 @@
         if(!res.ok||data.configured===false)throw new Error(data.error||'Jooble API belum dikonfigurasi');
         externalJobs=(data.jobs||[]).map((j,i)=>({id:'jooble-'+(j.id||i)+'-'+Date.now(),title:j.title||'Lowongan kerja',company:j.company||j.source||'Perusahan',loc:j.location||loc,salary:j.salary||'',type:j.type||'Lowongan Jooble',posted:j.updated||'Terbaru',updated:j.updated||'',snippet:(j.snippet||'').replace(/<[^>]+>/g,' '),link:j.link||'#',source:j.source||'Jooble',origin:'Jooble',external:true}));
         sessionStorage.setItem(cacheKey,JSON.stringify({ts:Date.now(),jobs:externalJobs}));
-        sourceEl.textContent=`${externalJobs.length} lowongan live dari Jooble + ${localJobs.length} lowongan lokal PURBALINK`;
-      }catch(e){externalJobs=[];sourceEl.textContent='Menampilkan lowongan lokal PURBALINK. '+e.message}
+        sourceEl.textContent=`Live · Jooble ${externalJobs.length}`;sourceEl.classList.add('connected');
+      }catch(e){externalJobs=[];sourceEl.textContent='Jooble: '+e.message;sourceEl.classList.remove('connected')}
       if(searchBtn)searchBtn.disabled=false;render();
     }
     window.showList=function(){document.getElementById('detailView').style.display='none';document.getElementById('listView').style.display='block';window.scrollTo(0,0)};
