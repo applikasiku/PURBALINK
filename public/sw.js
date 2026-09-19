@@ -1,4 +1,4 @@
-const CACHE = "purbalink-v2-10-auto-trending-20260919";
+const CACHE = "purbalink-v2-11-loker-fix-20260920";
 const ASSETS = [
   "./","./index.html","./purbalink-home.html","./loker.html","./shop.html","./video.html","./profile.html","./login.html","./register.html","./admin-dashboard.html",
   "./tentang.html","./redaksi.html","./pedoman-media-siber.html","./privacy.html","./terms.html","./kontak.html",
@@ -15,6 +15,7 @@ self.addEventListener("fetch",e=>{
       const copy=res.clone();e.waitUntil(caches.open(CACHE).then(c=>c.put(e.request,copy)));return res;
     }).catch(()=>caches.match(e.request).then(res=>res||Response.error())));return;
   }
+  const url=new URL(e.request.url);if(url.pathname==='/v2.js'||url.pathname==='/v2.css'||url.pathname==='/loker.html'||url.pathname==='/loker'){e.respondWith(fetch(e.request,{cache:'no-store'}).then(res=>{if(res.ok){const copy=res.clone();e.waitUntil(caches.open(CACHE).then(c=>c.put(e.request,copy)))}return res}).catch(()=>caches.match(e.request)));return;}
   const isNav=e.request.mode==="navigate";
   if(isNav){e.respondWith(fetch(e.request).then(res=>{const copy=res.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return res}).catch(()=>caches.match(e.request).then(r=>r||caches.match("./index.html"))));return;}
   e.respondWith(caches.match(e.request).then(cached=>cached||fetch(e.request).then(res=>{if(res.ok&&new URL(e.request.url).origin===self.location.origin){const copy=res.clone();caches.open(CACHE).then(c=>c.put(e.request,copy))}return res})));
