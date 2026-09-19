@@ -57,6 +57,7 @@
         merged.features=Object.assign({},seed.features,d.features||{});
         merged.trending=Object.assign({},seed.trending,d.trending||{});
         ['articles','jobs','products','videos','users','applications','orders','gifts','notifications','moderation'].forEach(k=>{ if(!Array.isArray(merged[k])) merged[k]=clone(seed[k]); });
+        merged.articles.forEach((article,index)=>{const seedArticle=seed.articles.find(x=>String(x.id)===String(article.id))||seed.articles[index];if(!Number.isFinite(Number(article.views)))article.views=Number(seedArticle?.views||0);});
         return merged;
       }
     }catch(_){ }
