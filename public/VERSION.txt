@@ -1,10 +1,8 @@
-PURBALINK V2.8.0 — Protected Admin Subdomain
+PURBALINK V2.10.0 — Automatic Trending News
 Build date: 2026-09-19
-Public site: https://purbalink.web.id
-Admin site: https://admin.purbalink.web.id
-Admin authorization: Cloudflare Access email header
-Allowed admin email: amelianewsid@gmail.com
-Public admin URL: blocked (404)
-Admin indexing: noindex/nofollow/noarchive
-Cloudflare Worker: host-based public/admin routing
-Ads: disabled in admin
+Trending source: article read counts + breaking-news boost
+Admin modes: Auto / Mixed / Manual
+Admin controls: limit, minimum reads, show read count, manual pin, edit views
+Homepage: clickable trending strip below header
+Public: https://purbalink.web.id
+Admin: https://admin.purbalink.web.id
