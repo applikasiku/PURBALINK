@@ -410,9 +410,16 @@
       grid.innerHTML=items.map(p=>`<button class="shop-hero-product" type="button" data-hero-product="${p.id}"><span class="shop-hero-product-img" style="background-image:url('${esc(p.img)}')"></span><span class="shop-hero-product-copy"><b>${esc(p.name)}</b><strong>${rupiah(p.price)}</strong></span></button>`).join('');
       grid.querySelectorAll('[data-hero-product]').forEach(b=>b.onclick=()=>openProduct(Number(b.dataset.heroProduct)));
     }
+    function renderTrendingProducts(){
+      const box=document.getElementById('trendingProductList');if(!box)return;
+      const items=[...products].sort((a,b)=>(Number(b.sold)||0)-(Number(a.sold)||0)||((Number(b.disc)||0)-(Number(a.disc)||0))).slice(0,5);
+      box.innerHTML=items.map((p,index)=>{const rating=(4.7+((Number(p.id)||0)%3)*.1).toFixed(1);return `<article class="shop-trending-item" data-trending-product="${p.id}"><span class="shop-trending-rank">#${index+1}</span><div class="shop-trending-img" style="background-image:url('${esc(p.img)}')">${p.disc?`<span>-${p.disc}%</span>`:''}</div><div class="shop-trending-info"><small>Trending #${index+1}</small><h3>${esc(p.name)}</h3><div class="shop-trending-rating">★ ${rating} · ${esc(String(p.sold||0))} terjual</div><strong>${rupiah(p.price)}</strong><div class="shop-trending-seller">${esc(p.shop||'Seller Lokal')} · ${esc(p.loc||'Purbalingga')}</div></div><button class="shop-trending-open" type="button" aria-label="Lihat produk"><img src="https://img.icons8.com/ios-filled/50/chevron-right.png" alt=""></button></article>`}).join('');
+      box.querySelectorAll('[data-trending-product]').forEach(el=>el.onclick=()=>openProduct(Number(el.dataset.trendingProduct)));
+    }
     function renderProducts(){
       const arr=list();reco.innerHTML=arr.length?arr.map(card).join(''):'<div class="pv2-search-empty" style="grid-column:1/-1">Produk tidak ditemukan.</div>';
       if(flash)flash.innerHTML=products.filter(p=>p.disc).slice(0,8).map(card).join('');
+      renderTrendingProducts();
       document.querySelectorAll('.tk-card').forEach(c=>c.onclick=e=>{if(e.target.closest('.tk-fav'))return;openProduct(Number(c.dataset.productId))});
       document.querySelectorAll('.tk-fav').forEach(f=>f.onclick=e=>{e.stopPropagation();f.classList.toggle('on');f.textContent=f.classList.contains('on')?'♥':'♡';toast(f.classList.contains('on')?'Produk disimpan':'Produk dihapus dari simpanan')});
     }
