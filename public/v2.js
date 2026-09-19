@@ -680,11 +680,11 @@
     }
     if((s=by('footer-banner'))){const ft=document.querySelector('.p6-footer,footer');putAd(s,ft,'before')}
     if((s=by('anchor'))){
-      document.querySelector('.pv5-anchor-ad')?.remove();
-      const box=document.createElement('aside');box.className='pv5-anchor-ad';box.dataset.adSlot=s.id;
-      box.innerHTML='<div class="pv5-anchor-thumb"><img src="'+esc(s.image)+'" alt="'+esc(s.title||'Kriuké')+'"></div><a class="pv5-anchor-copy" href="'+esc(s.url||'shop.html')+'" rel="sponsored"><small>'+esc(s.label||'Iklan')+'</small><b>'+esc(s.title||'Keripik Pisang Kriuké')+'</b><span>'+esc(s.description||'Renyahnya bikin nagih')+'</span></a><a class="pv5-anchor-cta" href="'+esc(s.url||'shop.html')+'" rel="sponsored">'+esc(s.cta||'Beli')+'</a><button class="pv5-anchor-close" type="button" aria-label="Tutup iklan">×</button>';
-      box.querySelector('.pv5-anchor-close').onclick=()=>box.remove();
-      document.body.appendChild(box);
+      document.querySelectorAll('.pv2-ad-anchor,.pv5-anchor-ad,.pv6-anchor').forEach(x=>x.remove());
+      const box=document.createElement('aside');box.className='pv6-anchor';box.setAttribute('aria-label','Iklan Kriuké');
+      box.innerHTML='<a class="pv6-anchor-main" href="'+esc(s.url||'shop.html')+'" rel="sponsored"><span class="pv6-anchor-brand"><i class="fa-solid fa-cookie-bite" aria-hidden="true"></i></span><span class="pv6-anchor-text"><small>IKLAN · KR IUKÉ</small><b>Keripik Pisang Kriuké</b><span>Renyah · Lokal · Bikin nagih</span></span><strong>'+esc(s.cta||'Beli')+'</strong></a><button class="pv6-anchor-close" type="button" aria-label="Tutup iklan"><i class="fa-solid fa-xmark"></i></button>';
+      box.querySelector('.pv6-anchor-close').onclick=()=>{box.remove();sessionStorage.setItem('pv6_anchor_closed','1')};
+      if(sessionStorage.getItem('pv6_anchor_closed')!=='1')document.body.appendChild(box);
     }
   }
   window.PV2.showRewardAd=function(onReward){
