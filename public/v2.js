@@ -11,14 +11,15 @@
     version:2,
     settings:{siteName:'PURBALINK',tagline:'Purbalingga, Lebih Dekat, Lebih Cepat',domain:DOMAIN,email:'redaksi@purbalink.web.id',whatsapp:'',apiBase:'',googleClientId:'',feeGift:10,feeShop:5,gateway:'Midtrans',gatewayMode:'Sandbox'},
     features:{loker:true,shop:true,video:true,gift:true,comment:true,google_login:true,registration:true,push:true},
+    trending:{mode:'auto',limit:5,minViews:0,manualIds:[],showViews:false},
     articles:[
-      {id:1,cat:'NASIONAL',title:'Pemerintah Percepat Pemulihan Pascaerupsi Gunung Lewotobi',summary:'Pemerintah menyiapkan bantuan darurat dan relokasi sementara bagi warga terdampak erupsi Gunung Lewotobi di NTT.',date:'12 Okt 2024 · 14:20 WIB',img:'https://images.unsplash.com/photo-1601134467661-3d775b999c8b?w=1000&q=80',author:'Tim PURBALINK',status:'Terbit',breaking:false,body:'Pemerintah menyiapkan bantuan darurat dan relokasi sementara bagi warga terdampak erupsi Gunung Lewotobi di Nusa Tenggara Timur (NTT).\n\nBadan Nasional Penanggulangan Bencana menyatakan proses evakuasi warga di zona berbahaya telah berjalan dan layanan dasar terus dipastikan tersedia.\n\nPemerintah daerah bersama kementerian terkait juga menyusun rencana relokasi jangka panjang bagi warga di zona rawan bencana.'},
-      {id:2,cat:'POLITIK',title:'Prabowo Tegaskan Komitmen Lanjutkan Program Pembangunan untuk Rakyat',summary:'Pemerintah menegaskan keberlanjutan program pembangunan dan layanan publik.',date:'12 Okt 2024 · 11:05 WIB',img:'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=700&q=80',author:'Redaksi PURBALINK',status:'Terbit',breaking:false,body:'Pemerintah menyampaikan komitmen untuk menjaga kesinambungan program pembangunan dan meningkatkan kualitas layanan publik.'},
-      {id:3,cat:'BISNIS',title:'Startup Indonesia Catat Pendanaan Rp2,3 Triliun di Kuartal III-2024',summary:'Ekosistem startup kembali mencatat aktivitas pendanaan pada kuartal ketiga.',date:'12 Okt 2024 · 10:42 WIB',img:'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80',author:'Redaksi PURBALINK',status:'Terbit',breaking:false,body:'Ekosistem startup Indonesia mencatat sejumlah putaran pendanaan pada kuartal ketiga dengan fokus pada efisiensi dan pertumbuhan berkelanjutan.'},
-      {id:4,cat:'DUNIA',title:'PBB Serukan Gencatan Senjata di Timur Tengah',summary:'Seruan internasional untuk perlindungan warga sipil kembali disampaikan.',date:'12 Okt 2024 · 09:30 WIB',img:'https://images.unsplash.com/photo-1544928147-79a2dbc1f389?w=700&q=80',author:'Redaksi PURBALINK',status:'Terbit',breaking:false,body:'Perserikatan Bangsa-Bangsa kembali menyerukan perlindungan warga sipil dan akses bantuan kemanusiaan.'},
-      {id:5,cat:'EKONOMI',title:'Rupiah Menguat, Pasar Menanti Data Ekonomi Terbaru',summary:'Pergerakan rupiah dipengaruhi sentimen global dan data domestik.',date:'12 Okt 2024 · 13:45 WIB',img:'https://images.unsplash.com/photo-1621981386829-9b458a2cddde?w=700&q=80',author:'Redaksi PURBALINK',status:'Terbit',breaking:false,body:'Pelaku pasar mencermati perkembangan ekonomi domestik dan global yang memengaruhi pergerakan nilai tukar.'},
-      {id:6,cat:'TEKNOLOGI',title:'Indonesia Perkuat Akses Internet melalui Infrastruktur Satelit',summary:'Infrastruktur konektivitas terus diperluas untuk wilayah yang belum terjangkau.',date:'12 Okt 2024 · 12:10 WIB',img:'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=700&q=80',author:'Redaksi PURBALINK',status:'Terbit',breaking:false,body:'Pemerataan akses internet menjadi fokus pengembangan infrastruktur digital, termasuk pemanfaatan teknologi satelit.'},
-      {id:7,cat:'OLAHRAGA',title:'Timnas Indonesia Bersiap Menjalani Laga Berikutnya',summary:'Tim pelatih mematangkan persiapan dan evaluasi jelang pertandingan.',date:'12 Okt 2024 · 11:20 WIB',img:'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=700&q=80',author:'Redaksi PURBALINK',status:'Terbit',breaking:false,body:'Tim nasional menjalani rangkaian latihan dan evaluasi menjelang pertandingan berikutnya.'}
+      {id:1,views:18420,cat:'NASIONAL',title:'Pemerintah Percepat Pemulihan Pascaerupsi Gunung Lewotobi',summary:'Pemerintah menyiapkan bantuan darurat dan relokasi sementara bagi warga terdampak erupsi Gunung Lewotobi di NTT.',date:'12 Okt 2024 · 14:20 WIB',img:'https://images.unsplash.com/photo-1601134467661-3d775b999c8b?w=1000&q=80',author:'Tim PURBALINK',status:'Terbit',breaking:false,body:'Pemerintah menyiapkan bantuan darurat dan relokasi sementara bagi warga terdampak erupsi Gunung Lewotobi di Nusa Tenggara Timur (NTT).\n\nBadan Nasional Penanggulangan Bencana menyatakan proses evakuasi warga di zona berbahaya telah berjalan dan layanan dasar terus dipastikan tersedia.\n\nPemerintah daerah bersama kementerian terkait juga menyusun rencana relokasi jangka panjang bagi warga di zona rawan bencana.'},
+      {id:2,views:16380,cat:'POLITIK',title:'Prabowo Tegaskan Komitmen Lanjutkan Program Pembangunan untuk Rakyat',summary:'Pemerintah menegaskan keberlanjutan program pembangunan dan layanan publik.',date:'12 Okt 2024 · 11:05 WIB',img:'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=700&q=80',author:'Redaksi PURBALINK',status:'Terbit',breaking:false,body:'Pemerintah menyampaikan komitmen untuk menjaga kesinambungan program pembangunan dan meningkatkan kualitas layanan publik.'},
+      {id:3,views:14120,cat:'BISNIS',title:'Startup Indonesia Catat Pendanaan Rp2,3 Triliun di Kuartal III-2024',summary:'Ekosistem startup kembali mencatat aktivitas pendanaan pada kuartal ketiga.',date:'12 Okt 2024 · 10:42 WIB',img:'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80',author:'Redaksi PURBALINK',status:'Terbit',breaking:false,body:'Ekosistem startup Indonesia mencatat sejumlah putaran pendanaan pada kuartal ketiga dengan fokus pada efisiensi dan pertumbuhan berkelanjutan.'},
+      {id:4,views:9870,cat:'DUNIA',title:'PBB Serukan Gencatan Senjata di Timur Tengah',summary:'Seruan internasional untuk perlindungan warga sipil kembali disampaikan.',date:'12 Okt 2024 · 09:30 WIB',img:'https://images.unsplash.com/photo-1544928147-79a2dbc1f389?w=700&q=80',author:'Redaksi PURBALINK',status:'Terbit',breaking:false,body:'Perserikatan Bangsa-Bangsa kembali menyerukan perlindungan warga sipil dan akses bantuan kemanusiaan.'},
+      {id:5,views:12760,cat:'EKONOMI',title:'Rupiah Menguat, Pasar Menanti Data Ekonomi Terbaru',summary:'Pergerakan rupiah dipengaruhi sentimen global dan data domestik.',date:'12 Okt 2024 · 13:45 WIB',img:'https://images.unsplash.com/photo-1621981386829-9b458a2cddde?w=700&q=80',author:'Redaksi PURBALINK',status:'Terbit',breaking:false,body:'Pelaku pasar mencermati perkembangan ekonomi domestik dan global yang memengaruhi pergerakan nilai tukar.'},
+      {id:6,views:11340,cat:'TEKNOLOGI',title:'Indonesia Perkuat Akses Internet melalui Infrastruktur Satelit',summary:'Infrastruktur konektivitas terus diperluas untuk wilayah yang belum terjangkau.',date:'12 Okt 2024 · 12:10 WIB',img:'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=700&q=80',author:'Redaksi PURBALINK',status:'Terbit',breaking:false,body:'Pemerataan akses internet menjadi fokus pengembangan infrastruktur digital, termasuk pemanfaatan teknologi satelit.'},
+      {id:7,views:10560,cat:'OLAHRAGA',title:'Timnas Indonesia Bersiap Menjalani Laga Berikutnya',summary:'Tim pelatih mematangkan persiapan dan evaluasi jelang pertandingan.',date:'12 Okt 2024 · 11:20 WIB',img:'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=700&q=80',author:'Redaksi PURBALINK',status:'Terbit',breaking:false,body:'Tim nasional menjalani rangkaian latihan dan evaluasi menjelang pertandingan berikutnya.'}
     ],
     jobs:[
       {id:1,title:'Staff Admin Gudang',company:'CV Sumber Makmur',loc:'Purbalingga Kota',type:'Full Time',salary:'Rp2,8 – 3,5 Jt',posted:'Baru',color:'#0B5ED7',status:'Aktif',desc:'Mengelola stok dan administrasi gudang, input data harian, dan koordinasi dengan tim logistik.',req:['Min. SMA/SMK sederajat','Terbiasa menggunakan Excel','Teliti dan disiplin','Domisili Purbalingga & sekitarnya'],about:'CV Sumber Makmur adalah distributor sembako yang telah beroperasi lebih dari 15 tahun di Purbalingga.'},
@@ -54,6 +55,7 @@
         const merged=Object.assign(clone(seed),d);
         merged.settings=Object.assign({},seed.settings,d.settings||{});
         merged.features=Object.assign({},seed.features,d.features||{});
+        merged.trending=Object.assign({},seed.trending,d.trending||{});
         ['articles','jobs','products','videos','users','applications','orders','gifts','notifications','moderation'].forEach(k=>{ if(!Array.isArray(merged[k])) merged[k]=clone(seed[k]); });
         return merged;
       }
@@ -163,7 +165,7 @@
       grid.innerHTML=list.length?list.map(a=>`<div class="card" data-article="${a.id}" onclick="PV2.openArticle(${a.id})"><div class="card-img" style="background-image:url('${esc(a.img)}')"></div><div class="card-body"><span class="cat">${esc(a.cat)}</span><h3>${esc(a.title)}</h3><div class="meta">${esc(a.date)}</div></div></div>`).join(''):`<div class="pv2-search-empty" style="grid-column:1/-1">Tidak ada berita yang cocok.</div>`;
     }
     window.PV2.openArticle=id=>{
-      const a=db.articles.find(x=>String(x.id)===String(id));if(!a)return;
+      const a=db.articles.find(x=>String(x.id)===String(id));if(!a)return;a.views=Number(a.views||0)+1;saveDb();
       const pill=document.querySelector('#detailView .article-wrap > .pill'); if(pill)pill.textContent=a.cat;
       const title=document.querySelector('#detailView .art-title');if(title)title.textContent=a.title;
       const by=document.querySelector('#detailView .art-byline div:last-child');if(by)by.innerHTML=`<b style="color:var(--ink);">${esc(a.author||'Tim PURBALINK')}</b> · Reporter<br>${esc(a.date)} · 5 menit baca`;
@@ -180,12 +182,27 @@
     document.querySelectorAll('.navrow a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.navrow a').forEach(x=>x.classList.remove('active'));a.classList.add('active');cat=a.textContent.trim().toUpperCase();renderCards();document.querySelector('#newsGrid')?.scrollIntoView({behavior:'smooth',block:'start'})}));
     renderCards();
 
+    function trendingItems(){
+      const cfg=Object.assign({},seed.trending,db.trending||{});
+      const pub=published().filter(a=>Number(a.views||0)>=Number(cfg.minViews||0));
+      const byViews=(a,b)=>{
+        const av=Number(a.views||0)+(a.breaking?5000:0),bv=Number(b.views||0)+(b.breaking?5000:0);
+        return bv-av || Number(Boolean(b.breaking))-Number(Boolean(a.breaking));
+      };
+      const manual=(cfg.manualIds||[]).map(id=>pub.find(a=>String(a.id)===String(id))).filter(Boolean);
+      let items=[];
+      if(cfg.mode==='manual') items=manual;
+      else if(cfg.mode==='mixed') items=[...manual,...pub.filter(a=>!manual.some(m=>String(m.id)===String(a.id))).sort(byViews)];
+      else items=pub.slice().sort(byViews);
+      return items.slice(0,Math.max(1,Math.min(10,Number(cfg.limit)||5)));
+    }
     function renderTrendingStrip(){
       const bar=document.getElementById('p6TrendingBar'),list=document.getElementById('p6TrendingList');
       if(!bar||!list)return;
-      const items=published().slice().sort((a,b)=>Number(Boolean(b.breaking))-Number(Boolean(a.breaking))).slice(0,5);
+      const items=trendingItems();
       if(!items.length){bar.style.display='none';return}
-      list.innerHTML=items.map((a,i)=>'<button type="button" class="p6-trending-chip'+(i===items.length-1?' active':'')+'" data-trend-id="'+a.id+'" title="'+esc(a.title)+'">'+esc((a.title||'').length>34?(a.title.slice(0,34)+'…'):a.title)+(i===items.length-1?'<span class="trend-check">✓</span>':'')+'</button>').join('');
+      bar.style.display='';
+      list.innerHTML=items.map((a,i)=>'<button type="button" class="p6-trending-chip'+(i===0?' active':'')+'" data-trend-id="'+a.id+'" title="'+esc(a.title)+'">'+esc((a.title||'').length>34?(a.title.slice(0,34)+'…'):a.title)+(db.trending?.showViews?'<small class="trend-views">'+Number(a.views||0).toLocaleString("id-ID")+' dibaca</small>':'')+(i===0?'<span class="trend-check">✓</span>':'')+'</button>').join('');
       list.querySelectorAll('[data-trend-id]').forEach(btn=>btn.addEventListener('click',()=>window.PV2.openArticle(btn.dataset.trendId)));
     }
     renderTrendingStrip();
@@ -539,6 +556,7 @@
     modal('Reward Ad',html,m=>{const b=m.querySelector('#rewardDone');if(b)b.onclick=()=>{closeModal();if(onReward)onReward()}});
   };
   window.PV2.renderAds=renderAds;
+  window.PV2.renderTrending=()=>{try{renderTrendingStrip()}catch(_){}};
 
   function initStaticPages(){
     document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().getFullYear());
