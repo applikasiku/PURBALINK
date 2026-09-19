@@ -334,10 +334,10 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
   </div>
   <nav class="p6-tabs">
     <div class="wrap">
-      <a class="active" href="#utama">Berita Utama</a>
-      <a href="#terkini">Terkini</a>
-      <a href="#populer">Populer</a>
-      <a href="#rekomendasi">Rekomendasi</a>
+      <a class="active" href="?feed=utama" data-feed="utama">Berita Utama</a>
+      <a href="?feed=terkini" data-feed="terkini">Terkini</a>
+      <a href="?feed=populer" data-feed="populer">Populer</a>
+      <a href="?feed=rekomendasi" data-feed="rekomendasi">Rekomendasi</a>
     </div>
   </nav>
 </header>
@@ -354,6 +354,16 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
   </div>
 </section>
 
+<section class="pv6-feed-page" id="pv6FeedPage" hidden>
+  <div class="wrap">
+    <div class="pv6-feed-head"><div><small>PURBALINK</small><h1 id="pv6FeedTitle">Terkini</h1><p id="pv6FeedDesc"></p></div><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></div>
+    <div class="pv6-feed-carousel" id="pv6FeedCarousel"></div>
+    <div class="pv6-feed-section-title"><h2>Pilihan Berita</h2><span>Geser untuk melihat lainnya</span></div>
+    <div class="pv6-feed-grid" id="pv6FeedGrid"></div>
+    <div class="pv6-feed-section-title"><h2>Berita Lainnya</h2><span>Update terbaru</span></div>
+    <div class="pv6-feed-list" id="pv6FeedList"></div>
+  </div>
+</section>
 <main class="p6-main">
   <div class="wrap">
     <section id="utama" class="p6-hero-layout" aria-label="Berita utama">
