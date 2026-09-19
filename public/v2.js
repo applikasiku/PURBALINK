@@ -605,7 +605,7 @@
       {id:'article-middle',name:'Artikel Tengah',type:'in-article',provider:'direct',enabled:true,placement:'article-middle',brand:'GANDEX',title:'GANDEX — Streetwear Lokal, Gaya Makin Berani',description:'Kaos distro dengan karakter kuat, desain modern dan nyaman untuk gaya harian.',cta:'Lihat Koleksi',image:'https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&w=900&q=82',url:'shop.html',label:'Iklan · Sponsored',adsenseSlot:''},
       {id:'article-bottom',name:'Artikel Bawah',type:'in-article',provider:'direct',enabled:true,placement:'article-bottom',brand:'Haroemin',title:'Temukan Koleksi Haroemin Pilihan',description:'Dukung brand lokal dan temukan kaos pilihan untuk gaya kasual sehari-hari.',cta:'Belanja Sekarang',image:'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=900&q=82',url:'shop.html',label:'Iklan · Sponsored',adsenseSlot:''},
       {id:'footer-banner',name:'Banner Footer',type:'banner',provider:'direct',enabled:false,placement:'footer-banner',image:'',url:'',adsenseSlot:''},
-      {id:'anchor',name:'Anchor',type:'anchor',provider:'adsense',enabled:false,placement:'anchor',image:'',url:'',adsenseSlot:''},
+      {id:'anchor',name:'Anchor Kriuké',type:'anchor',provider:'direct',enabled:true,placement:'anchor',brand:'Kriuké',title:'Keripik Pisang Kriuké',description:'Renyahnya bikin nagih · Camilan lokal Purbalingga',cta:'Beli Sekarang',image:'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=82',url:'shop.html',label:'Iklan · Sponsored',adsenseSlot:''},
       {id:'reward',name:'Reward',type:'reward',provider:'direct',enabled:false,placement:'reward',image:'',url:'',adsenseSlot:''}
     ]};
   }
@@ -613,8 +613,8 @@
     const fresh=defaultAdsConfig();
     if(!db.ads){db.ads=fresh;saveDb()}
     if(!Array.isArray(db.ads.slots))db.ads.slots=fresh.slots;
-    const staleDemo=db.ads.slots.some(s=>['home-native','article-top','article-middle','article-bottom'].includes(s.placement)&&!String(s.image||'').trim());
-    if(staleDemo){for(const demo of fresh.slots){if(['home-native','article-top','article-middle','article-bottom'].includes(demo.placement)){const i=db.ads.slots.findIndex(s=>s.placement===demo.placement);if(i>=0)db.ads.slots[i]=demo;else db.ads.slots.push(demo)}}saveDb()}
+    const staleDemo=db.ads.slots.some(s=>['home-native','article-top','article-middle','article-bottom','anchor'].includes(s.placement)&&(s.placement==='anchor'?(s.enabled===false||s.provider!=='direct'||!String(s.image||'').trim()):!String(s.image||'').trim()));
+    if(staleDemo){for(const demo of fresh.slots){if(['home-native','article-top','article-middle','article-bottom','anchor'].includes(demo.placement)){const i=db.ads.slots.findIndex(s=>s.placement===demo.placement);if(i>=0)db.ads.slots[i]=demo;else db.ads.slots.push(demo)}}saveDb()}
     return db.ads
   }
   let adsenseLoading=null;
