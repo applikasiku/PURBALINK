@@ -550,6 +550,7 @@ canvas{max-width:100%!important}
 
       <div class="sb-group">SHOP</div>
       <div class="sb-item" data-tab="shop-produk"><span class="ic">🛍️</span> Produk</div>
+      <div class="sb-item" data-tab="shop-hero"><span class="ic">▣</span> Hero & Promo Shop</div>
       <div class="sb-item" data-tab="shop-pesanan"><span class="ic">📦</span> Pesanan</div>
       <div class="sb-item" data-tab="shop-toko"><span class="ic">🏪</span> Toko / Seller</div>
 
@@ -893,6 +894,10 @@ function tabHTML(tab){
       applicants.map(a=>`<tr><td>${a.name}</td><td>${a.job}</td><td><span class="status ${applicantStatusClass[a.status]}">${a.status}</span></td><td>${a.date}</td><td class="row-actions"><button>Lihat CV</button><button>Update</button></td></tr>`).join(""),
       ["Pelamar","Posisi","Status","Tanggal","Aksi"]);
 
+    case "shop-hero": {
+      const h=JSON.parse(localStorage.getItem("purbalink_shop_hero")||"null")||{title:"Promo Produk UMKM",subtitle:"Belanja produk lokal pilihan dengan promo spesial minggu ini.",badge:"Belanja Lokal · Lebih Hemat",background:"https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=78",productIds:[1,2]};
+      return `<div class="panel"><div class="panel-head"><h2>Hero & Promo Shop</h2></div><p style="font-size:12px;color:var(--ink-2)">Atur background hero dan dua produk promo 1×1 yang tampil di halaman Shop.</p><div class="settings-grid"><div class="field"><label>Judul Hero</label><input id="shopHeroTitleAdmin" value="${escapeHTML(h.title)}"></div><div class="field"><label>Badge</label><input id="shopHeroBadgeAdmin" value="${escapeHTML(h.badge)}"></div><div class="field" style="grid-column:1/-1"><label>Subjudul</label><input id="shopHeroSubtitleAdmin" value="${escapeHTML(h.subtitle)}"></div><div class="field" style="grid-column:1/-1"><label>URL Background Stock</label><input id="shopHeroBgAdmin" value="${escapeHTML(h.background)}"></div><div class="field"><label>Produk Promo Kiri — ID</label><input id="shopHeroProduct1" type="number" min="1" value="${h.productIds?.[0]||1}"></div><div class="field"><label>Produk Promo Kanan — ID</label><input id="shopHeroProduct2" type="number" min="1" value="${h.productIds?.[1]||2}"></div></div><button class="save-btn" onclick="saveShopHeroAdmin()">Simpan Hero Shop</button><div id="shopHeroSaveNote" style="font-size:12px;color:var(--ink-2);margin-top:10px"></div></div>`;
+    }
     case "shop-produk": return `
       <div class="panel">
         <div class="panel-head"><h2>Produk</h2><button class="row-actions" style="border:none;background:var(--teal-700);color:#fff;padding:8px 14px;border-radius:8px;font-weight:700;font-size:12.5px;">+ Tambah Produk</button></div>
@@ -1234,6 +1239,13 @@ checkMobile();
 switchTab("dashboard");
 </script>
 <script src="v2.js"></script>
-<script src="admin-v5.js"></script>
+<script src="admin-v5.js">
+function saveShopHeroAdmin(){
+ const data={title:document.getElementById("shopHeroTitleAdmin").value.trim(),subtitle:document.getElementById("shopHeroSubtitleAdmin").value.trim(),badge:document.getElementById("shopHeroBadgeAdmin").value.trim(),background:document.getElementById("shopHeroBgAdmin").value.trim(),productIds:[Number(document.getElementById("shopHeroProduct1").value)||1,Number(document.getElementById("shopHeroProduct2").value)||2]};
+ localStorage.setItem("purbalink_shop_hero",JSON.stringify(data));
+ try{const key="purbalink_v2_db",db=JSON.parse(localStorage.getItem(key)||"{}");db.settings=db.settings||{};db.settings.shopHero=data;localStorage.setItem(key,JSON.stringify(db));}catch(e){}
+ const n=document.getElementById("shopHeroSaveNote");if(n)n.textContent="Tersimpan. Konfigurasi siap digunakan halaman Shop pada origin yang sama.";
+}
+</script>
 </body>
 </html>
