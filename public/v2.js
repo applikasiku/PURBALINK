@@ -299,16 +299,15 @@
     function jobId(j){return String(j.id)}
     function jobLogo(j){return initials(j.company||j.source||'JOB')}
     function jobCard(j){
-      const source=j.external?'<span class="job-source">Jooble</span>':'<span class="job-source local">PURBALINK</span>';
-      const salary=j.salary?esc(j.salary):'Gaji tidak dicantumkan';
-      return `<article class="job-card job-feed-card" data-job-id="${esc(jobId(j))}">
-        <div class="job-card-brand"><div class="job-logo">${jobLogo(j)}</div><div class="job-company">${esc(j.company||j.source||'Perusahaan')}</div><span>${source}</span></div>
-        <h2 class="job-title">${esc(j.title)}</h2>
-        <div class="job-meta-line"><img src="https://img.icons8.com/ios/50/clock--v1.png" alt=""><span>${esc(j.type||'Lowongan kerja')}</span></div>
-        <div class="job-meta-line"><img src="https://img.icons8.com/ios/50/marker--v1.png" alt=""><span>${esc(j.loc||'Indonesia')}</span></div>
-        <div class="job-meta-line"><img src="https://img.icons8.com/ios/50/money--v1.png" alt=""><span>${salary}</span></div>
-        ${j.snippet?`<p class="job-snippet">${esc(j.snippet)}</p>`:''}
-        <div class="job-card-bottom"><span>${esc(j.posted||'Terbaru')}</span><button class="job-hide-mini" type="button" aria-label="Sembunyikan">◉</button><button class="job-save-mini ${saved.has(jobId(j))?'saved':''}" data-save-job="${esc(jobId(j))}" aria-label="Simpan"><img src="https://img.icons8.com/ios/50/bookmark-ribbon--v1.png" alt=""></button></div>
+      const salary=j.salary?esc(j.salary):'';
+      const snippet=(j.snippet||j.desc||'').replace(/<[^>]+>/g,' ');
+      return `<article class="job-card jl-card" data-job-id="${esc(jobId(j))}">
+        <div class="jl-card-top"><h2>${esc(j.title)}</h2><button class="job-save-mini ${saved.has(jobId(j))?'saved':''}" data-save-job="${esc(jobId(j))}" aria-label="Simpan"><img src="https://img.icons8.com/ios/50/like--v1.png" alt=""></button></div>
+        ${snippet?`<p class="job-snippet">${esc(snippet)}</p>`:''}
+        <div class="job-company">${esc(j.company||j.source||'Perusahaan')}</div>
+        <div class="jl-place"><img src="https://img.icons8.com/ios-filled/50/marker.png" alt="">${esc(j.loc||'Indonesia')}</div>
+        ${salary?`<div class="jl-salary">${salary}</div>`:''}
+        <div class="jl-card-bottom"><span><img src="https://img.icons8.com/ios-filled/50/clock.png" alt="">${esc(j.posted||'Terbaru')}</span><button type="button"><img src="https://img.icons8.com/ios/50/flag--v1.png" alt="">Laporkan</button></div>
       </article>`;
     }
     function allJobs(){return [...externalJobs,...localJobs]}
@@ -363,6 +362,7 @@
     }
     window.showList=function(){document.getElementById('detailView').style.display='none';document.getElementById('listView').style.display='block';window.scrollTo(0,0)};
     document.querySelectorAll('.job-filter-chip').forEach(ch=>ch.onclick=()=>{document.querySelectorAll('.job-filter-chip').forEach(x=>x.classList.remove('active'));ch.classList.add('active');filter=ch.dataset.filter||'Semua';render()});
+    const locBtn=document.getElementById('jlLocationBtn');if(locBtn)locBtn.onclick=()=>{const v=prompt('Masukkan kota atau wilayah',locationInput?.value||'');if(v!==null){locationInput.value=v.trim();const lab=document.getElementById('jlLocationLabel');if(lab)lab.textContent=v.trim()||'Tambahkan wilayah';fetchJooble(true)}};
     if(searchBtn)searchBtn.onclick=()=>fetchJooble(true);
     [keyword,locationInput].forEach(inp=>inp&&inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();fetchJooble(true)}}));
     render();fetchJooble(false);
