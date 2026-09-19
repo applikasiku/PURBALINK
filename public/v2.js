@@ -154,7 +154,7 @@
         ${row('redaksi.html','https://img.icons8.com/fluency/48/conference-call.png','Redaksi','Tentang redaksi')}
         ${row('tentang.html','https://img.icons8.com/fluency/48/organization.png','Organisasi','Daftar organisasi PURBALINK')}
       </section>
-      <section><h3>Kategori Berita</h3><div class="pl-cat-list">${cats.map(x=>row('index.html?kategori='+encodeURIComponent(x[0].toLowerCase()),x[1],x[0])).join('')}</div></section>
+      <section><h3>Kategori Berita</h3><div class="pl-cat-list pl-drawer-cats">${cats.map(x=>catRow(x[0],x[1])).join('')}</div></section>
       <section><h3>Media Sosial</h3>
         ${row('#','https://img.icons8.com/fluency/48/facebook-new.png','Facebook','PURBALINK')}
         ${row('#','https://img.icons8.com/fluency/48/instagram-new.png','Instagram','PURBALINK')}
@@ -282,24 +282,27 @@
     }
     renderTrendingStrip();
     function initFeedPage(){
-      const mode=(new URLSearchParams(location.search).get('feed')||'utama').toLowerCase();
+      const params=new URLSearchParams(location.search),categoryParam=(params.get('kategori')||'').trim(),mode=(params.get('feed')||(categoryParam?'kategori':'utama')).toLowerCase();
       const pageEl=document.getElementById('pv6FeedPage'),homeMain=document.querySelector('.p6-main'),trend=document.getElementById('p6TrendingBar');
       document.querySelectorAll('.p6-tabs [data-feed]').forEach(a=>a.classList.toggle('active',a.dataset.feed===mode));
-      if(mode==='utama'){if(pageEl)pageEl.hidden=true;return}
-      const cfg={
+      if(mode==='utama'&&!categoryParam){if(pageEl)pageEl.hidden=true;return}
+      const categoryName=categoryParam?categoryParam.replace(/(^|\s)\S/g,m=>m.toUpperCase()):'';
+      const cfg=categoryParam?{title:categoryName,desc:'Semua berita kategori '+categoryName+' di PURBALINK.'}:{
         terkini:{title:'Terkini',desc:'Update berita terbaru PURBALINK, disusun dari publikasi paling baru.'},
         populer:{title:'Populer',desc:'Berita yang paling banyak menarik perhatian pembaca PURBALINK.'},
         rekomendasi:{title:'Rekomendasi',desc:'Pilihan berita menarik dari berbagai kategori untuk Anda.'}
-      }[mode]||{title:'Berita',desc:'Pilihan berita PURBALINK.'};
+      }[mode]||{title:'Berita',desc:'Pilihan berita PURBALINK.'}};
       if(!pageEl)return;pageEl.hidden=false;if(homeMain)homeMain.style.display='none';if(trend)trend.style.display='none';
       document.getElementById('pv6FeedTitle').textContent=cfg.title;document.getElementById('pv6FeedDesc').textContent=cfg.desc;
       let items=published().slice();
+      if(categoryParam)items=items.filter(a=>String(a.cat||'').toLowerCase()===categoryParam.toLowerCase());
       if(mode==='populer')items.sort((a,b)=>Number(b.views||0)-Number(a.views||0));
       else if(mode==='rekomendasi')items.sort((a,b)=>(Number(b.breaking)-Number(a.breaking))||Number(b.views||0)-Number(a.views||0));
       else items.reverse();
-      if(items.length<12){const base=items.slice();while(items.length<12&&base.length)items.push(...base.slice(0,12-items.length))}
+      if(!categoryParam&&items.length<12){const base=items.slice();while(items.length<12&&base.length)items.push(...base.slice(0,12-items.length))}
       const uniqueFor=(arr,n)=>arr.slice(0,Math.min(n,arr.length));
       const carousel=document.getElementById('pv6FeedCarousel');
+      if(!items.length){carousel.innerHTML='<div class="pv2-search-empty">Belum ada berita dalam kategori '+esc(categoryName)+'.</div>';document.getElementById('pv6FeedGrid').innerHTML='';document.getElementById('pv6FeedList').innerHTML='';return}
       carousel.innerHTML=uniqueFor(items,6).map(a=>'<article data-feed-article="'+a.id+'" style="background-image:url(\''+esc(a.img)+'\')"><div><small>'+esc(a.cat)+'</small><h2>'+esc(a.title)+'</h2><span>'+readMinutes(a)+' menit baca</span></div></article>').join('');
       const gridEl=document.getElementById('pv6FeedGrid');
       gridEl.innerHTML=uniqueFor(items.slice(1),9).map(a=>'<article data-feed-article="'+a.id+'"><div class="pv6-feed-poster" style="background-image:url(\''+esc(a.img)+'\')"><span>'+esc(a.cat)+'</span></div><h3>'+esc(a.title)+'</h3><small>'+readMinutes(a)+' menit</small></article>').join('');
