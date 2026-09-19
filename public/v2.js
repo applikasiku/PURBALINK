@@ -660,6 +660,10 @@
     document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().getFullYear());
   }
 
+  // PURBALINK V5.0 production runtime: lightweight diagnostics and resilience.
+  window.PURBALINK_VERSION='5.0.0';
+  window.addEventListener('error',e=>{try{sessionStorage.setItem('pv5_last_error',JSON.stringify({message:String(e.message||'Runtime error').slice(0,300),page,at:Date.now()}))}catch(_){}});
+  window.addEventListener('unhandledrejection',e=>{try{sessionStorage.setItem('pv5_last_error',JSON.stringify({message:String(e.reason?.message||e.reason||'Promise error').slice(0,300),page,at:Date.now()}))}catch(_){}});
   ensureSharedChrome();
   applyGlobal();
   if(page==='index.html'||page==='purbalink-home.html'||page==='')initHome();
