@@ -455,13 +455,13 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
     <div class="article-wrap">
       <span class="pill">NASIONAL</span>
       <h1 class="art-title">Pemerintah Percepat Pemulihan Pascaerupsi Gunung Lewotobi</h1>
-      <div class="art-byline">
+      <div class="art-byline-scroll" aria-label="Informasi penulis"><div class="art-byline">
         <div class="avatar">TA</div>
         <div>
           <b style="color:var(--ink);">Tim PURBALINK</b> · Reporter<br>
           12 Okt 2024 · 14:20 WIB · 5 menit baca
         </div>
-      </div>
+      </div><div class="author-chips"><span>Reporter</span><span>PURBALINK</span><span>Nasional</span></div></div>
 
       <div class="article-iconbar">
         <a class="article-google-btn" href="https://www.google.com/search?q=site%3Apurbalink.web.id+PURBALINK" target="_blank" rel="noopener" aria-label="Add on Google">
@@ -1406,13 +1406,28 @@ function toggleArticleAudio(force){
  const p=document.getElementById('articleAudioPopup');if(!p)return;p.classList.toggle('show',typeof force==='boolean'?force:!p.classList.contains('show'));
 }
 function articleSpeechText(){return [document.querySelector('#detailView .art-title')?.textContent,...[...document.querySelectorAll('#detailView .art-body h2,#detailView .art-body p')].map(x=>x.textContent)].filter(Boolean).join('. ')}
+let articleUtterance=null;
 function playArticleAudio(){
  const status=document.getElementById('articleAudioStatus');
- if(!('speechSynthesis' in window)){if(status)status.textContent='Audio otomatis belum didukung browser ini';return;}
- speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(articleSpeechText());u.lang='id-ID';u.rate=.95;u.onstart=()=>{if(status)status.textContent='Sedang memutar berita'};u.onend=()=>{if(status)status.textContent='Selesai'};u.onerror=()=>{if(status)status.textContent='Audio tidak dapat diputar'};speechSynthesis.speak(u);
+ const synth=window.speechSynthesis;
+ if(!synth||typeof window.SpeechSynthesisUtterance==='undefined'){if(status)status.textContent='Browser ini belum mendukung pembaca berita';return;}
+ try{
+   if(synth.paused&&articleUtterance){synth.resume();if(status)status.textContent='Sedang memutar berita';return;}
+   synth.cancel();
+   articleUtterance=new SpeechSynthesisUtterance(articleSpeechText());
+   articleUtterance.lang='id-ID';articleUtterance.rate=.92;articleUtterance.pitch=1;articleUtterance.volume=1;
+   const voices=synth.getVoices();const idVoice=voices.find(v=>/^id(-|_)/i.test(v.lang||''));if(idVoice)articleUtterance.voice=idVoice;
+   articleUtterance.onstart=()=>{if(status)status.textContent='Sedang memutar berita'};
+   articleUtterance.onpause=()=>{if(status)status.textContent='Dijeda'};
+   articleUtterance.onresume=()=>{if(status)status.textContent='Sedang memutar berita'};
+   articleUtterance.onend=()=>{if(status)status.textContent='Selesai';articleUtterance=null};
+   articleUtterance.onerror=e=>{if(status)status.textContent=e.error==='canceled'?'Dihentikan':'Audio gagal diputar — coba Chrome terbaru';};
+   synth.speak(articleUtterance);
+   setTimeout(()=>{if(synth.paused)synth.resume()},120);
+ }catch(e){if(status)status.textContent='Audio gagal dimulai di perangkat ini';}
 }
 function pauseArticleAudio(){if('speechSynthesis' in window){speechSynthesis.paused?speechSynthesis.resume():speechSynthesis.pause();}}
-function stopArticleAudio(){if('speechSynthesis' in window)speechSynthesis.cancel();const s=document.getElementById('articleAudioStatus');if(s)s.textContent='Dihentikan';}
+function stopArticleAudio(){if('speechSynthesis' in window)speechSynthesis.cancel();articleUtterance=null;const s=document.getElementById('articleAudioStatus');if(s)s.textContent='Dihentikan';}
 document.addEventListener('DOMContentLoaded',buildArticleToc);
 
 </script>
