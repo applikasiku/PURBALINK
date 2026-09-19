@@ -154,11 +154,21 @@ async function searchJooble(request, env) {
   const keywords = cleanText(body.keywords || 'lowongan', 100);
   const location = cleanText(body.location || 'Purbalingga', 100);
   const page = Math.max(1, Math.min(20, Math.round(Number(body.page) || 1)));
-  const res = await fetch(`https://id.jooble.org/api/${encodeURIComponent(env.JOOBLE_API_KEY)}`, {
-    method: 'POST',
-    headers: { accept: 'application/json', 'content-type': 'application/json' },
-    body: JSON.stringify({ keywords, location, page, ResultOnPage: 20 })
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 10000);
+  let res;
+  try {
+    res = await fetch(`https://id.jooble.org/api/${encodeURIComponent(env.JOOBLE_API_KEY)}`, {
+      method: 'POST',
+      headers: { accept: 'application/json', 'content-type': 'application/json' },
+      body: JSON.stringify({ keywords, location, page, ResultOnPage: 20 }),
+      signal: controller.signal
+    });
+  } catch (error) {
+    clearTimeout(timer);
+    return json({ configured: true, jobs: [], error: error?.name === 'AbortError' ? 'Jooble timeout. Coba lagi.' : 'Jooble tidak dapat dihubungi.' }, 504);
+  }
+  clearTimeout(timer);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     return json({ error: data.error || data.message || 'Jooble menolak permintaan.', details: data }, res.status >= 500 ? 502 : res.status);
