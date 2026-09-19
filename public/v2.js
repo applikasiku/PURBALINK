@@ -576,15 +576,15 @@
 
   function defaultAdsConfig(){
     return {enabled:true,provider:'mixed',adsenseClient:'',lazy:true,slots:[
-      {id:'top-header',name:'Atas Header',type:'banner',provider:'direct',enabled:true,placement:'top-header',image:'',url:'',adsenseSlot:''},
+      {id:'top-header',name:'Atas Header',type:'banner',provider:'direct',enabled:false,placement:'top-header',image:'',url:'',adsenseSlot:''},
       {id:'header-banner',name:'Banner Header',type:'banner',provider:'adsense',enabled:true,placement:'header-banner',image:'',url:'',adsenseSlot:''},
-      {id:'home-native',name:'Native Beranda',type:'native',provider:'direct',enabled:true,placement:'home-native',image:'',url:'',adsenseSlot:''},
-      {id:'article-top',name:'Artikel Atas',type:'in-article',provider:'adsense',enabled:true,placement:'article-top',image:'',url:'',adsenseSlot:''},
-      {id:'article-middle',name:'Artikel Tengah',type:'in-article',provider:'adsense',enabled:true,placement:'article-middle',image:'',url:'',adsenseSlot:''},
-      {id:'article-bottom',name:'Artikel Bawah',type:'in-article',provider:'direct',enabled:true,placement:'article-bottom',image:'',url:'',adsenseSlot:''},
-      {id:'footer-banner',name:'Banner Footer',type:'banner',provider:'direct',enabled:true,placement:'footer-banner',image:'',url:'',adsenseSlot:''},
-      {id:'anchor',name:'Anchor',type:'anchor',provider:'adsense',enabled:true,placement:'anchor',image:'',url:'',adsenseSlot:''},
-      {id:'reward',name:'Reward',type:'reward',provider:'direct',enabled:true,placement:'reward',image:'',url:'',adsenseSlot:''}
+      {id:'home-native',name:'Native Beranda',type:'native',provider:'direct',enabled:true,placement:'home-native',brand:'Haroemin',title:'Haroemin Local Pride — Kaos Lokal untuk Gaya Sehari-hari',description:'Kaos premium bergaya lokal, nyaman dipakai dan cocok untuk aktivitas harian.',cta:'Lihat Produk',image:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=82',url:'shop.html',label:'Iklan · Sponsored',adsenseSlot:''},
+      {id:'article-top',name:'Artikel Atas',type:'in-article',provider:'direct',enabled:true,placement:'article-top',brand:'Kriuké',title:'Kriuké Keripik Pisang — Renyahnya Camilan Lokal Purbalingga',description:'Keripik pisang renyah untuk teman santai. Produk lokal dengan rasa yang bikin ingin ngemil lagi.',cta:'Beli Sekarang',image:'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=82',url:'shop.html',label:'Iklan · Sponsored',adsenseSlot:''},
+      {id:'article-middle',name:'Artikel Tengah',type:'in-article',provider:'direct',enabled:true,placement:'article-middle',brand:'GANDEX',title:'GANDEX — Streetwear Lokal, Gaya Makin Berani',description:'Kaos distro dengan karakter kuat, desain modern dan nyaman untuk gaya harian.',cta:'Lihat Koleksi',image:'https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&w=900&q=82',url:'shop.html',label:'Iklan · Sponsored',adsenseSlot:''},
+      {id:'article-bottom',name:'Artikel Bawah',type:'in-article',provider:'direct',enabled:true,placement:'article-bottom',brand:'Haroemin',title:'Temukan Koleksi Haroemin Pilihan',description:'Dukung brand lokal dan temukan kaos pilihan untuk gaya kasual sehari-hari.',cta:'Belanja Sekarang',image:'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=900&q=82',url:'shop.html',label:'Iklan · Sponsored',adsenseSlot:''},
+      {id:'footer-banner',name:'Banner Footer',type:'banner',provider:'direct',enabled:false,placement:'footer-banner',image:'',url:'',adsenseSlot:''},
+      {id:'anchor',name:'Anchor',type:'anchor',provider:'adsense',enabled:false,placement:'anchor',image:'',url:'',adsenseSlot:''},
+      {id:'reward',name:'Reward',type:'reward',provider:'direct',enabled:false,placement:'reward',image:'',url:'',adsenseSlot:''}
     ]};
   }
   function adsConfig(){
@@ -616,8 +616,9 @@
     }else{
       if(!validDirect(slot)){box.remove();return}
       box.dataset.loaded='1';
-      const img='<img loading="lazy" decoding="async" src="'+esc(slot.image)+'" alt="'+esc(slot.name||'Iklan')+'">';
-      box.innerHTML='<div class="pv2-ad-label">'+esc(slot.label||'Sponsored')+'</div>'+(slot.url?'<a href="'+esc(slot.url)+'" target="_blank" rel="sponsored noopener">'+img+'</a>':img);
+      const img='<img loading="lazy" decoding="async" src="'+esc(slot.image)+'" alt="'+esc(slot.title||slot.name||'Iklan')+'">';
+      const content=(slot.title||slot.description||slot.brand)?'<div class="pv2-direct-ad">'+img+'<div class="pv2-direct-copy">'+(slot.brand?'<small>'+esc(slot.brand)+'</small>':'')+(slot.title?'<b>'+esc(slot.title)+'</b>':'')+(slot.description?'<p>'+esc(slot.description)+'</p>':'')+(slot.cta?'<span class="pv2-direct-cta">'+esc(slot.cta)+' ›</span>':'')+'</div></div>':img;
+      box.innerHTML='<div class="pv2-ad-label">'+esc(slot.label||'Iklan · Sponsored')+'</div>'+(slot.url?'<a href="'+esc(slot.url)+'" rel="sponsored">'+content+'</a>':content);
     }
   }
   function makeAd(slot){
