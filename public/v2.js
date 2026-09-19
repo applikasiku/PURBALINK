@@ -362,6 +362,10 @@
     }
     window.showList=function(){document.getElementById('detailView').style.display='none';document.getElementById('listView').style.display='block';window.scrollTo(0,0)};
     document.querySelectorAll('.job-filter-chip').forEach(ch=>ch.onclick=()=>{document.querySelectorAll('.job-filter-chip').forEach(x=>x.classList.remove('active'));ch.classList.add('active');filter=ch.dataset.filter||'Semua';render()});
+    const jlMenu=document.querySelector('.jl-menu'),jlDrawer=document.getElementById('jlDrawer'),jlMask=document.getElementById('jlDrawerMask'),jlClose=document.getElementById('jlDrawerClose');
+    const setDrawer=open=>{if(!jlDrawer)return;jlDrawer.classList.toggle('show',open);jlMask?.classList.toggle('show',open);jlDrawer.setAttribute('aria-hidden',open?'false':'true');document.body.classList.toggle('jl-drawer-open',open)};
+    if(jlMenu){jlMenu.removeAttribute('data-pl-menu');jlMenu.onclick=()=>setDrawer(true)}if(jlClose)jlClose.onclick=()=>setDrawer(false);if(jlMask)jlMask.onclick=()=>setDrawer(false);
+    document.querySelectorAll('[data-job-query]').forEach(btn=>btn.onclick=()=>{keyword.value=btn.dataset.jobQuery||'';setDrawer(false);fetchJooble(true)});
     const locBtn=document.getElementById('jlLocationBtn');if(locBtn)locBtn.onclick=()=>{const v=prompt('Masukkan kota atau wilayah',locationInput?.value||'');if(v!==null){locationInput.value=v.trim();const lab=document.getElementById('jlLocationLabel');if(lab)lab.textContent=v.trim()||'Tambahkan wilayah';fetchJooble(true)}};
     if(searchBtn)searchBtn.onclick=()=>fetchJooble(true);
     [keyword,locationInput].forEach(inp=>inp&&inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();fetchJooble(true)}}));
