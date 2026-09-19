@@ -307,7 +307,18 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
     </div>
   </div>
   <div class="p6-more-menu" id="p6MoreMenu">
-    <a href="loker.html">Loker</a><a href="shop.html">Shop</a><a href="video.html">Video</a><a href="profile.html">Profil</a>
+    <div class="p6-menu-title">Jelajahi PURBALINK</div>
+    <div class="p6-menu-grid">
+      <a href="#terkini"><img src="https://img.icons8.com/fluency-systems-regular/48/news.png" alt=""><span>Berita</span></a>
+      <a href="loker.html"><img src="https://img.icons8.com/fluency-systems-regular/48/briefcase.png" alt=""><span>Loker</span></a>
+      <a href="shop.html"><img src="https://img.icons8.com/fluency-systems-regular/48/shopping-bag.png" alt=""><span>Shop</span></a>
+      <a href="video.html"><img src="https://img.icons8.com/fluency-systems-regular/48/video.png" alt=""><span>Video</span></a>
+      <a href="redaksi.html"><img src="https://img.icons8.com/fluency-systems-regular/48/conference-call.png" alt=""><span>Redaksi</span></a>
+      <a href="tentang.html"><img src="https://img.icons8.com/fluency-systems-regular/48/organization.png" alt=""><span>Organisasi</span></a>
+      <a href="kontak.html"><img src="https://img.icons8.com/fluency-systems-regular/48/contacts.png" alt=""><span>Kontak</span></a>
+      <button type="button" id="pwaInstallMenu" onclick="installPurbalinkPWA()"><img src="https://img.icons8.com/fluency-systems-regular/48/download.png" alt=""><span>Install PWA</span></button>
+    </div>
+    <div class="p6-menu-pages"><a href="pedoman-media-siber.html">Pedoman Media Siber</a><a href="privacy.html">Privasi</a><a href="terms.html">Ketentuan</a></div>
   </div>
   <nav class="p6-tabs">
     <div class="wrap">
@@ -407,17 +418,14 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
 
 <footer class="p6-footer">
   <div class="wrap">
-    <div class="p6-footer-brand"><img src="brand-icon-transparent.png" alt=""><b><span class="brand-purba">PURBA</span><span class="brand-link">LINK</span></b></div>
-    <div class="p6-footer-links">
-      <a href="kontak.html">Kontak</a><a href="redaksi.html">Redaksi</a>
-      <a href="privacy.html">Disclaimer & Privasi</a><a href="terms.html">Kode Etik & Ketentuan</a>
-      <a href="pedoman-media-siber.html">Pedoman Media Siber</a><a href="tentang.html">Tentang Kami</a>
-      <a href="loker.html">Karir / Loker</a><a href="kontak.html">Hak Jawab dan Koreksi</a>
+    <div class="p6-footer-brand"><img src="brand-icon-transparent.png" alt="PURBALINK"><div><b><span class="brand-purba">PURBA</span><span class="brand-link">LINK</span></b><p>Portal berita dan informasi Purbalingga. Lebih dekat, lebih cepat.</p></div></div>
+    <div class="p6-footer-columns">
+      <div><b>Redaksi & Transparansi</b><a href="redaksi.html">Redaksi</a><a href="tentang.html">Tentang Kami</a><a href="kontak.html">Kontak</a><a href="kontak.html">Hak Jawab & Koreksi</a></div>
+      <div><b>Kebijakan</b><a href="pedoman-media-siber.html">Pedoman Media Siber</a><a href="terms.html">Kode Etik & Ketentuan</a><a href="privacy.html">Privasi & Disclaimer</a></div>
+      <div><b>Kategori</b><a href="#terkini">Berita</a><a href="#populer">Terpopuler</a><a href="loker.html">Lowongan Kerja</a><a href="video.html">Video</a></div>
+      <div><b>Layanan</b><a href="shop.html">PURBALINK Shop</a><a href="profile.html">Akun</a><button type="button" onclick="installPurbalinkPWA()">Install Aplikasi</button></div>
     </div>
-    <div class="p6-footer-network"><b>Layanan PURBALINK</b><span>Berita</span><span>Loker</span><span>Shop</span><span>Video</span></div>
-    <div class="p6-social-title">Connect with us</div>
-    <div class="p6-socials"><span>▶</span><span>f</span><span>𝕏</span><span>◎</span><span>☏</span><span>♪</span></div>
-    <div class="p6-copy">Copyright © <span data-year>2026</span> PURBALINK. Semua hak dilindungi.</div>
+    <div class="p6-footer-bottom"><span>© <span data-year>2026</span> PURBALINK. Semua hak dilindungi.</span><span>Informasi editorial dan kontak penerbit tersedia pada halaman Redaksi.</span></div>
   </div>
 </footer>
 </div>
@@ -478,10 +486,24 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
         <img src="https://images.unsplash.com/photo-1601134467661-3d775b999c8b?w=900&q=80" alt="Gunung Lewotobi">
         <figcaption>Aktivitas Gunung Lewotobi terlihat dari Desa Nobo, Flores Timur, NTT (12/10/2024). Foto: ANTARA</figcaption>
       </figure>
+      <div class="article-tools">
+        <nav class="article-toc" id="articleToc" aria-label="Daftar isi artikel"><div class="article-toc-head"><img src="https://img.icons8.com/fluency-systems-regular/48/list.png" alt=""><b>Daftar Isi</b></div><ol id="articleTocList"></ol></nav>
+        <button class="article-audio-trigger" type="button" onclick="toggleArticleAudio()" aria-label="Dengarkan berita" title="Dengarkan berita"><img src="https://img.icons8.com/fluency-systems-regular/48/speaker.png" alt=""></button>
+      </div>
+      <div class="article-audio-popup" id="articleAudioPopup" role="dialog" aria-label="Pemutar audio berita">
+        <div><b>Dengarkan Berita</b><small id="articleAudioStatus">Siap membacakan artikel</small></div>
+        <button type="button" onclick="playArticleAudio()" aria-label="Putar"><img src="https://img.icons8.com/fluency-systems-regular/48/play.png" alt=""></button>
+        <button type="button" onclick="pauseArticleAudio()" aria-label="Jeda"><img src="https://img.icons8.com/fluency-systems-regular/48/pause.png" alt=""></button>
+        <button type="button" onclick="stopArticleAudio()" aria-label="Berhenti"><img src="https://img.icons8.com/fluency-systems-regular/48/stop.png" alt=""></button>
+        <button type="button" class="audio-close" onclick="toggleArticleAudio(false)" aria-label="Tutup">×</button>
+      </div>
 
       <div class="art-body">
+        <h2>Penanganan Warga Terdampak</h2>
         <p>Pemerintah menyiapkan bantuan darurat dan relokasi sementara bagi warga terdampak erupsi Gunung Lewotobi di Nusa Tenggara Timur (NTT) dengan menyalurkan bantuan darurat, menyiapkan lokasi relokasi sementara, serta memastikan layanan dasar tetap berjalan dengan baik bagi masyarakat terdampak.</p>
+        <h2>Evakuasi dan Pengungsian</h2>
         <p>Badan Nasional Penanggulangan Bencana (BNPB) menyatakan bahwa proses evakuasi warga di zona berbahaya telah berjalan lancar, dengan ribuan warga telah dipindahkan ke titik pengungsian yang telah disiapkan di beberapa kecamatan terdekat.</p>
+        <h2>Rencana Pemulihan Jangka Panjang</h2>
         <p>Pemerintah daerah bersama kementerian terkait juga tengah menyusun rencana relokasi jangka panjang bagi warga yang berada di zona rawan bencana, sembari memastikan kebutuhan dasar seperti air bersih, logistik, dan layanan kesehatan tetap terpenuhi selama masa tanggap darurat.</p>
       </div>
 
@@ -1353,6 +1375,33 @@ function postComment(){
   document.getElementById("composerPicker")?.classList.remove("show");
   renderComments();
 }
+
+let purbalinkInstallPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();purbalinkInstallPrompt=e;});
+async function installPurbalinkPWA(){
+  document.getElementById('p6MoreMenu')?.classList.remove('show');
+  if(purbalinkInstallPrompt){purbalinkInstallPrompt.prompt();await purbalinkInstallPrompt.userChoice;purbalinkInstallPrompt=null;return;}
+  if(window.matchMedia('(display-mode: standalone)').matches){alert('PURBALINK sudah terpasang di perangkat ini.');return;}
+  alert('Gunakan menu browser lalu pilih "Install app" atau "Tambahkan ke layar utama".');
+}
+function buildArticleToc(){
+ const list=document.getElementById('articleTocList'), body=document.querySelector('#detailView .art-body'); if(!list||!body)return;
+ const hs=[...body.querySelectorAll('h2,h3')]; list.innerHTML='';
+ hs.forEach((h,i)=>{if(!h.id)h.id='bagian-'+(i+1);const li=document.createElement('li');li.innerHTML='<a href="#'+h.id+'">'+h.textContent+'</a>';list.appendChild(li);});
+ document.getElementById('articleToc')?.classList.toggle('empty',!hs.length);
+}
+function toggleArticleAudio(force){
+ const p=document.getElementById('articleAudioPopup');if(!p)return;p.classList.toggle('show',typeof force==='boolean'?force:!p.classList.contains('show'));
+}
+function articleSpeechText(){return [document.querySelector('#detailView .art-title')?.textContent,...[...document.querySelectorAll('#detailView .art-body h2,#detailView .art-body p')].map(x=>x.textContent)].filter(Boolean).join('. ')}
+function playArticleAudio(){
+ const status=document.getElementById('articleAudioStatus');
+ if(!('speechSynthesis' in window)){if(status)status.textContent='Audio otomatis belum didukung browser ini';return;}
+ speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(articleSpeechText());u.lang='id-ID';u.rate=.95;u.onstart=()=>{if(status)status.textContent='Sedang memutar berita'};u.onend=()=>{if(status)status.textContent='Selesai'};u.onerror=()=>{if(status)status.textContent='Audio tidak dapat diputar'};speechSynthesis.speak(u);
+}
+function pauseArticleAudio(){if('speechSynthesis' in window){speechSynthesis.paused?speechSynthesis.resume():speechSynthesis.pause();}}
+function stopArticleAudio(){if('speechSynthesis' in window)speechSynthesis.cancel();const s=document.getElementById('articleAudioStatus');if(s)s.textContent='Dihentikan';}
+document.addEventListener('DOMContentLoaded',buildArticleToc);
 
 </script>
 <script src="v2.js"></script>
