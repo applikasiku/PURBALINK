@@ -285,6 +285,19 @@ async function verifyNotification(request, env) {
   return json({ ok: true, order_id: body.order_id, transaction_status: body.transaction_status, payment_type: body.payment_type });
 }
 
+function securityHeaders(headers = new Headers()) {
+  headers.set('x-content-type-options', 'nosniff');
+  headers.set('referrer-policy', 'strict-origin-when-cross-origin');
+  headers.set('permissions-policy', 'camera=(), microphone=(), geolocation=()');
+  headers.set('x-frame-options', 'SAMEORIGIN');
+  return headers;
+}
+function publicAssetResponse(res, pathname) {
+  const headers = securityHeaders(new Headers(res.headers));
+  if (/\.(?:js|css|png|jpg|jpeg|webp|svg|ico|woff2)$/i.test(pathname)) headers.set('cache-control','public, max-age=86400, stale-while-revalidate=604800');
+  else if (/\.html$/i.test(pathname) || pathname === '/' || !pathname.includes('.')) headers.set('cache-control','public, max-age=0, must-revalidate');
+  return new Response(res.body,{status:res.status,statusText:res.statusText,headers});
+}
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -301,7 +314,7 @@ export default {
       if (url.pathname === '/api/jobs/jooble' && request.method === 'POST') return searchJooble(request, env);
       if (url.pathname === '/api/ai/article' && request.method === 'POST') return generateAIArticle(request, env);
       if (url.pathname === '/api/health') {
-        return json({ ok: true, app: 'PURBALINK', public_host: PUBLIC_HOST, admin_host: ADMIN_HOST, payment_gateway: 'Midtrans', mode: mode(env), midtrans_configured: Boolean(env.MIDTRANS_SERVER_KEY), jooble_configured: Boolean(env.JOOBLE_API_KEY), ai: { openai:Boolean(env.OPENAI_API_KEY), gemini:Boolean(env.GEMINI_API_KEY), deepseek:Boolean(env.DEEPSEEK_API_KEY), groq:Boolean(env.GROQ_API_KEY), mistral:Boolean(env.MISTRAL_API_KEY), anthropic:Boolean(env.ANTHROPIC_API_KEY), openrouter:Boolean(env.OPENROUTER_API_KEY), together:Boolean(env.TOGETHER_API_KEY) } });
+        return json({ ok: true, app: 'PURBALINK', version: '5.0.0', environment: host.endsWith('.workers.dev') ? 'preview' : 'production', public_host: PUBLIC_HOST, admin_host: ADMIN_HOST, payment_gateway: 'Midtrans', mode: mode(env), midtrans_configured: Boolean(env.MIDTRANS_SERVER_KEY), jooble_configured: Boolean(env.JOOBLE_API_KEY), ai: { openai:Boolean(env.OPENAI_API_KEY), gemini:Boolean(env.GEMINI_API_KEY), deepseek:Boolean(env.DEEPSEEK_API_KEY), groq:Boolean(env.GROQ_API_KEY), mistral:Boolean(env.MISTRAL_API_KEY), anthropic:Boolean(env.ANTHROPIC_API_KEY), openrouter:Boolean(env.OPENROUTER_API_KEY), together:Boolean(env.TOGETHER_API_KEY) } });
       }
       if (url.pathname === '/api/midtrans/transaction' && request.method === 'POST') return createTransaction(request, env);
       if (url.pathname === '/api/midtrans/status' && request.method === 'GET') return getStatus(request, env);
@@ -341,7 +354,7 @@ export default {
       }
 
       // Public static application.
-      if (isPublicHost) return env.ASSETS.fetch(request);
+      if (isPublicHost) return publicAssetResponse(await env.ASSETS.fetch(request), url.pathname);
 
       return new Response('Not Found', { status: 404 });
     } catch (error) {
