@@ -1,6 +1,6 @@
 (()=>{
   'use strict';
-  const VERSION='5.3.0';
+  const VERSION='5.9.0';
   const DB_KEY='purbalink_v2_db';
   const DOMAIN='https://purbalink.web.id';
   let page=(location.pathname.split('/').pop()||'index.html').toLowerCase();
@@ -306,9 +306,12 @@
       carousel.innerHTML=uniqueFor(items,6).map(a=>'<article data-feed-article="'+a.id+'" style="background-image:url(\''+esc(a.img)+'\')"><div><small>'+esc(a.cat)+'</small><h2>'+esc(a.title)+'</h2><span>'+readMinutes(a)+' menit baca</span></div></article>').join('');
       const gridEl=document.getElementById('pv6FeedGrid');
       gridEl.innerHTML=uniqueFor(items.slice(1),9).map(a=>'<article data-feed-article="'+a.id+'"><div class="pv6-feed-poster" style="background-image:url(\''+esc(a.img)+'\')"><span>'+esc(a.cat)+'</span></div><h3>'+esc(a.title)+'</h3><small>'+readMinutes(a)+' menit</small></article>').join('');
-      const listEl=document.getElementById('pv6FeedList');
-      listEl.innerHTML=uniqueFor(items.slice(4),10).map(a=>'<article data-feed-article="'+a.id+'"><div class="pv6-feed-thumb" style="background-image:url(\''+esc(a.img)+'\')"></div><div><small>'+esc(a.cat)+'</small><h3>'+esc(a.title)+'</h3><p>'+esc(a.summary||'')+'</p><span>'+esc(a.date)+' · '+readMinutes(a)+' menit baca</span></div><i class="fa-solid fa-chevron-right"></i></article>').join('');
-      pageEl.querySelectorAll('[data-feed-article]').forEach(el=>el.onclick=()=>PV2.openArticle(el.dataset.feedArticle));
+      const listEl=document.getElementById('pv6FeedList'),moreBtn=document.getElementById('pv58FeedMore');let listLimit=10;
+      const renderFeedList=()=>{const rest=items.slice(4),shown=rest.slice(0,listLimit);listEl.innerHTML=shown.map(a=>'<article data-feed-article="'+a.id+'"><div class="pv6-feed-thumb" style="background-image:url(\''+esc(a.img)+'\')"></div><div><small>'+esc(a.cat)+'</small><h3>'+esc(a.title)+'</h3><p>'+esc(a.summary||'')+'</p><span>'+esc(a.date)+' · '+readMinutes(a)+' menit baca</span></div><i class="fa-solid fa-chevron-right"></i></article>').join('');listEl.querySelectorAll('[data-feed-article]').forEach(el=>el.onclick=()=>PV2.openArticle(el.dataset.feedArticle));if(moreBtn)moreBtn.hidden=shown.length>=rest.length};
+      renderFeedList();if(moreBtn)moreBtn.onclick=()=>{listLimit+=10;renderFeedList()};
+      pageEl.querySelectorAll('.pv6-feed-carousel [data-feed-article],.pv6-feed-grid [data-feed-article]').forEach(el=>el.onclick=()=>PV2.openArticle(el.dataset.feedArticle));
+      const canonical=new URL(location.href);canonical.searchParams.delete('article');document.querySelector('link[rel="canonical"]')?.setAttribute('href',canonical.origin+canonical.pathname+canonical.search);
+      document.querySelector('meta[name="description"]')?.setAttribute('content',cfg.desc);
       document.title=cfg.title+' — PURBALINK';
     }
     initFeedPage();
@@ -733,7 +736,7 @@
   }
 
   // PURBALINK V5.0 production runtime: lightweight diagnostics and resilience.
-  window.PURBALINK_VERSION='5.3.0';
+  window.PURBALINK_VERSION='5.9.0';
   window.addEventListener('error',e=>{try{sessionStorage.setItem('pv5_last_error',JSON.stringify({message:String(e.message||'Runtime error').slice(0,300),page,at:Date.now()}))}catch(_){}});
   window.addEventListener('unhandledrejection',e=>{try{sessionStorage.setItem('pv5_last_error',JSON.stringify({message:String(e.reason?.message||e.reason||'Promise error').slice(0,300),page,at:Date.now()}))}catch(_){}});
   function installRuntimeResilience(){
