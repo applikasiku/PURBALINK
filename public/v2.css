@@ -515,3 +515,34 @@ body[data-pv2-page="profile.html"] .pro-profile-card{padding:0!important;overflo
 .pc-identity{display:flex;align-items:flex-end;gap:11px;padding:0 16px 13px;margin-top:-35px}.pc-photo{width:74px!important;height:74px!important;border:4px solid #fff;overflow:hidden;background:#1769d2!important;flex:none}.pc-photo img{width:100%;height:100%;display:block;object-fit:cover}.pc-usercopy{min-width:0;padding-bottom:4px}.pc-usercopy .pc-name{display:flex;align-items:center;gap:5px}.verified-badge{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#1687f8;color:#fff;font-size:11px;font-weight:900}.fan-pro-badge{display:inline-block;margin-top:5px;padding:3px 7px;border-radius:999px;background:#eaf3ff;color:#0969da;font-size:9px;font-weight:800}.pc-identity .pc-edit{margin-left:auto;margin-bottom:5px}
 body[data-pv2-page="profile.html"] .menu-card{display:flex;flex-direction:column}body[data-pv2-page="profile.html"] .menu-item{grid-template-columns:32px minmax(0,1fr) 16px!important}body[data-pv2-page="profile.html"] .menu-ic{background:transparent!important;border-radius:0!important;width:28px!important;height:28px!important}body[data-pv2-page="profile.html"] .menu-ic img{width:23px!important;height:23px!important;opacity:.78}
 @media(max-width:420px){#detailView .article-iconbar{grid-template-columns:minmax(105px,1.55fr) repeat(4,minmax(39px,1fr));gap:5px!important}#detailView .article-google-btn{height:44px!important;padding:0 7px!important}#detailView .article-google-btn b{font-size:10.5px!important}#detailView .article-circle-btn{width:44px!important;height:44px!important}.pc-cover{height:130px}.pc-photo{width:68px!important;height:68px!important}}
+
+/* ===== PURBALINK V3.7 — compact article controls for ~720px Android viewports / Infinix Hot 50 ===== */
+@media (max-width:760px){
+ #detailView .article-iconbar{
+   display:flex!important;flex-wrap:nowrap!important;align-items:center!important;
+   gap:5px!important;width:100%!important;max-width:100%!important;overflow:visible!important;
+ }
+ #detailView .article-google-btn{
+   flex:0 1 132px!important;min-width:108px!important;max-width:132px!important;
+   width:auto!important;height:40px!important;padding:0 8px!important;gap:5px!important;border-radius:22px!important;
+ }
+ #detailView .article-google-btn .google-g{font-size:21px!important}
+ #detailView .article-google-btn b{font-size:10px!important;line-height:1!important}
+ #detailView .article-circle-btn{
+   flex:0 0 40px!important;width:40px!important;height:40px!important;min-width:40px!important;
+   border-radius:50%!important;padding:0!important;margin:0!important;
+ }
+ #detailView .article-circle-btn svg{width:20px!important;height:20px!important}
+ #detailView .article-reaction-badge{width:18px!important;height:18px!important;right:-2px!important;bottom:-2px!important}
+ #detailView .article-reaction-badge img{width:13px!important;height:13px!important}
+ .art-byline-scroll{overflow:hidden!important;padding-bottom:5px!important}
+ .author-chips{display:none!important}
+}
+@media (max-width:390px){
+ #detailView .article-iconbar{gap:4px!important}
+ #detailView .article-google-btn{flex-basis:112px!important;min-width:96px!important;max-width:112px!important;height:38px!important;padding:0 6px!important}
+ #detailView .article-google-btn .google-g{font-size:19px!important}
+ #detailView .article-google-btn b{font-size:9px!important}
+ #detailView .article-circle-btn{flex-basis:38px!important;width:38px!important;height:38px!important;min-width:38px!important}
+ #detailView .article-circle-btn svg{width:19px!important;height:19px!important}
+}
