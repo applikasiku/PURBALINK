@@ -680,7 +680,11 @@
     }
     if((s=by('footer-banner'))){const ft=document.querySelector('.p6-footer,footer');putAd(s,ft,'before')}
     if((s=by('anchor'))){
-      const box=makeAd(s);box.classList.add('pv2-ad-anchor');mountAdContent(box,s);const close=document.createElement('button');close.className='pv2-ad-close';close.type='button';close.setAttribute('aria-label','Tutup iklan');close.textContent='×';close.onclick=()=>box.remove();box.appendChild(close);document.body.appendChild(box)
+      document.querySelector('.pv5-anchor-ad')?.remove();
+      const box=document.createElement('aside');box.className='pv5-anchor-ad';box.dataset.adSlot=s.id;
+      box.innerHTML='<div class="pv5-anchor-thumb"><img src="'+esc(s.image)+'" alt="'+esc(s.title||'Kriuké')+'"></div><a class="pv5-anchor-copy" href="'+esc(s.url||'shop.html')+'" rel="sponsored"><small>'+esc(s.label||'Iklan')+'</small><b>'+esc(s.title||'Keripik Pisang Kriuké')+'</b><span>'+esc(s.description||'Renyahnya bikin nagih')+'</span></a><a class="pv5-anchor-cta" href="'+esc(s.url||'shop.html')+'" rel="sponsored">'+esc(s.cta||'Beli')+'</a><button class="pv5-anchor-close" type="button" aria-label="Tutup iklan">×</button>';
+      box.querySelector('.pv5-anchor-close').onclick=()=>box.remove();
+      document.body.appendChild(box);
     }
   }
   window.PV2.showRewardAd=function(onReward){
