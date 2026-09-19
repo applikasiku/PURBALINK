@@ -265,6 +265,25 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
 .brand-purba{color:#0B5ED7}.brand-link{color:#E3062C}
 .mark{background-color:transparent!important;background-image:url("brand-icon-transparent.png")!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;color:transparent!important;overflow:hidden!important}
 .logo .word,.pword{letter-spacing:-.55px}
+
+/* ===== PURBALINK TRENDING STRIP ===== */
+.p6-trending-wrap{background:#fff;padding:14px 0 4px}
+.p6-trending{display:flex;align-items:center;gap:18px;border:1px solid #ff9f43;border-left-color:#ff4d8d;border-radius:14px;background:#fffaf3;padding:12px 16px;min-height:62px}
+.p6-trending-label{display:flex;align-items:center;gap:9px;flex:0 0 auto;color:#f0440b;font-weight:800;font-size:15px}
+.p6-trending-label svg{width:22px;height:22px}
+.p6-trending-list{display:flex;align-items:center;gap:10px;overflow-x:auto;scrollbar-width:none;min-width:0;padding:1px 0}
+.p6-trending-list::-webkit-scrollbar{display:none}
+.p6-trending-chip{flex:0 0 auto;border:0;background:#fff0d8;color:#111827;border-radius:999px;padding:10px 16px;font-size:14px;font-weight:700;line-height:1;white-space:nowrap;transition:.15s ease}
+.p6-trending-chip:hover{background:#ffe4bd;transform:translateY(-1px)}
+.p6-trending-chip.active{display:flex;align-items:center;gap:7px}
+.p6-trending-chip .trend-check{width:19px;height:19px;border:2px solid #16a34a;border-radius:50%;display:inline-grid;place-items:center;color:#16a34a;font-size:11px;font-weight:900}
+@media(max-width:700px){
+  .p6-trending-wrap{padding:10px 0 2px}
+  .p6-trending{gap:10px;border-radius:12px;padding:9px 10px;min-height:54px}
+  .p6-trending-label{font-size:12.5px;gap:6px}
+  .p6-trending-label svg{width:18px;height:18px}
+  .p6-trending-chip{padding:8px 12px;font-size:12px}
+}
 </style>
 <link rel="stylesheet" href="v2.css">
 </head>
@@ -299,6 +318,18 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
     </div>
   </nav>
 </header>
+
+<section class="p6-trending-wrap" id="p6TrendingBar" aria-label="Berita trending">
+  <div class="wrap">
+    <div class="p6-trending">
+      <div class="p6-trending-label" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M16 7h5v5"/></svg>
+        <span>Trending</span>
+      </div>
+      <div class="p6-trending-list" id="p6TrendingList"></div>
+    </div>
+  </div>
+</section>
 
 <main class="p6-main">
   <div class="wrap">
