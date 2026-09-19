@@ -1,25 +1,20 @@
 <!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover"><title>Loker — PURBALINK</title><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#093A8A"><link rel="apple-touch-icon" href="icon-192.png"><link rel="stylesheet" href="v2.css"></head><body>
 <div id="listView">
-  <section class="job-app-hero">
-    <div class="job-app-wrap">
-      <div class="job-greeting"><div class="job-user-avatar">P</div><div><small>Selamat datang</small><b>Temukan pekerjaan impianmu</b></div></div>
-      <div class="job-search-modern">
-        <img src="https://img.icons8.com/ios/50/search--v1.png" alt="">
-        <input id="jobKeyword" placeholder="Cari posisi atau perusahaan" value="">
-        <input id="jobLocation" type="hidden" value="Purbalingga">
-        <button id="jobSearchBtn" type="button">Cari</button>
-      </div>
-    </div>
+  <header class="jl-head">
+    <button class="jl-menu" type="button" data-pl-menu aria-label="Menu"><img src="https://img.icons8.com/ios/50/menu--v1.png" alt=""></button>
+    <a class="jl-brand" href="index.html"><img src="brand-icon-transparent.png" alt=""><b>PURBALINK <span>Loker</span></b></a>
+    <a class="jl-profile" href="profile.html">Profil</a>
+  </header>
+  <section class="jl-search-area">
+    <div class="jl-searchbox"><input id="jobKeyword" placeholder="Lowongan Kerja" value=""><button id="jobSearchBtn" type="button" aria-label="Cari"><img src="https://img.icons8.com/ios/50/search--v1.png" alt=""></button></div>
+    <div class="jl-filters"><button type="button" id="jlLocationBtn">＋ <span id="jlLocationLabel">Tambahkan wilayah</span></button><button type="button" class="job-filter-chip" data-filter="Terbaru">Tanggal diposkan⌄</button></div>
+    <input id="jobLocation" type="hidden" value="">
   </section>
-  <main class="job-feed">
-    <div class="job-app-wrap">
-      <div class="job-feed-head"><div><h1>Rekomendasi</h1><p>Lowongan terbaru untukmu</p></div><span class="job-live-pill" id="jobSourceNote">Menghubungkan Jooble…</span></div>
-      <div class="job-filter-row">
-        <button class="job-filter-chip active" data-filter="Semua">Semua</button><button class="job-filter-chip" data-filter="Terbaru">Baru untukmu</button><button class="job-filter-chip" data-filter="Full Time">Full time</button><button class="job-filter-chip" data-filter="Part Time">Part time</button><button class="job-filter-chip" data-filter="Magang">Magang</button><button class="job-filter-chip" data-filter="WFH">Remote</button>
-      </div>
-      <div class="result-count" id="resultCount">Menyiapkan lowongan…</div>
-      <div class="job-list" id="jobList"></div>
-    </div>
+  <main class="jl-main">
+    <div class="jl-alert"><span>Dapatkan lowongan baru via email</span><button type="button" aria-label="Notifikasi email"><i></i></button></div>
+    <div class="jl-status"><span id="resultCount">Menyiapkan lowongan…</span><span id="jobSourceNote">Menghubungkan Jooble…</span></div>
+    <div class="job-filter-row jl-hidden-filters" aria-hidden="true"><button class="job-filter-chip active" data-filter="Semua">Semua</button><button class="job-filter-chip" data-filter="Full Time">Full Time</button><button class="job-filter-chip" data-filter="Part Time">Part Time</button><button class="job-filter-chip" data-filter="Magang">Magang</button><button class="job-filter-chip" data-filter="WFH">WFH</button></div>
+    <div class="job-list" id="jobList"></div>
   </main>
 </div>
 <div id="detailView" style="display:none"><div class="jd-wrap"><a class="tk-back" href="#" onclick="showList();return false">← Kembali ke hasil pencarian</a><div class="jd-card" id="jdCard"></div></div></div>
