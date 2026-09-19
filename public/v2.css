@@ -350,3 +350,6 @@ body[data-pv2-page="index.html"] #detailView .btn-primary{background:#0b5ed7}
 @media(max-width:680px){
   .pv2-ad{margin:13px auto;min-height:44px}.pv2-ad-banner{min-height:50px}.pv2-ad-in-article{min-height:90px;margin:19px auto}.pv2-ad img{border-radius:9px;max-height:220px}.pv2-ad-anchor{bottom:calc(66px + env(safe-area-inset-bottom));width:calc(100vw - 12px);border-radius:10px}
 }
+
+/* PURBALINK trending read-count badge */
+.p6-trending-chip{position:relative}.p6-trending-chip .trend-views{display:block;font-size:9px;font-weight:700;color:#9a6700;margin-top:4px;line-height:1}.p6-trending-chip.active .trend-views{color:#15803d}
