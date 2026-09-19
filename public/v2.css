@@ -779,3 +779,18 @@ body[data-pv2-page="shop.html"] .shop-trending-open img{width:14px;height:14px;o
 .article-baca-juga-list small{display:block;margin-bottom:3px;color:#0b5ed7;font:800 8.5px/1.2 system-ui;text-transform:uppercase}
 .article-baca-juga-list b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12.5px;line-height:1.35}
 @media(max-width:680px){.article-baca-juga{margin:18px 0;padding:12px 0}.article-baca-juga-list button{grid-template-columns:68px minmax(0,1fr);gap:9px}.article-baca-juga-img{width:68px}.article-baca-juga-list b{font-size:11.5px}}
+
+/* ===== PURBALINK V5.0 — Direct/native advertising ===== */
+.pv2-ad{max-width:100%;margin:16px auto;overflow:hidden}
+.pv2-ad-label{margin:0 0 5px;color:#7b8494;font:700 9px/1.2 system-ui;letter-spacing:.35px;text-transform:uppercase}
+.pv2-ad>a{display:block;color:inherit;text-decoration:none}
+.pv2-direct-ad{display:grid;grid-template-columns:132px minmax(0,1fr);gap:12px;align-items:center;padding:9px;background:#fff;border:1px solid #dfe6ef;border-radius:12px;box-shadow:0 3px 12px rgba(16,24,40,.045)}
+.pv2-direct-ad>img{width:132px;height:92px;object-fit:cover;border-radius:9px;background:#eef2f6}
+.pv2-direct-copy{min-width:0}
+.pv2-direct-copy small{display:block;margin-bottom:3px;color:#0b5ed7;font:800 9px/1.2 system-ui;text-transform:uppercase;letter-spacing:.3px}
+.pv2-direct-copy b{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;color:#101828;font:800 14px/1.3 system-ui}
+.pv2-direct-copy p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;margin:5px 0;color:#667085;font:500 11.5px/1.4 system-ui}
+.pv2-direct-cta{display:inline-flex;margin-top:2px;color:#0b5ed7;font:800 11px/1.2 system-ui}
+.pv2-ad-native .pv2-direct-ad{grid-template-columns:160px minmax(0,1fr)}
+.pv2-ad-native .pv2-direct-ad>img{width:160px;height:106px}
+@media(max-width:520px){.pv2-ad{margin:13px 0}.pv2-direct-ad,.pv2-ad-native .pv2-direct-ad{grid-template-columns:100px minmax(0,1fr);gap:9px;padding:7px;border-radius:10px}.pv2-direct-ad>img,.pv2-ad-native .pv2-direct-ad>img{width:100px;height:78px;border-radius:7px}.pv2-direct-copy b{font-size:11.5px}.pv2-direct-copy p{font-size:9.5px;line-height:1.35;margin:3px 0}.pv2-direct-cta{font-size:10px}}
