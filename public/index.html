@@ -1173,7 +1173,12 @@ function toggleArticleReactionPicker(e){
   const picker=document.getElementById("articleReactionPicker");
   if(!picker)return;
   picker.innerHTML=reactionDefs.map(r=>`<button type="button" onclick="pickMainReaction('${r.key}')"><img src="${r.file}" alt="${r.label}"><span>${r.label}</span></button>`).join("");
-  picker.classList.toggle("show");
+  const opening=!picker.classList.contains("show");
+  picker.classList.toggle("show",opening);
+  if(opening && e?.currentTarget){
+    const r=e.currentTarget.getBoundingClientRect();
+    picker.style.top=Math.max(8,r.top-picker.offsetHeight-10)+"px";
+  }
 }
 function showMainPopup(){ document.getElementById("articleReactionPicker")?.classList.add("show"); }
 function hideMainPopupNow(){ document.getElementById("articleReactionPicker")?.classList.remove("show"); }
