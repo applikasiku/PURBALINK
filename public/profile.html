@@ -79,39 +79,23 @@ button{font-family:inherit;cursor:pointer;}
   </div>
 </header>
 
-<div class="wrap">
+<main class="wa-profile-page">
   <div id="profileArea"></div>
-
-  <div class="menu-section">
-    <div class="menu-label">Akun Saya</div>
-    <div class="menu-card">
-      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/fluency/48/shopping-bag.png" alt=""></div>Pesanan Saya<span class="chev">›</span></div>
-      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/fluency/48/briefcase.png" alt=""></div>Lamaran Loker Saya<span class="chev">›</span></div>
-      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/fluency/48/video.png" alt=""></div>Video Saya<span class="chev">›</span></div>
-      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/fluency/48/bookmark-ribbon.png" alt=""></div>Tersimpan / Bookmark<span class="chev">›</span></div>
-    </div>
-  </div>
-
-  <div class="menu-section">
-    <div class="menu-label">Pengaturan</div>
-    <div class="menu-card">
-      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/ios/50/user--v1.png" alt=""></div>Edit Profil<span class="chev">›</span></div>
-      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/ios/50/lock--v1.png" alt=""></div>Ubah Kata Sandi<span class="chev">›</span></div>
-      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/ios/50/appointment-reminders--v1.png" alt=""></div>Notifikasi<span class="chev">›</span></div>
-      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/ios/50/globe--v1.png" alt=""></div>Bahasa — Indonesia<span class="chev">›</span></div>
-    </div>
-  </div>
-
-  <div class="menu-section">
-    <div class="menu-label">Lainnya</div>
-    <div class="menu-card">
-      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/ios/50/help--v1.png" alt=""></div>Pusat Bantuan<span class="chev">›</span></div>
-      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/ios/50/document--v1.png" alt=""></div>Syarat & Ketentuan<span class="chev">›</span></div>
-      <div class="menu-item danger" id="logoutItem" onclick="logout()"><div class="menu-ic"><img src="https://img.icons8.com/ios/50/exit--v1.png" alt=""></div>Keluar</div>
-    </div>
-  </div>
-  <div style="height:20px;"></div>
-</div>
+  <section class="wa-settings">
+    <a class="wa-row" href="#"><span class="wa-line-icon"><img src="https://img.icons8.com/ios/50/shopping-bag--v1.png" alt=""></span><span><b>Pesanan Saya</b><small>Lihat status dan riwayat pesanan</small></span><i>›</i></a>
+    <a class="wa-row" href="loker.html"><span class="wa-line-icon"><img src="https://img.icons8.com/ios/50/briefcase.png" alt=""></span><span><b>Lamaran Loker Saya</b><small>Kelola lamaran pekerjaan</small></span><i>›</i></a>
+    <a class="wa-row" href="video.html"><span class="wa-line-icon"><img src="https://img.icons8.com/ios/50/video.png" alt=""></span><span><b>Video Saya</b><small>Video favorit dan aktivitas</small></span><i>›</i></a>
+    <a class="wa-row" href="#"><span class="wa-line-icon"><img src="https://img.icons8.com/ios/50/bookmark-ribbon--v1.png" alt=""></span><span><b>Tersimpan</b><small>Berita dan konten yang disimpan</small></span><i>›</i></a>
+  </section>
+  <section class="wa-settings">
+    <a class="wa-row" href="#"><span class="wa-line-icon"><img src="https://img.icons8.com/ios/50/user--v1.png" alt=""></span><span><b>Akun</b><small>Profil, verifikasi Fan Pro, dan keamanan</small></span><i>›</i></a>
+    <a class="wa-row" href="#"><span class="wa-line-icon"><img src="https://img.icons8.com/ios/50/privacy.png" alt=""></span><span><b>Privasi</b><small>Atur visibilitas dan data akun</small></span><i>›</i></a>
+    <a class="wa-row" href="#"><span class="wa-line-icon"><img src="https://img.icons8.com/ios/50/appointment-reminders--v1.png" alt=""></span><span><b>Notifikasi</b><small>Berita, loker, pesanan, dan video</small></span><i>›</i></a>
+    <a class="wa-row" href="#"><span class="wa-line-icon"><img src="https://img.icons8.com/ios/50/globe--v1.png" alt=""></span><span><b>Bahasa</b><small>Indonesia</small></span><i>›</i></a>
+    <a class="wa-row" href="#"><span class="wa-line-icon"><img src="https://img.icons8.com/ios/50/help--v1.png" alt=""></span><span><b>Bantuan</b><small>Pusat bantuan dan hubungi PURBALINK</small></span><i>›</i></a>
+    <button class="wa-row wa-logout" id="logoutItem" onclick="logout()"><span class="wa-line-icon"><img src="https://img.icons8.com/ios/50/exit--v1.png" alt=""></span><span><b>Keluar</b><small>Keluar dari akun ini</small></span></button>
+  </section>
+</main>
 
 <nav class="bottomnav"></nav>
 <style>
@@ -155,39 +139,25 @@ function renderProfile(){
 
   if(!token || !userRaw){
     area.innerHTML = `
-      <div class="guest-card">
-        <div class="pc-avatar" style="margin:0 auto 10px;">?</div>
-        <div style="font-weight:800;font-size:15px;">Anda belum masuk</div>
-        <p>Masuk untuk melamar loker, belanja, dan menyimpan video favorit.</p>
-        <div class="guest-actions">
-          <a class="gb-login" href="login.html">Masuk</a>
-          <a class="gb-register" href="register.html">Daftar</a>
-        </div>
-      </div>`;
+      <section class="wa-profile-hero wa-guest">
+        <div class="wa-avatar">?</div><div class="wa-profile-copy"><b>Anda belum masuk</b><small>Masuk untuk mengelola profil PURBALINK</small></div>
+        <a class="wa-login-btn" href="login.html">Masuk</a><a class="wa-register-link" href="register.html">Daftar akun baru</a>
+      </section>`;
     document.getElementById("logoutItem").style.display = "none";
     return;
   }
 
   const user = JSON.parse(userRaw);
   area.innerHTML = `
-    <div class="profile-card pro-profile-card">
-      <div class="pc-cover" style="background-image:url('${user.cover || user.cover_url || "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=70"}')"></div>
-      <div class="pc-identity">
-        <div class="pc-avatar pc-photo">${user.photo || user.avatar || user.picture ? `<img src="${user.photo || user.avatar || user.picture}" alt="Foto profil">` : initials(user.name || "Pengguna")}</div>
-        <div class="pc-usercopy"><div class="pc-name">${user.name || "Pengguna"}${user.verified || user.fan_pro ? '<span class="verified-badge" title="Terverifikasi Fan Pro">✓</span>' : ''}</div><div class="pc-email">${user.email || ""}</div>${user.fan_pro?'<span class="fan-pro-badge">Fan Pro</span>':''}</div>
-        <button class="pc-edit">Edit</button>
+    <section class="wa-profile-hero">
+      <div class="wa-cover" style="background-image:url('${user.cover || user.cover_url || "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=70"}')"></div>
+      <div class="wa-profile-main">
+        <div class="wa-avatar">${user.photo || user.avatar || user.picture ? `<img src="${user.photo || user.avatar || user.picture}" alt="Foto profil">` : initials(user.name || "Pengguna")}</div>
+        <div class="wa-profile-copy"><b>${user.name || "Pengguna"}${user.verified || user.fan_pro ? '<span class="verified-badge" title="Terverifikasi Fan Pro">✓</span>' : ''}</b><small>${user.email || ""}</small>${user.fan_pro?'<span class="fan-pro-badge">Fan Pro</span>':''}</div>
+        <button class="wa-edit-btn" type="button">✎</button>
       </div>
-      <div class="stats-row">
-        <div class="stat"><b>3</b><span>Lamaran</span></div>
-        <div class="stat"><b>5</b><span>Pesanan</span></div>
-        <div class="stat"><b>12</b><span>Video Disukai</span></div>
-      </div>
-      ${user.role === "author" || user.role === "admin" ? `
-      <div class="wallet-strip">
-        <div>Saldo Penulis<b>${"Rp" + (user.wallet_balance||0).toLocaleString("id-ID")}</b></div>
-        <button>Tarik Saldo</button>
-      </div>` : ''}
-    </div>`;
+      <div class="wa-about"><small>Tentang</small><p>${user.bio || "Halo! Saya menggunakan PURBALINK."}</p></div>
+    </section>`;
 }
 renderProfile();
 
