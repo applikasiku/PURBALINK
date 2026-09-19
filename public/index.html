@@ -299,10 +299,10 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
     </a>
     <div class="p6-head-actions">
       <a class="p6-icon-btn" href="profile.html" aria-label="Profil">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg>
+        <img class="i8-icon" src="https://img.icons8.com/fluency-systems-regular/48/user.png" alt="">
       </a>
       <button class="p6-icon-btn" type="button" aria-label="Menu" onclick="document.getElementById('p6MoreMenu').classList.toggle('show')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M17 14v6M14 17h6"/></svg>
+        <img class="i8-icon" src="https://img.icons8.com/fluency-systems-regular/48/circled-menu.png" alt="">
       </button>
     </div>
   </div>
@@ -323,7 +323,7 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
   <div class="wrap">
     <div class="p6-trending">
       <div class="p6-trending-label" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M16 7h5v5"/></svg>
+        <img class="i8-trend-icon" src="https://img.icons8.com/fluency-systems-regular/48/increase.png" alt="">
         <span>Trending</span>
       </div>
       <div class="p6-trending-list" id="p6TrendingList"></div>
@@ -333,17 +333,13 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
 
 <main class="p6-main">
   <div class="wrap">
-    <section id="utama" class="p6-hero" onclick="showDetail()">
-      <div class="p6-hero-img" style="background-image:url('https://images.unsplash.com/photo-1601134467661-3d775b999c8b?w=1200&q=82')">
-        <div class="p6-hero-overlay">
-          <span class="p6-kicker">Berita Utama</span>
-          <h1>Pemerintah Percepat Pemulihan Pascaerupsi Gunung Lewotobi</h1>
-          <span class="p6-time">46 menit lalu</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="p6-grid2 p6-quick">
+    <section id="utama" class="p6-hero-layout" aria-label="Berita utama">
+<article class="p6-hero p6-hero-main" onclick="showDetail()"><div class="p6-hero-img" style="background-image:url('https://images.unsplash.com/photo-1601134467661-3d775b999c8b?w=1200&q=82')"><div class="p6-hero-overlay"><span class="p6-kicker">Berita Utama</span><h1>Pemerintah Percepat Pemulihan Pascaerupsi Gunung Lewotobi</h1><p class="p6-hero-excerpt">Pemerintah mempercepat penanganan dan pemulihan warga terdampak sambil memastikan layanan dasar tetap berjalan.</p><span class="p6-time">46 menit lalu</span></div></div></article>
+<div class="p6-hero-side">
+<article class="p6-hero-side-card" onclick="showDetail()"><div class="p6-hero-side-img" style="background-image:url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80')"></div><div><span>Ekonomi</span><h3>Ekonomi Digital Lokal Terus Tumbuh, UMKM Makin Adaptif</h3><p>Pelaku usaha memperluas pemasaran digital dan layanan daring.</p></div></article>
+<article class="p6-hero-side-card" onclick="showDetail()"><div class="p6-hero-side-img" style="background-image:url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=700&q=80')"></div><div><span>Olahraga</span><h3>Olahraga Purbalingga Makin Aktif Menjelang Agenda Daerah</h3><p>Komunitas dan atlet lokal meningkatkan persiapan serta latihan.</p></div></article>
+</div></section>
+<section class="p6-grid2 p6-quick">
       <article class="p6-mini" onclick="showDetail()"><div class="p6-mini-img" style="background-image:url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80')"></div><h3>Ekonomi Digital Lokal Terus Tumbuh, UMKM Makin Adaptif</h3><span>1 jam lalu</span></article>
       <article class="p6-mini" onclick="showDetail()"><div class="p6-mini-img" style="background-image:url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=700&q=80')"></div><h3>Olahraga Purbalingga Bersiap Hadapi Agenda Kompetisi Daerah</h3><span>1 jam lalu</span></article>
       <article class="p6-mini" onclick="showDetail()"><div class="p6-mini-img" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=700&q=80')"></div><h3>Internet Desa Diperluas, Pelayanan Publik Makin Terhubung</h3><span>2 jam lalu</span></article>
@@ -561,7 +557,7 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
       </div>
 
       <div id="commentList"></div>
-      <div class="fb-hidden-note"><b>◉ Lihat balasan yang disembunyikan</b><span>Komentar disembunyikan karena mungkin menyinggung, di luar topik, atau spam.</span></div>
+      <button class="fb-hidden-note" type="button" onclick="this.classList.toggle('show')"><b>Balasan</b><span>Komentar balasan yang disembunyikan akan ditampilkan di sini.</span></button>
 
       <section class="post-comment-recs">
         <div class="rec-section">
@@ -601,23 +597,23 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
 
 <nav class="bottomnav">
   <a href="index.html" class="bn-item active">
-    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10"/></svg>
+    <img class="bn-ic" src="https://img.icons8.com/fluency-systems-regular/48/home.png" alt="">
     <span class="bn-label">Beranda</span>
   </a>
   <a href="loker.html" class="bn-item">
-    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+    <img class="bn-ic" src="https://img.icons8.com/fluency-systems-regular/48/briefcase.png" alt="">
     <span class="bn-label">Loker</span>
   </a>
   <a href="shop.html" class="bn-item">
-    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <img class="bn-ic" src="https://img.icons8.com/fluency-systems-regular/48/shopping-bag.png" alt="">
     <span class="bn-label">Shop</span>
   </a>
   <a href="video.html" class="bn-item">
-    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="18" rx="3"/><path d="M17 8l4-2v12l-4-2z"/></svg>
+    <img class="bn-ic" src="https://img.icons8.com/fluency-systems-regular/48/video.png" alt="">
     <span class="bn-label">Video</span>
   </a>
   <a href="profile.html" class="bn-item">
-    <svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg>
+    <img class="bn-ic" src="https://img.icons8.com/fluency-systems-regular/48/user.png" alt="">
     <span class="bn-label">Profile</span>
   </a>
 </nav>
