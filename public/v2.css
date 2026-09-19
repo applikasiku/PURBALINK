@@ -767,3 +767,15 @@ body[data-pv2-page="shop.html"] .shop-trending-open img{width:14px;height:14px;o
  body[data-pv2-page="shop.html"] .shop-trending-info h3{font-size:11px}
  body[data-pv2-page="shop.html"] .shop-trending-info strong{font-size:11px}
 }
+
+/* ===== PURBALINK V5.0 — Baca Juga artikel ===== */
+.article-baca-juga{margin:22px 0;padding:14px 0;border-top:2px solid #0b5ed7;border-bottom:1px solid #dce6f5}
+.article-baca-juga-label{display:inline-flex;align-items:center;margin-bottom:9px;color:#0b5ed7;font:800 11px/1.2 system-ui;letter-spacing:.45px}
+.article-baca-juga-list{display:grid;grid-template-columns:1fr;gap:0}
+.article-baca-juga-list button{width:100%;display:grid;grid-template-columns:74px minmax(0,1fr);gap:10px;align-items:center;padding:8px 0;border:0;border-top:1px solid #edf1f6;background:transparent;text-align:left;color:#101828}
+.article-baca-juga-list button:first-child{border-top:0}
+.article-baca-juga-img{width:74px;aspect-ratio:16/10;border-radius:7px;background-size:cover;background-position:center}
+.article-baca-juga-list button>span:last-child{min-width:0}
+.article-baca-juga-list small{display:block;margin-bottom:3px;color:#0b5ed7;font:800 8.5px/1.2 system-ui;text-transform:uppercase}
+.article-baca-juga-list b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12.5px;line-height:1.35}
+@media(max-width:680px){.article-baca-juga{margin:18px 0;padding:12px 0}.article-baca-juga-list button{grid-template-columns:68px minmax(0,1fr);gap:9px}.article-baca-juga-img{width:68px}.article-baca-juga-list b{font-size:11.5px}}
