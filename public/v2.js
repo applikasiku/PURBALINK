@@ -412,9 +412,17 @@
     }
     function renderTrendingProducts(){
       const box=document.getElementById('trendingProductList');if(!box)return;
-      const items=[...products].sort((a,b)=>(Number(b.sold)||0)-(Number(a.sold)||0)||((Number(b.disc)||0)-(Number(a.disc)||0))).slice(0,5);
-      box.innerHTML=items.map((p,index)=>{const rating=(4.7+((Number(p.id)||0)%3)*.1).toFixed(1);return `<article class="shop-trending-item" data-trending-product="${p.id}"><span class="shop-trending-rank">#${index+1}</span><div class="shop-trending-img" style="background-image:url('${esc(p.img)}')">${p.disc?`<span>-${p.disc}%</span>`:''}</div><div class="shop-trending-info"><small>Trending #${index+1}</small><h3>${esc(p.name)}</h3><div class="shop-trending-rating">★ ${rating} · ${esc(String(p.sold||0))} terjual</div><strong>${rupiah(p.price)}</strong><div class="shop-trending-seller">${esc(p.shop||'Seller Lokal')} · ${esc(p.loc||'Purbalingga')}</div></div><button class="shop-trending-open" type="button" aria-label="Lihat produk"><img src="https://img.icons8.com/ios-filled/50/chevron-right.png" alt=""></button></article>`}).join('');
-      box.querySelectorAll('[data-trending-product]').forEach(el=>el.onclick=()=>openProduct(Number(el.dataset.trendingProduct)));
+      const fallbackTrending=[
+        {id:'trend-demo-1',name:'Keripik Tempe Renyah 250gr',price:15000,old:20000,disc:25,sold:320,rating:'4.8',shop:'UMKM Purbalingga',loc:'Purbalingga Kota',img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=500&q=75'},
+        {id:'trend-demo-2',name:'Kaos Distro Purbalingga Pride',price:65000,old:85000,disc:24,sold:142,rating:'4.9',shop:'Purbalingga Clothing',loc:'Kalimanah',img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=500&q=75'},
+        {id:'trend-demo-3',name:'Madu Hutan Asli 500ml',price:78000,old:99000,disc:21,sold:118,rating:'4.8',shop:'Tani Makmur',loc:'Karangreja',img:'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=500&q=75'},
+        {id:'trend-demo-4',name:'Kopi Arabika Lokal 200gr',price:45000,old:55000,disc:18,sold:96,rating:'4.9',shop:'Kopi Lereng Slamet',loc:'Bojongsari',img:'https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=500&q=75'},
+        {id:'trend-demo-5',name:'Tas Anyaman Handmade',price:89000,old:110000,disc:19,sold:83,rating:'4.7',shop:'Kriya Purbalingga',loc:'Bobotsari',img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=500&q=75'}
+      ];
+      const ranked=[...products].sort((a,b)=>(Number(b.sold)||0)-(Number(a.sold)||0)||((Number(b.disc)||0)-(Number(a.disc)||0)));
+      const items=ranked.slice(0,5);while(items.length<5)items.push(fallbackTrending[items.length]);
+      box.innerHTML=items.map((p,index)=>{const rating=p.rating||((4.7+((Number(p.id)||0)%3)*.1).toFixed(1));return `<article class="shop-trending-item" data-trending-product="${p.id}"><span class="shop-trending-rank">#${index+1}</span><div class="shop-trending-img" style="background-image:url('${esc(p.img)}')">${p.disc?`<span>-${p.disc}%</span>`:''}</div><div class="shop-trending-info"><small>Trending #${index+1}</small><h3>${esc(p.name)}</h3><div class="shop-trending-rating">★ ${rating} · ${esc(String(p.sold||0))} terjual</div><strong>${rupiah(p.price)}</strong><div class="shop-trending-seller">${esc(p.shop||'Seller Lokal')} · ${esc(p.loc||'Purbalingga')}</div></div><button class="shop-trending-open" type="button" aria-label="Lihat produk"><img src="https://img.icons8.com/ios-filled/50/chevron-right.png" alt=""></button></article>`}).join('');
+      box.querySelectorAll('[data-trending-product]').forEach(el=>el.onclick=()=>{const raw=el.dataset.trendingProduct;if(!raw.startsWith('trend-demo-'))openProduct(Number(raw))});
     }
     function renderProducts(){
       const arr=list();reco.innerHTML=arr.length?arr.map(card).join(''):'<div class="pv2-search-empty" style="grid-column:1/-1">Produk tidak ditemukan.</div>';
