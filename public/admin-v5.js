@@ -76,7 +76,8 @@ function dashboard(){
  '<button onclick="AdminV5.productForm()" title="Produk"><span>🛍️</span><small>Produk</small></button>'+
  '<button onclick="switchTab(\'shop-pesanan\')" title="Pesanan"><span>📦</span><small>Pesanan</small></button>'+
  '<button onclick="switchTab(\'video-konten\')" title="Video"><span>🎬</span><small>Video</small></button>'+
- '<button onclick="switchTab(\'komentar\')" title="Komentar"><span>💬</span><small>Komentar</small></button>'+\n '<button onclick="switchTab(\'trending\')" title="Trending"><span>📈</span><small>Trending</small></button>'+
+ '<button onclick="switchTab(\'komentar\')" title="Komentar"><span>💬</span><small>Komentar</small></button>'+ 
+ '<button onclick="switchTab(\'trending\')" title="Trending"><span>📈</span><small>Trending</small></button>'+
  '<button onclick="switchTab(\'media-interaksi\')" title="Sticker & GIF"><span>🧩</span><small>Sticker</small></button>'+
  '<button onclick="switchTab(\'iklan\')" title="Iklan & AdSense"><span>📣</span><small>Iklan</small></button>'+
  '<button onclick="switchTab(\'pengguna\')" title="Pengguna"><span>👥</span><small>User</small></button>'+
