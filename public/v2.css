@@ -813,3 +813,16 @@ body[data-pv2-page="shop.html"] .shop-trending-open img{width:14px;height:14px;o
 .pv5-read-next-grid b{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font:800 12px/1.35 system-ui;color:#101828}
 .pv5-read-next-grid span{display:block;margin-top:4px;color:#7b8494;font:500 8.5px/1.2 system-ui}
 @media(max-width:680px){.p6-hero-main .p6-hero-excerpt{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}.pv5-news-card .card-body p{font-size:10px}.pv5-read-next{margin-top:20px}.pv5-read-next-grid{gap:9px}.pv5-read-next-grid b{font-size:10.5px}}
+
+/* ===== PURBALINK V5.1 — compact Kriuke anchor ===== */
+.pv2-ad-anchor{width:min(620px,calc(100vw - 18px));min-height:0!important;padding:5px 7px 6px!important;border:1px solid #ffb000!important;background:linear-gradient(100deg,#fff9c9 0%,#ffd52f 52%,#ff9f1a 100%)!important;box-shadow:0 8px 22px rgba(123,76,0,.22)!important;border-radius:13px!important}
+.pv2-ad-anchor .pv2-ad-label{text-align:left;margin:0 0 3px 3px;color:#855300;font-size:7px}
+.pv2-ad-anchor .pv2-direct-ad{display:grid;grid-template-columns:68px minmax(0,1fr) auto;gap:8px;align-items:center;padding:0;background:transparent;border:0;box-shadow:none}
+.pv2-ad-anchor .pv2-direct-ad>img{width:68px;height:52px;max-height:none;object-fit:cover;border-radius:8px;border:1px solid rgba(133,83,0,.15)}
+.pv2-ad-anchor .pv2-direct-copy{display:contents}
+.pv2-ad-anchor .pv2-direct-copy small{display:none}
+.pv2-ad-anchor .pv2-direct-copy b{grid-column:2;grid-row:1;color:#6b3c00;font-size:12px;line-height:1.2;-webkit-line-clamp:1}
+.pv2-ad-anchor .pv2-direct-copy p{grid-column:2;grid-row:1;margin-top:29px;color:#754800;font-size:8.5px;line-height:1.2;-webkit-line-clamp:1}
+.pv2-ad-anchor .pv2-direct-cta{grid-column:3;grid-row:1;align-self:center;margin:0;padding:9px 11px;border-radius:999px;background:#f15a24;color:#fff;font-size:9px;white-space:nowrap;box-shadow:0 3px 8px rgba(180,62,0,.2)}
+.pv2-ad-anchor .pv2-ad-close{right:-3px;top:-13px;width:24px;height:24px;border-color:#f0a400;color:#6b3c00;font-weight:900}
+@media(max-width:520px){.pv2-ad-anchor{bottom:calc(67px + env(safe-area-inset-bottom));width:calc(100vw - 12px);padding:4px 6px 5px!important;border-radius:11px!important}.pv2-ad-anchor .pv2-direct-ad{grid-template-columns:55px minmax(0,1fr) auto;gap:6px}.pv2-ad-anchor .pv2-direct-ad>img{width:55px;height:44px}.pv2-ad-anchor .pv2-direct-copy b{font-size:10.5px}.pv2-ad-anchor .pv2-direct-copy p{font-size:7.5px;margin-top:25px}.pv2-ad-anchor .pv2-direct-cta{padding:8px 9px;font-size:8px}.pv2-ad-anchor .pv2-ad-label{font-size:6.5px}}
