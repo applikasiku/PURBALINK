@@ -4,6 +4,7 @@
   const DB_KEY='purbalink_v2_db';
   const DOMAIN='https://purbalink.web.id';
   let page=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  if(page==='loker')page='loker.html';if(page==='shop')page='shop.html';if(page==='video')page='video.html';if(page==='profile')page='profile.html';
   const ADMIN_HOST='admin.purbalink.web.id';
   if(location.hostname.toLowerCase()===ADMIN_HOST && (page==='index.html'||page==='')) page='admin-dashboard.html';
 
@@ -351,13 +352,14 @@
       if(!force){try{const c=JSON.parse(sessionStorage.getItem(cacheKey)||'null');if(c&&Date.now()-c.ts<1800000){externalJobs=c.jobs||[];sourceEl.textContent='Lowongan live dari Jooble ´ cache 30 menit';render();return}}catch(_){}}
       if(searchBtn)searchBtn.disabled=true;sourceEl.textContent='Memuat lowongan live dari Jooble…';
       try{
-        const res=await fetch('/api/jobs/jooble',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({keywords:q,location:loc,page:1})});
+        const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),12000);
+        const res=await fetch('/api/jobs/jooble',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({keywords:q,location:loc,page:1}),signal:controller.signal,cache:'no-store'});clearTimeout(timeout);
         const data=await res.json().catch(()=>({}));
         if(!res.ok||data.configured===false)throw new Error(data.error||'Jooble API belum dikonfigurasi');
         externalJobs=(data.jobs||[]).map((j,i)=>({id:'jooble-'+(j.id||i)+'-'+Date.now(),title:j.title||'Lowongan kerja',company:j.company||j.source||'Perusahan',loc:j.location||loc,salary:j.salary||'',type:j.type||'Lowongan Jooble',posted:j.updated||'Terbaru',updated:j.updated||'',snippet:(j.snippet||'').replace(/<[^>]+>/g,' '),link:j.link||'#',source:j.source||'Jooble',origin:'Jooble',external:true}));
         sessionStorage.setItem(cacheKey,JSON.stringify({ts:Date.now(),jobs:externalJobs}));
         sourceEl.textContent=`Live · Jooble ${externalJobs.length}`;sourceEl.classList.add('connected');
-      }catch(e){externalJobs=[];sourceEl.textContent='Jooble: '+e.message;sourceEl.classList.remove('connected')}
+      }catch(e){externalJobs=[];sourceEl.textContent=e?.name==='AbortError'?'Jooble: koneksi timeout':'Jooble: '+e.message;sourceEl.classList.remove('connected')}
       if(searchBtn)searchBtn.disabled=false;render();
     }
     window.showList=function(){document.getElementById('detailView').style.display='none';document.getElementById('listView').style.display='block';window.scrollTo(0,0)};
