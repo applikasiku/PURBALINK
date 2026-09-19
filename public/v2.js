@@ -10,7 +10,7 @@
 
   const seed={
     version:2,
-    settings:{siteName:'PURBALINK',tagline:'Purbalingga, Lebih Dekat, Lebih Cepat',domain:DOMAIN,email:'redaksi@purbalink.web.id',whatsapp:'',apiBase:'',googleClientId:'',feeGift:10,feeShop:5,gateway:'Midtrans',gatewayMode:'Sandbox'},
+    settings:{siteName:'PURBALINK',tagline:'Purbalingga, Lebih Dekat, Lebih Cepat',domain:DOMAIN,email:'redaksi@purbalink.web.id',whatsapp:'',apiBase:'',googleClientId:'',feeGift:10,feeShop:5,gateway:'Midtrans',gatewayMode:'Sandbox',shopHero:{title:'Promo Produk UMKM',subtitle:'Belanja produk lokal pilihan dengan promo spesial minggu ini.',badge:'Belanja Lokal · Lebih Hemat',background:'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=78',productIds:[1,2]}},
     features:{loker:true,shop:true,video:true,gift:true,comment:true,google_login:true,registration:true,push:true},
     trending:{mode:'auto',limit:5,minViews:0,manualIds:[],showViews:false},
     articles:[
@@ -395,6 +395,20 @@
         return (!query||text.includes(query))&&(category==='Semua'||productCategory(p)===category);
       });
     }
+    function renderShopHero(){
+      const hero=document.getElementById('shopHero');if(!hero)return;
+      const cfg=Object.assign({},seed.settings.shopHero,db.settings?.shopHero||{});
+      hero.style.backgroundImage=`url("${String(cfg.background||seed.settings.shopHero.background).replace(/"/g,'%22')}")`;
+      document.getElementById('shopHeroTitle').textContent=cfg.title||'Promo Produk UMKM';
+      document.getElementById('shopHeroSubtitle').textContent=cfg.subtitle||'';
+      document.getElementById('shopHeroBadge').textContent=cfg.badge||'';
+      const ids=Array.isArray(cfg.productIds)?cfg.productIds:[1,2];
+      let items=ids.map(id=>products.find(p=>String(p.id)===String(id))).filter(Boolean).slice(0,2);
+      if(items.length<2)items=products.slice(0,2);
+      const grid=document.getElementById('shopHeroProducts');if(!grid)return;
+      grid.innerHTML=items.map(p=>`<button class="shop-hero-product" type="button" data-hero-product="${p.id}"><span class="shop-hero-product-img" style="background-image:url('${esc(p.img)}')"></span><span class="shop-hero-product-copy"><b>${esc(p.name)}</b><strong>${rupiah(p.price)}</strong></span></button>`).join('');
+      grid.querySelectorAll('[data-hero-product]').forEach(b=>b.onclick=()=>openProduct(Number(b.dataset.heroProduct)));
+    }
     function renderProducts(){
       const arr=list();reco.innerHTML=arr.length?arr.map(card).join(''):'<div class="pv2-search-empty" style="grid-column:1/-1">Produk tidak ditemukan.</div>';
       if(flash)flash.innerHTML=products.filter(p=>p.disc).slice(0,8).map(card).join('');
@@ -447,6 +461,7 @@
     if(search)search.addEventListener('input',()=>{query=search.value.trim().toLowerCase();renderProducts()});
     document.querySelectorAll('.shop-cat-chip').forEach(ch=>ch.onclick=()=>{document.querySelectorAll('.shop-cat-chip').forEach(x=>x.classList.remove('active'));ch.classList.add('active');category=ch.dataset.category||'Semua';renderProducts()});
     const returnParams=new URLSearchParams(location.search);if(returnParams.get('payment')==='midtrans'&&returnParams.get('type')==='shop'){const oid=returnParams.get('order_id');midtransStatus(oid).then(st=>{const order=db.orders.find(x=>x.id===oid);const mapped=mappedPaymentStatus(st.transaction_status);if(order){order.status=mapped;order.payment='Midtrans';saveDb()}toast(mapped==='Dibayar'?'Pembayaran '+oid+' berhasil':mapped==='Gagal'?'Pembayaran '+oid+' gagal':'Pembayaran '+oid+' masih menunggu')}).catch(e=>toast('Status Midtrans belum dapat diverifikasi: '+e.message))}
+    renderShopHero();
     renderProducts();updateCartBadge();
   }
   function initVideo(){
