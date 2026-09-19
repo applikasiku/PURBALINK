@@ -704,3 +704,41 @@ body[data-pv2-page="shop.html"] .pd-sticky-actions{width:auto!important;max-widt
  body[data-pv2-page="shop.html"] .pd-summary b{font-size:25px!important}
  body[data-pv2-page="shop.html"] .pd-emoji-grid{grid-template-columns:repeat(7,1fr)}
 }
+
+/* ===== PURBALINK V4.7 — fixed precision Shop + UMKM hero ===== */
+html,body{max-width:100%;overflow-x:hidden;touch-action:pan-y}
+body[data-pv2-page="shop.html"]{width:100%;max-width:100vw;overflow-x:hidden;overscroll-behavior-x:none}
+body[data-pv2-page="shop.html"] *{box-sizing:border-box}
+body[data-pv2-page="shop.html"] .shop-shell{width:100%!important;max-width:1180px!important;margin-inline:auto!important}
+body[data-pv2-page="shop.html"] .shop-hero{position:relative;isolation:isolate;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(220px,42%);gap:16px;align-items:center;min-height:260px;padding:22px!important;background-size:cover!important;background-position:center!important;color:#fff}
+body[data-pv2-page="shop.html"] .shop-hero-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(5,25,62,.92) 0%,rgba(5,25,62,.72) 50%,rgba(5,25,62,.32) 100%)}
+body[data-pv2-page="shop.html"] .shop-hero-copy{min-width:0}
+body[data-pv2-page="shop.html"] .shop-hero-kicker{display:block;font:800 9px/1.2 system-ui;letter-spacing:.8px;margin-bottom:7px;color:#d9eaff}
+body[data-pv2-page="shop.html"] .shop-hero h1{font-size:27px;line-height:1.08;margin:0 0 8px}
+body[data-pv2-page="shop.html"] .shop-hero p{font-size:12.5px;line-height:1.4;max-width:420px}
+body[data-pv2-page="shop.html"] .shop-hero-products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;min-width:0}
+body[data-pv2-page="shop.html"] .shop-hero-product{min-width:0;padding:0;border:1px solid rgba(255,255,255,.6);background:#fff;border-radius:12px;overflow:hidden;text-align:left;box-shadow:0 8px 24px rgba(0,0,0,.16)}
+body[data-pv2-page="shop.html"] .shop-hero-product-img{display:block;width:100%;aspect-ratio:1/1;background-size:cover;background-position:center}
+body[data-pv2-page="shop.html"] .shop-hero-product-copy{display:block;padding:7px}
+body[data-pv2-page="shop.html"] .shop-hero-product-copy b{display:block;color:#101828;font-size:9.5px;line-height:1.25;height:24px;overflow:hidden}
+body[data-pv2-page="shop.html"] .shop-hero-product-copy strong{display:block;color:#e3062c;font-size:10px;margin-top:4px}
+@media(max-width:680px){
+ body[data-pv2-page="shop.html"] .shop-shell{padding-left:10px!important;padding-right:10px!important}
+ body[data-pv2-page="shop.html"] .shop-search-zone .shop-shell{padding-left:10px!important;padding-right:10px!important}
+ body[data-pv2-page="shop.html"] .shop-hero{grid-template-columns:minmax(0,1fr) 156px!important;gap:10px!important;min-height:205px!important;padding:16px!important;border-radius:13px!important}
+ body[data-pv2-page="shop.html"] .shop-hero h1{font-size:21px!important}
+ body[data-pv2-page="shop.html"] .shop-hero p{font-size:10.5px!important;line-height:1.35!important}
+ body[data-pv2-page="shop.html"] .shop-hero-badge{font-size:8.5px!important;padding:6px 8px!important;margin-top:9px!important}
+ body[data-pv2-page="shop.html"] .shop-hero-products{gap:6px}
+ body[data-pv2-page="shop.html"] .shop-hero-product{border-radius:9px}
+ body[data-pv2-page="shop.html"] .shop-hero-product-copy{padding:5px}
+ body[data-pv2-page="shop.html"] .shop-hero-product-copy b{font-size:7.5px;height:19px}
+ body[data-pv2-page="shop.html"] .shop-hero-product-copy strong{font-size:8px}
+ body[data-pv2-page="shop.html"] .shop-shortcuts{gap:6px!important}
+ body[data-pv2-page="shop.html"] .shop-shortcut{min-width:0!important;padding:9px 3px!important;justify-content:center!important;flex-direction:column!important;text-align:center!important;font-size:9px!important}
+ body[data-pv2-page="shop.html"] .shop-shortcut img{width:23px!important;height:23px!important}
+}
+@media(max-width:390px){
+ body[data-pv2-page="shop.html"] .shop-hero{grid-template-columns:minmax(0,1fr) 142px!important;padding:14px!important}
+ body[data-pv2-page="shop.html"] .shop-hero h1{font-size:19px!important}
+}
