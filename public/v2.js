@@ -397,7 +397,8 @@
     }
     function renderShopHero(){
       const hero=document.getElementById('shopHero');if(!hero)return;
-      const cfg=Object.assign({},seed.settings.shopHero,db.settings?.shopHero||{});
+      let adminHero=null;try{adminHero=JSON.parse(localStorage.getItem('purbalink_shop_hero')||'null')}catch(_){}
+      const cfg=Object.assign({},seed.settings.shopHero,db.settings?.shopHero||{},adminHero||{});
       hero.style.backgroundImage=`url("${String(cfg.background||seed.settings.shopHero.background).replace(/"/g,'%22')}")`;
       document.getElementById('shopHeroTitle').textContent=cfg.title||'Promo Produk UMKM';
       document.getElementById('shopHeroSubtitle').textContent=cfg.subtitle||'';
