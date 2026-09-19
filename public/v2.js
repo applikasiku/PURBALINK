@@ -180,6 +180,16 @@
     document.querySelectorAll('.navrow a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.navrow a').forEach(x=>x.classList.remove('active'));a.classList.add('active');cat=a.textContent.trim().toUpperCase();renderCards();document.querySelector('#newsGrid')?.scrollIntoView({behavior:'smooth',block:'start'})}));
     renderCards();
 
+    function renderTrendingStrip(){
+      const bar=document.getElementById('p6TrendingBar'),list=document.getElementById('p6TrendingList');
+      if(!bar||!list)return;
+      const items=published().slice().sort((a,b)=>Number(Boolean(b.breaking))-Number(Boolean(a.breaking))).slice(0,5);
+      if(!items.length){bar.style.display='none';return}
+      list.innerHTML=items.map((a,i)=>'<button type="button" class="p6-trending-chip'+(i===items.length-1?' active':'')+'" data-trend-id="'+a.id+'" title="'+esc(a.title)+'">'+esc((a.title||'').length>34?(a.title.slice(0,34)+'…'):a.title)+(i===items.length-1?'<span class="trend-check">✓</span>':'')+'</button>').join('');
+      list.querySelectorAll('[data-trend-id]').forEach(btn=>btn.addEventListener('click',()=>window.PV2.openArticle(btn.dataset.trendId)));
+    }
+    renderTrendingStrip();
+
     const breaking=db.articles.filter(a=>a.breaking&&a.status==='Terbit');
     const breakingEl=document.querySelector('.breaking .txt');let bi=0;
     if(breakingEl&&breaking.length){breakingEl.textContent=breaking[0].title;setInterval(()=>{bi=(bi+1)%breaking.length;breakingEl.textContent=breaking[bi].title},5000)}
