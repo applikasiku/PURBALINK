@@ -1403,7 +1403,10 @@ function buildArticleToc(){
  document.getElementById('articleToc')?.classList.toggle('empty',!hs.length);
 }
 function toggleArticleAudio(force){
- const p=document.getElementById('articleAudioPopup');if(!p)return;p.classList.toggle('show',typeof force==='boolean'?force:!p.classList.contains('show'));
+ const p=document.getElementById('articleAudioPopup'),btn=document.querySelector('.article-audio-trigger');if(!p)return;
+ const opening=typeof force==='boolean'?force:!p.classList.contains('show');
+ p.classList.toggle('show',opening);p.setAttribute('aria-hidden',opening?'false':'true');
+ if(opening&&btn){const r=btn.getBoundingClientRect();p.style.position='fixed';p.style.left='auto';p.style.right=Math.max(12,window.innerWidth-r.right)+'px';p.style.bottom=Math.max(88,window.innerHeight-r.top+10)+'px';p.style.top='auto';}
 }
 function articleSpeechText(){return [document.querySelector('#detailView .art-title')?.textContent,...[...document.querySelectorAll('#detailView .art-body h2,#detailView .art-body p')].map(x=>x.textContent)].filter(Boolean).join('. ')}
 let articleUtterance=null;
