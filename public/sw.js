@@ -1,4 +1,4 @@
-const CACHE = "purbalink-v5-1-ads-icons-fix-20260920";
+const CACHE = "purbalink-v5-2-anchor-rebuild-20260920";
 const ASSETS = [
   "./","./index.html","./purbalink-home.html","./loker.html","./shop.html","./video.html","./profile.html","./login.html","./register.html","./admin-dashboard.html",
   "./tentang.html","./redaksi.html","./pedoman-media-siber.html","./privacy.html","./terms.html","./kontak.html",
