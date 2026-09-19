@@ -138,8 +138,9 @@
       <a href="profile.html" class="bn-item${active('profile.html')}"><svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg><span class="bn-label">Profil</span></a>`;
   }
   function sharedDrawerMarkup(){
+    const iconSvg=(symbol,bg='#eef4ff',fg='#0b5ed7')=>'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="'+bg+'"/><text x="24" y="31" text-anchor="middle" font-size="23" font-family="Arial,sans-serif" fill="'+fg+'">'+symbol+'</text></svg>');
     const cats=[
-      ['Nasional','https://img.icons8.com/fluency/48/government.png'],['Internasional','https://img.icons8.com/fluency/48/globe.png'],['Daerah','https://img.icons8.com/fluency/48/marker.png'],['Politik','https://img.icons8.com/fluency/48/conference-call.png'],['Ekonomi','https://img.icons8.com/fluency/48/combo-chart.png'],['Finance','https://img.icons8.com/fluency/48/coins.png'],['Hukum','https://img.icons8.com/fluency/48/scales.png'],['Teknologi','https://img.icons8.com/fluency/48/processor.png'],['Olahraga','https://img.icons8.com/fluency/48/football2.png'],['Hiburan','https://img.icons8.com/fluency/48/musical-notes.png'],['Gaya Hidup','https://img.icons8.com/fluency/48/natural-food.png'],['Pendidikan','https://img.icons8.com/fluency/48/graduation-cap.png'],['Kesehatan','https://img.icons8.com/fluency/48/heart-with-pulse.png'],['Lingkungan','https://img.icons8.com/fluency/48/deciduous-tree.png']
+      ['Nasional',iconSvg('N')],['Internasional',iconSvg('I')],['Daerah',iconSvg('D')],['Politik',iconSvg('P')],['Ekonomi',iconSvg('E')],['Finance',iconSvg('F')],['Hukum',iconSvg('H')],['Teknologi',iconSvg('T')],['Olahraga',iconSvg('O')],['Hiburan',iconSvg('★')],['Gaya Hidup',iconSvg('G')],['Pendidikan',iconSvg('A')],['Kesehatan',iconSvg('+')],['Lingkungan',iconSvg('L')]
     ];
     const row=(href,icon,title,sub='')=>`<a class="pl-drawer-row" href="${href}"><img src="${icon}" alt=""><span><b>${title}</b>${sub?`<small>${sub}</small>`:''}</span><i>›</i></a>`;
     return `<div class="pl-drawer-backdrop" data-pl-close></div><aside class="pl-drawer" id="plSharedDrawer" aria-label="Menu PURBALINK">
@@ -613,8 +614,8 @@
     const fresh=defaultAdsConfig();
     if(!db.ads){db.ads=fresh;saveDb()}
     if(!Array.isArray(db.ads.slots))db.ads.slots=fresh.slots;
-    const staleDemo=db.ads.slots.some(s=>['home-native','article-top','article-middle','article-bottom','anchor'].includes(s.placement)&&(s.placement==='anchor'?(s.enabled===false||s.provider!=='direct'||!String(s.image||'').trim()):!String(s.image||'').trim()));
-    if(staleDemo){for(const demo of fresh.slots){if(['home-native','article-top','article-middle','article-bottom','anchor'].includes(demo.placement)){const i=db.ads.slots.findIndex(s=>s.placement===demo.placement);if(i>=0)db.ads.slots[i]=demo;else db.ads.slots.push(demo)}}saveDb()}
+    const adsVersion=Number(db.ads.version||0),staleDemo=adsVersion<5||db.ads.slots.some(s=>['home-native','article-top','article-middle','article-bottom','anchor'].includes(s.placement)&&(s.placement==='anchor'?(s.enabled===false||s.provider!=='direct'||!String(s.image||'').trim()):!String(s.image||'').trim()));
+    if(staleDemo){for(const demo of fresh.slots){if(['home-native','article-top','article-middle','article-bottom','anchor'].includes(demo.placement)){const i=db.ads.slots.findIndex(s=>s.placement===demo.placement);if(i>=0)db.ads.slots[i]=demo;else db.ads.slots.push(demo)}}db.ads.enabled=true;db.ads.version=5;saveDb()}
     return db.ads
   }
   let adsenseLoading=null;
@@ -679,7 +680,7 @@
     }
     if((s=by('footer-banner'))){const ft=document.querySelector('.p6-footer,footer');putAd(s,ft,'before')}
     if((s=by('anchor'))){
-      const box=makeAd(s);box.classList.add('pv2-ad-anchor');const close=document.createElement('button');close.className='pv2-ad-close';close.type='button';close.textContent='×';close.onclick=()=>box.remove();box.appendChild(close);document.body.appendChild(box)
+      const box=makeAd(s);box.classList.add('pv2-ad-anchor');mountAdContent(box,s);const close=document.createElement('button');close.className='pv2-ad-close';close.type='button';close.setAttribute('aria-label','Tutup iklan');close.textContent='×';close.onclick=()=>box.remove();box.appendChild(close);document.body.appendChild(box)
     }
   }
   window.PV2.showRewardAd=function(onReward){
