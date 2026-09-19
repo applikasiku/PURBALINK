@@ -215,7 +215,16 @@
       const av=document.querySelector('#detailView .art-byline .avatar');if(av)av.textContent=initials(a.author||'Tim PURBALINK');
       const img=document.querySelector('#detailView .art-figure img');if(img){img.src=a.img;img.alt=a.title;}
       const cap=document.querySelector('#detailView .art-figure figcaption');if(cap)cap.textContent=`Dokumentasi PURBALINK · ${a.date}`;
-      const body=document.querySelector('#detailView .art-body');if(body)body.innerHTML=nl2p(a.body||a.summary||'');
+      const body=document.querySelector('#detailView .art-body');if(body){
+        body.innerHTML=nl2p(a.body||a.summary||'');
+        const related=db.articles.filter(x=>x.status==='Terbit'&&String(x.id)!==String(a.id)).sort((x,y)=>Number(y.cat===a.cat)-Number(x.cat===a.cat)||Number(y.views||0)-Number(x.views||0)).slice(0,3);
+        if(related.length){
+          const paragraphs=[...body.querySelectorAll(':scope > p')],after=paragraphs[Math.min(1,Math.max(0,paragraphs.length-1))]||body.firstElementChild;
+          const box=document.createElement('aside');box.className='article-baca-juga';box.innerHTML=`<div class="article-baca-juga-label">BACA JUGA</div><div class="article-baca-juga-list">${related.map(r=>`<button type="button" data-baca-juga="${r.id}"><span class="article-baca-juga-img" style="background-image:url('${esc(r.img)}')"></span><span><small>${esc(r.cat)}</small><b>${esc(r.title)}</b></span></button>`).join('')}</div>`;
+          if(after)after.insertAdjacentElement('afterend',box);else body.appendChild(box);
+          box.querySelectorAll('[data-baca-juga]').forEach(btn=>btn.onclick=()=>window.PV2.openArticle(btn.dataset.bacaJuga));
+        }
+      }
       history.replaceState({articleId:a.id},'',`?article=${encodeURIComponent(a.id)}`);
       showDetail();
       setTimeout(renderAds,0);
