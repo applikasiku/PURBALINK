@@ -9,7 +9,7 @@
   },
   "vars": {
     "MIDTRANS_MODE": "sandbox",
-    "ADMIN_EMAIL": "amelianewsid@gmail.com",
+    "ADMIN_EMAIL": "amelnewsid@gmail.com",
     "AI_PROVIDER_ORDER": "openrouter,groq,gemini,deepseek,mistral,together,openai,anthropic"
   },
   "routes": [
