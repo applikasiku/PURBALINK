@@ -472,3 +472,25 @@ body[data-pv2-page="profile.html"] .chev{font-size:18px}
  body[data-pv2-page="profile.html"] .menu-ic{width:32px;height:32px}
  body[data-pv2-page="profile.html"] .menu-ic img{width:21px;height:21px}
 }
+
+/* ===== PURBALINK V3.4 — exact homepage header parity ===== */
+.pl-unified-head.p6-header{height:auto;background:#fff;border:0;border-bottom:1px solid #e7eaf0;box-shadow:none;padding:0}
+.pl-unified-head .p6-head-row{height:72px;max-width:1180px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between}
+.pl-unified-head .p6-brand{display:flex;align-items:center;gap:9px;min-width:0}
+.pl-unified-head .p6-brand>img{width:44px;height:44px;object-fit:contain;flex:none}
+.pl-unified-head .p6-brand>span{display:flex;align-items:baseline;white-space:nowrap}
+.pl-unified-head .p6-brand b{font-size:22px;line-height:1;font-weight:900;letter-spacing:-.8px}
+.pl-unified-head .p6-head-actions{margin-left:auto;display:flex;align-items:center;gap:5px}
+.pl-unified-head .p6-icon-btn{width:42px;height:42px;padding:0;border:0;background:transparent;border-radius:50%;display:grid;place-items:center;flex:none}
+.pl-unified-head .p6-icon-btn:active{background:#f2f4f7;transform:scale(.96)}
+.pl-unified-head .p6-icon-btn img{width:28px;height:28px;object-fit:contain}
+body[data-pv2-page="profile.html"]>.wrap{padding-top:14px}
+@media(max-width:680px){
+ .pl-unified-head .p6-head-row{height:64px;padding:0 16px}
+ .pl-unified-head .p6-brand>img{width:40px;height:40px}
+ .pl-unified-head .p6-brand b{font-size:20px}
+ .pl-unified-head .p6-head-actions{gap:3px}
+ .pl-unified-head .p6-icon-btn{width:40px;height:40px}
+ .pl-unified-head .p6-icon-btn img{width:27px;height:27px}
+ body[data-pv2-page="profile.html"]>.wrap{padding-top:12px}
+}
