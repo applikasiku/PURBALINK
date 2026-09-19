@@ -138,11 +138,11 @@
       <a href="profile.html" class="bn-item${active('profile.html')}"><svg class="bn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg><span class="bn-label">Profil</span></a>`;
   }
   function sharedDrawerMarkup(){
-    const iconSvg=(symbol,bg='#eef4ff',fg='#0b5ed7')=>'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="'+bg+'"/><text x="24" y="31" text-anchor="middle" font-size="23" font-family="Arial,sans-serif" fill="'+fg+'">'+symbol+'</text></svg>');
     const cats=[
-      ['Nasional',iconSvg('N')],['Internasional',iconSvg('I')],['Daerah',iconSvg('D')],['Politik',iconSvg('P')],['Ekonomi',iconSvg('E')],['Finance',iconSvg('F')],['Hukum',iconSvg('H')],['Teknologi',iconSvg('T')],['Olahraga',iconSvg('O')],['Hiburan',iconSvg('★')],['Gaya Hidup',iconSvg('G')],['Pendidikan',iconSvg('A')],['Kesehatan',iconSvg('+')],['Lingkungan',iconSvg('L')]
+      ['Nasional','fa-flag'],['Internasional','fa-earth-asia'],['Daerah','fa-location-dot'],['Politik','fa-landmark'],['Ekonomi','fa-chart-line'],['Finance','fa-coins'],['Hukum','fa-scale-balanced'],['Teknologi','fa-microchip'],['Olahraga','fa-futbol'],['Hiburan','fa-music'],['Gaya Hidup','fa-leaf'],['Pendidikan','fa-graduation-cap'],['Kesehatan','fa-heart-pulse'],['Lingkungan','fa-tree']
     ];
     const row=(href,icon,title,sub='')=>`<a class="pl-drawer-row" href="${href}"><img src="${icon}" alt=""><span><b>${title}</b>${sub?`<small>${sub}</small>`:''}</span><i>›</i></a>`;
+    const catRow=(name,icon)=>`<a class="pl-drawer-cat" href="index.html?kategori=${encodeURIComponent(name.toLowerCase())}"><span class="pl-cat-icon"><i class="fa-solid ${icon}"></i></span><b>${name}</b><i class="fa-solid fa-chevron-right"></i></a>`;
     return `<div class="pl-drawer-backdrop" data-pl-close></div><aside class="pl-drawer" id="plSharedDrawer" aria-label="Menu PURBALINK">
       <div class="pl-drawer-head"><a href="index.html"><img src="logo-purbalink.png" alt=""><b><span>PURBA</span><em>LINK</em></b></a><button type="button" data-pl-close>×</button></div>
       <section><h3>Menu Utama</h3>
