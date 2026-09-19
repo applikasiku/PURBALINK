@@ -742,3 +742,28 @@ body[data-pv2-page="shop.html"] .shop-hero-product-copy strong{display:block;col
  body[data-pv2-page="shop.html"] .shop-hero{grid-template-columns:minmax(0,1fr) 142px!important;padding:14px!important}
  body[data-pv2-page="shop.html"] .shop-hero h1{font-size:19px!important}
 }
+
+/* ===== PURBALINK V4.8 — Produk Trending list ===== */
+body[data-pv2-page="shop.html"] .shop-trending-section{width:100%;max-width:100%;margin:16px 0 20px;overflow:hidden}
+body[data-pv2-page="shop.html"] .shop-trending-title{margin-bottom:8px!important}
+body[data-pv2-page="shop.html"] .shop-trending-title span{font:700 9.5px/1.2 system-ui;color:#667085;white-space:nowrap}
+body[data-pv2-page="shop.html"] .shop-trending-list{display:grid;grid-template-columns:1fr;gap:7px;width:100%}
+body[data-pv2-page="shop.html"] .shop-trending-item{position:relative;display:grid;grid-template-columns:82px minmax(0,1fr) 30px;gap:10px;align-items:center;width:100%;min-width:0;padding:8px;background:#fff;border:1px solid #e4e9ef;border-radius:12px;overflow:hidden;cursor:pointer}
+body[data-pv2-page="shop.html"] .shop-trending-rank{position:absolute;left:4px;top:4px;z-index:2;background:#e3062c;color:#fff;border-radius:6px;padding:3px 5px;font:800 8px/1 system-ui}
+body[data-pv2-page="shop.html"] .shop-trending-img{position:relative;width:82px;aspect-ratio:1/1;border-radius:9px;background-size:cover;background-position:center;overflow:hidden}
+body[data-pv2-page="shop.html"] .shop-trending-img>span{position:absolute;right:4px;bottom:4px;background:#e3062c;color:#fff;border-radius:5px;padding:3px 4px;font:800 8px/1 system-ui}
+body[data-pv2-page="shop.html"] .shop-trending-info{min-width:0}
+body[data-pv2-page="shop.html"] .shop-trending-info>small{display:block;color:#e3062c;font:800 8px/1.2 system-ui;margin-bottom:3px;text-transform:uppercase}
+body[data-pv2-page="shop.html"] .shop-trending-info h3{margin:0;color:#101828;font-size:12px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+body[data-pv2-page="shop.html"] .shop-trending-rating{margin-top:4px;color:#667085;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body[data-pv2-page="shop.html"] .shop-trending-info strong{display:block;color:#e3062c;font-size:12px;margin-top:4px}
+body[data-pv2-page="shop.html"] .shop-trending-seller{margin-top:2px;color:#98a2b3;font-size:8.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body[data-pv2-page="shop.html"] .shop-trending-open{width:28px;height:34px;border:0;background:#f3f6fa;border-radius:8px;display:grid;place-items:center;padding:0}
+body[data-pv2-page="shop.html"] .shop-trending-open img{width:14px;height:14px;opacity:.65}
+@media(min-width:760px){body[data-pv2-page="shop.html"] .shop-trending-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:390px){
+ body[data-pv2-page="shop.html"] .shop-trending-item{grid-template-columns:74px minmax(0,1fr) 28px;gap:8px;padding:7px}
+ body[data-pv2-page="shop.html"] .shop-trending-img{width:74px}
+ body[data-pv2-page="shop.html"] .shop-trending-info h3{font-size:11px}
+ body[data-pv2-page="shop.html"] .shop-trending-info strong{font-size:11px}
+}
