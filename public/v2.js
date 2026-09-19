@@ -1,6 +1,6 @@
 (()=>{
   'use strict';
-  const VERSION='2.6.0';
+  const VERSION='5.3.0';
   const DB_KEY='purbalink_v2_db';
   const DOMAIN='https://purbalink.web.id';
   let page=(location.pathname.split('/').pop()||'index.html').toLowerCase();
@@ -701,9 +701,19 @@
   }
 
   // PURBALINK V5.0 production runtime: lightweight diagnostics and resilience.
-  window.PURBALINK_VERSION='5.0.0';
+  window.PURBALINK_VERSION='5.3.0';
   window.addEventListener('error',e=>{try{sessionStorage.setItem('pv5_last_error',JSON.stringify({message:String(e.message||'Runtime error').slice(0,300),page,at:Date.now()}))}catch(_){}});
   window.addEventListener('unhandledrejection',e=>{try{sessionStorage.setItem('pv5_last_error',JSON.stringify({message:String(e.reason?.message||e.reason||'Promise error').slice(0,300),page,at:Date.now()}))}catch(_){}});
+  function installRuntimeResilience(){
+    const fallbackIcon='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#eef4ff"/><path d="M17 33h30M32 18v30" stroke="#0b5ed7" stroke-width="5" stroke-linecap="round"/></svg>');
+    document.addEventListener('error',e=>{const img=e.target;if(!(img instanceof HTMLImageElement)||img.dataset.pvFallback)return;img.dataset.pvFallback='1';img.src=(/icons8|flaticon/i.test(img.src||''))?fallbackIcon:'/icon-512.png'},true);
+    window.addEventListener('online',()=>toast('Koneksi kembali online'));
+    window.addEventListener('offline',()=>toast('Anda sedang offline. Konten tersimpan tetap dapat dibuka.'));
+    window.PV2=window.PV2||{};
+    window.PV2.healthCheck=async()=>{try{const r=await fetch('/api/health',{cache:'no-store'});const data=await r.json();sessionStorage.setItem('pv5_health',JSON.stringify({ok:r.ok,data,at:Date.now()}));return data}catch(e){sessionStorage.setItem('pv5_health',JSON.stringify({ok:false,error:String(e.message||e),at:Date.now()}));return null}};
+    setTimeout(()=>window.PV2.healthCheck(),1200);
+  }
+  installRuntimeResilience();
   ensureSharedChrome();
   applyGlobal();
   if(page==='index.html'||page==='purbalink-home.html'||page==='')initHome();
