@@ -235,8 +235,8 @@
         body.innerHTML=nl2p(a.body||a.summary||'');
         const related=db.articles.filter(x=>x.status==='Terbit'&&String(x.id)!==String(a.id)).sort((x,y)=>Number(y.cat===a.cat)-Number(x.cat===a.cat)||Number(y.views||0)-Number(x.views||0)).slice(0,3);
         if(related.length){
-          const paragraphs=[...body.querySelectorAll(':scope > p')],after=paragraphs[Math.min(1,Math.max(0,paragraphs.length-1))]||body.firstElementChild;
-          const box=document.createElement('aside');box.className='article-baca-juga';box.innerHTML=`<div class="article-baca-juga-label">BACA JUGA</div><div class="article-baca-juga-list">${related.map(r=>`<button type="button" data-baca-juga="${r.id}"><span class="article-baca-juga-img" style="background-image:url('${esc(r.img)}')"></span><span><small>${esc(r.cat)}</small><b>${esc(r.title)}</b></span></button>`).join('')}</div>`;
+          const paragraphs=[...body.querySelectorAll(':scope > p')],mid=Math.max(1,Math.floor(paragraphs.length/2)),after=paragraphs[mid-1]||body.firstElementChild;
+          const box=document.createElement('aside');box.className='article-baca-juga article-baca-juga-mid';box.innerHTML=`<div class="article-baca-juga-head"><span><i class="fa-solid fa-newspaper"></i> BACA JUGA</span><small>Artikel terkait</small></div><div class="article-baca-juga-list">${related.map(r=>`<button type="button" data-baca-juga="${r.id}"><span class="article-baca-juga-img" style="background-image:url('${esc(r.img)}')"></span><span><small>${esc(r.cat)}</small><b>${esc(r.title)}</b><em>${readMinutes(r)} menit baca</em></span><i class="fa-solid fa-chevron-right"></i></button>`).join('')}</div>`;
           if(after)after.insertAdjacentElement('afterend',box);else body.appendChild(box);
           box.querySelectorAll('[data-baca-juga]').forEach(btn=>btn.onclick=()=>window.PV2.openArticle(btn.dataset.bacaJuga));
         }
