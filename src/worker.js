@@ -298,6 +298,27 @@ function publicAssetResponse(res, pathname) {
   else if (/\.html$/i.test(pathname) || pathname === '/' || !pathname.includes('.')) headers.set('cache-control','public, max-age=0, must-revalidate');
   return new Response(res.body,{status:res.status,statusText:res.statusText,headers});
 }
+function metaEscape(value=''){return String(value).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+async function articleShareResponse(res,url){
+  if(!url.searchParams.get('article') || !url.searchParams.get('share_title')) return publicAssetResponse(res,url.pathname);
+  const title=cleanText(url.searchParams.get('share_title'),180);
+  const desc=cleanText(url.searchParams.get('share_desc'),300);
+  const image=url.searchParams.get('share_image')||'https://purbalink.web.id/icon-512.png';
+  const articleId=cleanText(url.searchParams.get('article'),80);
+  const canonical='https://purbalink.web.id/?article='+encodeURIComponent(articleId);
+  let html=await res.text();
+  html=html.replace(/<title>[\s\S]*?<\/title>/i,'<title>'+metaEscape(title)+' — PURBALINK</title>')
+    .replace(/<meta name="description"[^>]*>/i,'<meta name="description" content="'+metaEscape(desc)+'">')
+    .replace(/<link rel="canonical"[^>]*>/i,'<link rel="canonical" href="'+metaEscape(canonical)+'">')
+    .replace(/<meta property="og:type"[^>]*>/i,'<meta property="og:type" content="article">')
+    .replace(/<meta property="og:title"[^>]*>/i,'<meta property="og:title" content="'+metaEscape(title)+'">')
+    .replace(/<meta property="og:description"[^>]*>/i,'<meta property="og:description" content="'+metaEscape(desc)+'">')
+    .replace(/<meta property="og:url"[^>]*>/i,'<meta property="og:url" content="'+metaEscape(canonical)+'">')
+    .replace(/<meta property="og:image"[^>]*>/i,'<meta property="og:image" content="'+metaEscape(image)+'"><meta property="og:image:alt" content="'+metaEscape(title)+'"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">')
+    .replace(/<meta name="twitter:card"[^>]*>/i,'<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="'+metaEscape(title)+'"><meta name="twitter:description" content="'+metaEscape(desc)+'"><meta name="twitter:image" content="'+metaEscape(image)+'">');
+  const headers=securityHeaders(new Headers(res.headers));headers.set('content-type','text/html; charset=UTF-8');headers.set('cache-control','public, max-age=0, must-revalidate');
+  return new Response(html,{status:res.status,statusText:res.statusText,headers});
+}
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -354,7 +375,7 @@ export default {
       }
 
       // Public static application.
-      if (isPublicHost) return publicAssetResponse(await env.ASSETS.fetch(request), url.pathname);
+      if (isPublicHost) { const asset=await env.ASSETS.fetch(request); return (url.pathname==='/'||url.pathname==='/index.html') ? articleShareResponse(asset,url) : publicAssetResponse(asset,url.pathname); }
 
       return new Response('Not Found', { status: 404 });
     } catch (error) {
