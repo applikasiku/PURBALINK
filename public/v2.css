@@ -445,3 +445,30 @@ body[data-pv2-page]:not([data-pv2-page="index.html"])>.pl-global-header{display:
 .pl-drawer-row{width:100%;min-height:52px;display:grid;grid-template-columns:36px minmax(0,1fr) 16px;gap:10px;align-items:center;border:0;border-bottom:1px solid #eef0f3;background:#fff;padding:7px 2px;text-align:left;color:#101828}.pl-drawer-row:last-child{border-bottom:0}.pl-drawer-row>img{width:28px;height:28px;object-fit:contain}.pl-drawer-row>span{min-width:0}.pl-drawer-row b{display:block;font-size:12.5px;line-height:1.25}.pl-drawer-row small{display:block;font-size:10.5px;color:#667085;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pl-drawer-row i{font-style:normal;color:#98a2b3;font-size:19px;text-align:center}
 .pl-cat-list{display:grid;grid-template-columns:1fr 1fr;column-gap:12px}.pl-cat-list .pl-drawer-row{grid-template-columns:30px minmax(0,1fr) 12px;min-height:46px}.pl-cat-list .pl-drawer-row>img{width:24px;height:24px}.pl-cat-list .pl-drawer-row b{font-size:11.5px}
 @media(max-width:680px){.pl-unified-head{height:64px}.pl-u-brand>img{width:38px;height:38px}.pl-u-brand b{font-size:19px}.pl-u-actions>a,.pl-u-actions>button{width:38px;height:38px}.pl-u-actions img{width:27px;height:27px}.pl-drawer{width:min(360px,94vw)}.pl-drawer section{padding-left:14px;padding-right:14px}}
+
+/* ===== PURBALINK V3.3 — compact profile page ===== */
+body[data-pv2-page="profile.html"]{background:#f6f8fb;padding-bottom:84px}
+body[data-pv2-page="profile.html"]>.wrap{max-width:680px;padding:16px 16px 28px}
+body[data-pv2-page="profile.html"] .guest-card,body[data-pv2-page="profile.html"] .profile-card{margin-top:0;border:1px solid #e7ebf0;box-shadow:0 5px 18px rgba(16,24,40,.055);border-radius:14px}
+body[data-pv2-page="profile.html"] .guest-card{padding:20px 18px}
+body[data-pv2-page="profile.html"] .guest-card .pc-avatar{width:50px;height:50px;font-size:17px;margin-bottom:8px!important}
+body[data-pv2-page="profile.html"] .guest-card p{max-width:430px;margin:5px auto 15px;line-height:1.45}
+body[data-pv2-page="profile.html"] .guest-actions{max-width:430px;margin:auto}
+body[data-pv2-page="profile.html"] .guest-actions a{height:42px}
+body[data-pv2-page="profile.html"] .menu-section{margin-top:17px}
+body[data-pv2-page="profile.html"] .menu-label{font-size:11px;margin:0 3px 7px}
+body[data-pv2-page="profile.html"] .menu-card{border:1px solid #e7ebf0;border-radius:13px;box-shadow:0 3px 12px rgba(16,24,40,.025)}
+body[data-pv2-page="profile.html"] .menu-item{min-height:54px;padding:9px 13px;gap:11px;font-size:13px}
+body[data-pv2-page="profile.html"] .menu-ic{width:34px;height:34px;background:#f7f9fc!important;color:inherit!important}
+body[data-pv2-page="profile.html"] .menu-ic img{width:23px;height:23px;object-fit:contain}
+body[data-pv2-page="profile.html"] .chev{font-size:18px}
+@media(max-width:680px){
+ body[data-pv2-page="profile.html"]>.wrap{padding:12px 14px 26px}
+ body[data-pv2-page="profile.html"] .guest-card{padding:17px 14px}
+ body[data-pv2-page="profile.html"] .guest-card .pc-avatar{width:46px;height:46px}
+ body[data-pv2-page="profile.html"] .guest-actions{gap:8px}
+ body[data-pv2-page="profile.html"] .guest-actions a{height:40px;font-size:12.5px}
+ body[data-pv2-page="profile.html"] .menu-item{min-height:50px;padding:8px 12px;font-size:12.5px}
+ body[data-pv2-page="profile.html"] .menu-ic{width:32px;height:32px}
+ body[data-pv2-page="profile.html"] .menu-ic img{width:21px;height:21px}
+}
