@@ -1,4 +1,26 @@
 <!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover"><title>Loker — PURBALINK</title><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#093A8A"><link rel="apple-touch-icon" href="icon-192.png"><link rel="stylesheet" href="v2.css"></head><body>
-<div id="listView"><section class="jobs-hero"><div class="jobs-wrap"><h1>Temukan pekerjaan yang tepat</h1><p>Lowongan lokal PURBALINK + pencarian live Jooble untuk Indonesia.</p><div class="jobs-search-card"><label class="jobs-field"><span>⌕</span><input id="jobKeyword" placeholder="Posisi, keahlian, atau perusahaan" value="lowongan"></label><label class="jobs-field"><span>⌖</span><input id="jobLocation" placeholder="Kota atau wilayah" value="Purbalingga"></label><button id="jobSearchBtn">Cari</button></div><div class="job-filter-row"><button class="job-filter-chip active" data-filter="Semua">Semua</button><button class="job-filter-chip" data-filter="Terbaru">Terbaru</button><button class="job-filter-chip" data-filter="Full Time">Full Time</button><button class="job-filter-chip" data-filter="Part Time">Part Time</button><button class="job-filter-chip" data-filter="Magang">Magang</button><button class="job-filter-chip" data-filter="WFH">Remote / WFH</button></div><div class="job-source-note" id="jobSourceNote">Menyiapkan lowongan…</div></div></section><main class="jobs-main"><div class="jobs-wrap jobs-layout"><aside class="jobs-aside"><h3>Pencarian lebih relevan</h3><p>Gunakan nama posisi dan lokasi yang spesifik. Lowongan eksternal dibuka pada situs sumber agar informasi aplikasi tetap terbaru.</p></aside><section><div class="result-count" id="resultCount">0 lowongan ditemukan</div><div class="job-list" id="jobList"></div></section></div></main></div>
+<div id="listView">
+  <section class="job-app-hero">
+    <div class="job-app-wrap">
+      <div class="job-greeting"><div class="job-user-avatar">P</div><div><small>Selamat datang</small><b>Temukan pekerjaan impianmu</b></div></div>
+      <div class="job-search-modern">
+        <img src="https://img.icons8.com/ios/50/search--v1.png" alt="">
+        <input id="jobKeyword" placeholder="Cari posisi atau perusahaan" value="">
+        <input id="jobLocation" type="hidden" value="Purbalingga">
+        <button id="jobSearchBtn" type="button">Cari</button>
+      </div>
+    </div>
+  </section>
+  <main class="job-feed">
+    <div class="job-app-wrap">
+      <div class="job-feed-head"><div><h1>Rekomendasi</h1><p>Lowongan terbaru untukmu</p></div><span class="job-live-pill" id="jobSourceNote">Menghubungkan Jooble…</span></div>
+      <div class="job-filter-row">
+        <button class="job-filter-chip active" data-filter="Semua">Semua</button><button class="job-filter-chip" data-filter="Terbaru">Baru untukmu</button><button class="job-filter-chip" data-filter="Full Time">Full time</button><button class="job-filter-chip" data-filter="Part Time">Part time</button><button class="job-filter-chip" data-filter="Magang">Magang</button><button class="job-filter-chip" data-filter="WFH">Remote</button>
+      </div>
+      <div class="result-count" id="resultCount">Menyiapkan lowongan…</div>
+      <div class="job-list" id="jobList"></div>
+    </div>
+  </main>
+</div>
 <div id="detailView" style="display:none"><div class="jd-wrap"><a class="tk-back" href="#" onclick="showList();return false">← Kembali ke hasil pencarian</a><div class="jd-card" id="jdCard"></div></div></div>
 <nav class="bottomnav"></nav><script src="v2.js"></script></body></html>
