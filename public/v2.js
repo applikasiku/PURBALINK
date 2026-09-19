@@ -207,10 +207,20 @@
     let q='',cat='SEMUA';
     function published(){return db.articles.filter(a=>a.status==='Terbit');}
     function filtered(){return published().filter(a=>(cat==='SEMUA'||a.cat.toUpperCase()===cat)&&(!q||`${a.title} ${a.summary} ${a.author}`.toLowerCase().includes(q)));}
+    function readMinutes(a){const words=String(a.body||a.summary||'').trim().split(/\s+/).filter(Boolean).length;return Math.max(1,Math.ceil(words/220))}
     function renderCards(){
       const list=filtered();
       if(!grid)return;
-      grid.innerHTML=list.length?list.map(a=>`<div class="card" data-article="${a.id}" onclick="PV2.openArticle(${a.id})"><div class="card-img" style="background-image:url('${esc(a.img)}')"></div><div class="card-body"><span class="cat">${esc(a.cat)}</span><h3>${esc(a.title)}</h3><div class="meta">${esc(a.date)}</div></div></div>`).join(''):`<div class="pv2-search-empty" style="grid-column:1/-1">Tidak ada berita yang cocok.</div>`;
+      grid.innerHTML=list.length?list.map(a=>`<article class="card pv5-news-card" data-article="${a.id}" onclick="PV2.openArticle(${a.id})"><div class="card-img" style="background-image:url('${esc(a.img)}')"><span class="pv5-card-cat">${esc(a.cat)}</span></div><div class="card-body"><h3>${esc(a.title)}</h3><p>${esc(a.summary||'')}</p><div class="meta">${esc(a.date)} · ${readMinutes(a)} menit baca</div></div></article>`).join(''):`<div class="pv2-search-empty" style="grid-column:1/-1">Tidak ada berita yang cocok.</div>`;
+    }
+    function renderEditorialHome(){
+      const pub=published().slice().sort((a,b)=>Number(b.views||0)-Number(a.views||0));if(!pub.length)return;
+      const hero=pub[0],side=pub.slice(1,3),quick=pub.slice(3,7);
+      const main=document.querySelector('.p6-hero-main');if(main){main.dataset.article=hero.id;main.onclick=()=>PV2.openArticle(hero.id);main.innerHTML=`<div class="p6-hero-img" style="background-image:url('${esc(hero.img)}')"><div class="p6-hero-overlay"><span class="p6-kicker">${hero.breaking?'Breaking News':'Berita Utama'}</span><h1>${esc(hero.title)}</h1><p class="p6-hero-excerpt">${esc(hero.summary||'')}</p><span class="p6-time">${esc(hero.date)} · ${readMinutes(hero)} menit baca</span></div></div>`;}
+      const sideBox=document.querySelector('.p6-hero-side');if(sideBox)sideBox.innerHTML=side.map(a=>`<article class="p6-hero-side-card" data-article="${a.id}"><div class="p6-hero-side-img" style="background-image:url('${esc(a.img)}')"></div><div><span>${esc(a.cat)}</span><h3>${esc(a.title)}</h3><p>${esc(a.summary||'')}</p></div></article>`).join('');
+      sideBox?.querySelectorAll('[data-article]').forEach(el=>el.onclick=()=>PV2.openArticle(el.dataset.article));
+      const quickBox=document.querySelector('.p6-quick');if(quickBox)quickBox.innerHTML=quick.map(a=>`<article class="p6-mini" data-article="${a.id}"><div class="p6-mini-img" style="background-image:url('${esc(a.img)}')"></div><span class="pv5-mini-cat">${esc(a.cat)}</span><h3>${esc(a.title)}</h3><span>${esc(a.date)} · ${readMinutes(a)} menit</span></article>`).join('');
+      quickBox?.querySelectorAll('[data-article]').forEach(el=>el.onclick=()=>PV2.openArticle(el.dataset.article));
     }
     window.PV2.openArticle=id=>{
       const a=db.articles.find(x=>String(x.id)===String(id));if(!a)return;a.views=Number(a.views||0)+1;saveDb();
@@ -230,6 +240,12 @@
           box.querySelectorAll('[data-baca-juga]').forEach(btn=>btn.onclick=()=>window.PV2.openArticle(btn.dataset.bacaJuga));
         }
       }
+      const tags=document.querySelector('#detailView .article-tags');if(tags){const keywords=[a.cat,'Purbalingga','PURBALINK'];tags.innerHTML='<div><b>Tag:</b>'+keywords.map(k=>'<a href="?kategori='+encodeURIComponent(k.toLowerCase())+'">'+esc(k)+'</a>').join('')+'</div><div class="article-hashtags"><b>Tagar:</b><a href="#">#Purbalink</a><a href="#">#'+esc(a.cat.replace(/\s+/g,''))+'</a></div>'}
+      let more=document.getElementById('pv5ReadNext');if(!more){more=document.createElement('section');more.id='pv5ReadNext';more.className='pv5-read-next';const anchor=document.querySelector('#detailView .article-tags');anchor?.insertAdjacentElement('afterend',more)}
+      const next=db.articles.filter(x=>x.status==='Terbit'&&String(x.id)!==String(a.id)).sort((x,y)=>Number(y.cat===a.cat)-Number(x.cat===a.cat)||Number(y.views||0)-Number(x.views||0)).slice(0,4);
+      if(more){more.innerHTML='<div class="pv5-section-head"><h2>Berita Terkait</h2><span>Untuk Anda</span></div><div class="pv5-read-next-grid">'+next.map(n=>'<article data-next="'+n.id+'"><div style="background-image:url(\''+esc(n.img)+'\')"></div><small>'+esc(n.cat)+'</small><b>'+esc(n.title)+'</b><span>'+esc(n.date)+'</span></article>').join('')+'</div>';more.querySelectorAll('[data-next]').forEach(el=>el.onclick=()=>PV2.openArticle(el.dataset.next))}
+      document.title=a.title+' — PURBALINK';
+      document.querySelector('meta[name="description"]')?.setAttribute('content',a.summary||String(a.body||'').slice(0,160));
       history.replaceState({articleId:a.id},'',`?article=${encodeURIComponent(a.id)}`);
       showDetail();
       setTimeout(renderAds,0);
@@ -238,6 +254,7 @@
     document.querySelectorAll('.tabs .tab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.tabs .tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');cat=(t.textContent.trim()==='Semua'?'SEMUA':t.textContent.trim().toUpperCase());renderCards()}));
     document.querySelectorAll('.navrow a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.navrow a').forEach(x=>x.classList.remove('active'));a.classList.add('active');cat=a.textContent.trim().toUpperCase();renderCards();document.querySelector('#newsGrid')?.scrollIntoView({behavior:'smooth',block:'start'})}));
     renderCards();
+    renderEditorialHome();
 
     function trendingItems(){
       const cfg=Object.assign({},seed.trending,db.trending||{});
