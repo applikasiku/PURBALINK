@@ -76,7 +76,7 @@ function dashboard(){
  '<button onclick="AdminV5.productForm()" title="Produk"><span>🛍️</span><small>Produk</small></button>'+
  '<button onclick="switchTab(\'shop-pesanan\')" title="Pesanan"><span>📦</span><small>Pesanan</small></button>'+
  '<button onclick="switchTab(\'video-konten\')" title="Video"><span>🎬</span><small>Video</small></button>'+
- '<button onclick="switchTab(\'komentar\')" title="Komentar"><span>💬</span><small>Komentar</small></button>'+
+ '<button onclick="switchTab(\'komentar\')" title="Komentar"><span>💬</span><small>Komentar</small></button>'+\n '<button onclick="switchTab(\'trending\')" title="Trending"><span>📈</span><small>Trending</small></button>'+
  '<button onclick="switchTab(\'media-interaksi\')" title="Sticker & GIF"><span>🧩</span><small>Sticker</small></button>'+
  '<button onclick="switchTab(\'iklan\')" title="Iklan & AdSense"><span>📣</span><small>Iklan</small></button>'+
  '<button onclick="switchTab(\'pengguna\')" title="Pengguna"><span>👥</span><small>User</small></button>'+
@@ -93,14 +93,63 @@ function articlePage(){
  return '<div class="article-admin-head"><div><h2>Manajemen Artikel / Berita</h2><p>Kelola artikel yang langsung dipakai frontend PURBALINK.</p></div><div class="admin-v5-inline-actions"><button class="a-btn primary" onclick="AdminV5.articleForm()">+ Artikel Baru</button><button class="a-btn primary" onclick="openArticleGenerator()">AI Generator</button></div></div><div class="tabbar" id="articleTabbar"><button class="active" data-article-mode="list" onclick="switchArticleSubtab(this,\'list\')">Daftar Artikel</button><button data-article-mode="generator" onclick="switchArticleSubtab(this,\'generator\')">AI Article Generator</button></div><div id="articleSubtabList">'+table('Semua Artikel',['Judul','Kategori','Status','Tanggal','Aksi'],articleRows())+'</div><div id="articleSubtabGenerator" style="display:none">'+(window.articleGeneratorHTML?articleGeneratorHTML():'')+'</div>'
 }
 function articleForm(id){
- id=id||'';var d=D(),a=d.articles.find(function(x){return String(x.id)===String(id)})||{title:'',cat:'DAERAH',summary:'',date:new Date().toLocaleString('id-ID'),img:'',author:'Tim PURBALINK',status:'Draft',body:'',breaking:false};
+ id=id||'';var d=D(),a=d.articles.find(function(x){return String(x.id)===String(id)})||{title:'',cat:'DAERAH',summary:'',date:new Date().toLocaleString('id-ID'),img:'',author:'Tim PURBALINK',status:'Draft',body:'',breaking:false,views:0};
  var cats=['DAERAH','NASIONAL','POLITIK','EKONOMI','BISNIS','TEKNOLOGI','OLAHRAGA','GAYA HIDUP','HIBURAN','OTOMOTIF'],statuses=['Draft','Review','Terbit'],co='',so='';
  cats.forEach(function(x){co+='<option '+(x===a.cat?'selected':'')+'>'+x+'</option>'});statuses.forEach(function(x){so+='<option '+(x===a.status?'selected':'')+'>'+x+'</option>'});
- var h='<form id="v5ArticleForm"><div class="admin-v5-form"><label class="full">Judul<input name="title" required value="'+E(a.title)+'"></label><label>Kategori<select name="cat">'+co+'</select></label><label>Status<select name="status">'+so+'</select></label><label>Penulis<input name="author" value="'+E(a.author||'Tim PURBALINK')+'"></label><label>Tanggal<input name="date" value="'+E(a.date||'')+'"></label><label class="full">URL Gambar<input name="img" value="'+E(a.img||'')+'"></label><label class="full">Ringkasan<textarea name="summary">'+E(a.summary||'')+'</textarea></label><label class="full">Isi Artikel<textarea name="body" class="tall">'+E(a.body||'')+'</textarea></label><label class="check full"><input type="checkbox" name="breaking" '+(a.breaking?'checked':'')+'> Breaking News</label></div><div class="admin-v5-actions"><button type="button" class="a-btn ghost" data-close>Batal</button><button class="a-btn primary">Simpan</button></div></form>';
- openM(id?'Edit Artikel':'Artikel Baru',h,function(m){m.querySelector('#v5ArticleForm').onsubmit=function(e){e.preventDefault();var x=FD(e.currentTarget);x.breaking=e.currentTarget.breaking.checked;if(id)Object.assign(a,x);else d.articles.unshift(Object.assign(x,{id:Date.now()}));SD();closeM();toast('Artikel tersimpan');refresh('artikel')}})
+ var h='<form id="v5ArticleForm"><div class="admin-v5-form"><label class="full">Judul<input name="title" required value="'+E(a.title)+'"></label><label>Kategori<select name="cat">'+co+'</select></label><label>Status<select name="status">'+so+'</select></label><label>Penulis<input name="author" value="'+E(a.author||'Tim PURBALINK')+'"></label><label>Tanggal<input name="date" value="'+E(a.date||'')+'"></label><label class="full">URL Gambar<input name="img" value="'+E(a.img||'')+'"></label><label class="full">Ringkasan<textarea name="summary">'+E(a.summary||'')+'</textarea></label><label class="full">Isi Artikel<textarea name="body" class="tall">'+E(a.body||'')+'</textarea></label><label>Jumlah dibaca<input name="views" type="number" min="0" value="'+Number(a.views||0)+'"></label><label class="check"><input type="checkbox" name="breaking" '+(a.breaking?'checked':'')+'> Breaking News</label></div><div class="admin-v5-actions"><button type="button" class="a-btn ghost" data-close>Batal</button><button class="a-btn primary">Simpan</button></div></form>';
+ openM(id?'Edit Artikel':'Artikel Baru',h,function(m){m.querySelector('#v5ArticleForm').onsubmit=function(e){e.preventDefault();var x=FD(e.currentTarget);x.breaking=e.currentTarget.breaking.checked;x.views=Math.max(0,Number(x.views)||0);if(id)Object.assign(a,x);else d.articles.unshift(Object.assign(x,{id:Date.now()}));SD();closeM();toast('Artikel tersimpan');refresh('artikel')}})
 }
 function toggleArticle(id){var a=D().articles.find(function(x){return String(x.id)===String(id)});if(!a)return;a.status=a.status==='Terbit'?'Draft':'Terbit';SD();toast(a.status==='Terbit'?'Artikel diterbitkan':'Artikel di-unpublish');refresh('artikel')}
 function deleteArticle(id){confirmA('Hapus artikel ini?',function(){var d=D();d.articles=d.articles.filter(function(x){return String(x.id)!==String(id)});SD();toast('Artikel dihapus');refresh('artikel')})}
+
+
+function ensureTrending(){
+ var d=D();if(!d)return {mode:'auto',limit:5,minViews:0,manualIds:[],showViews:false};
+ d.trending=Object.assign({mode:'auto',limit:5,minViews:0,manualIds:[],showViews:false},d.trending||{});
+ return d.trending
+}
+function trendingRanked(){
+ var d=D(),cfg=ensureTrending(),pub=(d.articles||[]).filter(function(a){return a.status==='Terbit'});
+ function score(a){return Number(a.views||0)+(a.breaking?5000:0)}
+ var manual=(cfg.manualIds||[]).map(function(id){return pub.find(function(a){return String(a.id)===String(id)})}).filter(Boolean);
+ var rest=pub.filter(function(a){return !manual.some(function(m){return String(m.id)===String(a.id)})}).sort(function(a,b){return score(b)-score(a)});
+ if(cfg.mode==='manual')return manual;
+ if(cfg.mode==='mixed')return manual.concat(rest);
+ return pub.slice().sort(function(a,b){return score(b)-score(a)})
+}
+function trendingPage(){
+ var cfg=ensureTrending(),ranked=trendingRanked(),rows='';
+ ranked.forEach(function(a,i){
+  var manual=(cfg.manualIds||[]).some(function(id){return String(id)===String(a.id)});
+  rows+='<tr><td><b>#'+(i+1)+'</b></td><td>'+E(a.title)+'</td><td>'+Number(a.views||0).toLocaleString('id-ID')+'</td><td>'+(a.breaking?'Breaking':'Normal')+'</td><td><span class="status '+(manual?'st-terbit':'st-review')+'">'+(manual?'Manual':'Otomatis')+'</span></td><td class="row-actions"><button onclick="AdminV5.toggleTrending(\\''+a.id+'\\')">'+(manual?'Lepas Manual':'Jadikan Manual')+'</button><button onclick="AdminV5.editViews(\\''+a.id+'\\')">Atur Views</button></td></tr>'
+ });
+ return '<div class="panel"><div class="panel-head"><div><h2>Pengaturan Trending</h2><p class="admin-v5-sub">Trending otomatis berdasarkan jumlah dibaca. Berita Breaking mendapat bobot tambahan agar berita yang sedang ramai lebih cepat naik.</p></div><button class="a-btn primary" onclick="AdminV5.saveTrending()">Simpan</button></div>'+
+ '<div class="settings-grid"><div class="field"><label>Mode Trending</label><select id="trendMode"><option value="auto" '+(cfg.mode==='auto'?'selected':'')+'>Otomatis — paling banyak dibaca</option><option value="mixed" '+(cfg.mode==='mixed'?'selected':'')+'>Campuran — manual + otomatis</option><option value="manual" '+(cfg.mode==='manual'?'selected':'')+'>Manual — admin pilih sendiri</option></select></div>'+
+ '<div class="field"><label>Jumlah yang tampil</label><input id="trendLimit" type="number" min="1" max="10" value="'+Number(cfg.limit||5)+'"></div>'+
+ '<div class="field"><label>Minimum jumlah dibaca</label><input id="trendMinViews" type="number" min="0" value="'+Number(cfg.minViews||0)+'"></div>'+
+ '<div class="field"><label>Tampilkan jumlah dibaca</label><select id="trendShowViews"><option value="false" '+(!cfg.showViews?'selected':'')+'>Tidak</option><option value="true" '+(cfg.showViews?'selected':'')+'>Ya</option></select></div></div></div>'+
+ '<div style="margin-top:16px">'+table('Ranking Berita Trending',['Rank','Berita','Dibaca','Tipe','Sumber','Aksi'],rows)+'</div>'
+}
+function saveTrending(){
+ var cfg=ensureTrending();
+ cfg.mode=document.getElementById('trendMode').value;
+ cfg.limit=Math.max(1,Math.min(10,Number(document.getElementById('trendLimit').value)||5));
+ cfg.minViews=Math.max(0,Number(document.getElementById('trendMinViews').value)||0);
+ cfg.showViews=document.getElementById('trendShowViews').value==='true';
+ SD();toast('Pengaturan trending tersimpan');refresh('trending')
+}
+function toggleTrending(id){
+ var cfg=ensureTrending(),arr=cfg.manualIds||[];
+ var idx=arr.findIndex(function(x){return String(x)===String(id)});
+ if(idx>=0)arr.splice(idx,1);else arr.unshift(id);
+ cfg.manualIds=arr;SD();toast(idx>=0?'Dilepas dari trending manual':'Ditambahkan ke trending manual');refresh('trending')
+}
+function editViews(id){
+ var a=(D().articles||[]).find(function(x){return String(x.id)===String(id)});if(!a)return;
+ openM('Atur Jumlah Dibaca','<form id="viewForm"><div class="admin-v5-form"><label class="full">Berita<input value="'+E(a.title)+'" readonly></label><label class="full">Jumlah dibaca<input name="views" type="number" min="0" value="'+Number(a.views||0)+'"></label></div><div class="admin-v5-actions"><button type="button" class="a-btn ghost" data-close>Batal</button><button class="a-btn primary">Simpan</button></div></form>',function(m){
+  m.querySelector('form').onsubmit=function(e){e.preventDefault();a.views=Math.max(0,Number(FD(e.currentTarget).views)||0);SD();closeM();toast('Jumlah dibaca diperbarui');refresh('trending')}
+ })
+}
 
 function commentsPage(){var r='';A.comments.forEach(function(c){r+='<tr><td>'+E(c.name)+'</td><td>'+E(c.text)+'</td><td>'+E(c.article)+'</td><td>'+E(c.time)+'</td><td><span class="status '+SC(c.status)+'">'+E(c.status)+'</span></td><td class="row-actions"><button onclick="AdminV5.toggleComment(\''+c.id+'\')">'+(c.status==='Tayang'?'Sembunyikan':'Tampilkan')+'</button><button onclick="AdminV5.deleteComment(\''+c.id+'\')">Hapus</button></td></tr>'});return table('Semua Komentar',['Pengguna','Komentar','Artikel','Waktu','Status','Aksi'],r)}
 function toggleComment(id){var c=A.comments.find(function(x){return x.id===id});if(!c)return;c.status=c.status==='Tayang'?'Disembunyikan':'Tayang';SA();toast('Status komentar diperbarui');refresh('komentar')}
@@ -392,10 +441,10 @@ function messages(){openM('Pesan Admin','<div class="admin-v5-empty">Kotak pesan
 
 function switchTabV5(tab){
  window.__adminV5Tab=tab;document.querySelectorAll('.sb-item').forEach(function(el){el.classList.toggle('active',el.dataset.tab===tab)});
- var titles={dashboard:'Dashboard',artikel:'Artikel / Berita',komentar:'Komentar',moderasi:'Moderasi',laporan:'Laporan Komentar',reaksi:'Reaction',rating:'Rating',pengguna:'User Activity',gift:'Gift Author',transaksi:'Transaksi',saldo:'Saldo Author',withdrawal:'Withdrawal',iklan:'Iklan & AdSense','loker-list':'Lowongan Kerja','loker-pelamar':'Pelamar Loker','shop-produk':'Produk','shop-pesanan':'Pesanan','shop-toko':'Toko / Seller','video-konten':'Konten Video','video-moderasi':'Moderasi Video',statistik:'Statistik',fitur:'Kustomisasi Fitur',pengaturan:'Pengaturan Website','media-interaksi':'Sticker & GIF',integrasi:'API & Integrasi'};
+ var titles={dashboard:'Dashboard',artikel:'Artikel / Berita',trending:'Berita Trending',komentar:'Komentar',moderasi:'Moderasi',laporan:'Laporan Komentar',reaksi:'Reaction',rating:'Rating',pengguna:'User Activity',gift:'Gift Author',transaksi:'Transaksi',saldo:'Saldo Author',withdrawal:'Withdrawal',iklan:'Iklan & AdSense','loker-list':'Lowongan Kerja','loker-pelamar':'Pelamar Loker','shop-produk':'Produk','shop-pesanan':'Pesanan','shop-toko':'Toko / Seller','video-konten':'Konten Video','video-moderasi':'Moderasi Video',statistik:'Statistik',fitur:'Kustomisasi Fitur',pengaturan:'Pengaturan Website','media-interaksi':'Sticker & GIF',integrasi:'API & Integrasi'};
  document.getElementById('pageTitle').textContent=titles[tab]||tab;document.getElementById('pageRange').textContent=tab==='dashboard'?'Ringkasan aktivitas PURBALINK · '+today():'';
  var h='';switch(tab){
-  case'dashboard':h=dashboard();break;case'artikel':h=articlePage();break;case'komentar':h=commentsPage();break;case'moderasi':h=moderationPage('comment');break;case'laporan':h=reportsPage();break;
+  case'dashboard':h=dashboard();break;case'artikel':h=articlePage();break;case'trending':h=trendingPage();break;case'komentar':h=commentsPage();break;case'moderasi':h=moderationPage('comment');break;case'laporan':h=reportsPage();break;
   case'loker-list':h=jobsPage();break;case'loker-pelamar':h=applicantsPage();break;case'shop-produk':h=productsPage();break;case'shop-pesanan':h=ordersPage();break;case'shop-toko':h=sellersPage();break;
   case'video-konten':h=videosPage();break;case'video-moderasi':h=moderationPage('video');break;case'pengguna':h=usersPage();break;case'gift':case'transaksi':h=giftsPage();break;case'saldo':h=balancesPage();break;case'withdrawal':h=withdrawalsPage();break;
   case'iklan':h=adsPage();break;case'media-interaksi':h=mediaPage();break;case'fitur':h=featuresPage();break;case'pengaturan':h=settingsPage();break;case'integrasi':h=integrationsPage();break;
@@ -404,7 +453,7 @@ function switchTabV5(tab){
  document.getElementById('content').innerHTML=h;if(tab==='dashboard'||tab==='statistik')setTimeout(function(){if(window.drawChart)drawChart()},0);if(tab==='integrasi')setTimeout(checkIntegrations,100);if(window.closeAdminSidebar)closeAdminSidebar()
 }
 
-window.AdminV5={articleForm:articleForm,toggleArticle:toggleArticle,deleteArticle:deleteArticle,toggleComment:toggleComment,deleteComment:deleteComment,moderate:moderate,toggleReport:toggleReport,jobForm:jobForm,toggleJob:toggleJob,deleteJob:deleteJob,viewApplicant:viewApplicant,advanceApplicant:advanceApplicant,productForm:productForm,deleteProduct:deleteProduct,advanceOrder:advanceOrder,viewOrder:viewOrder,toggleSeller:toggleSeller,videoForm:videoForm,deleteVideo:deleteVideo,toggleUser:toggleUser,processWithdrawal:processWithdrawal,adForm:adForm,toggleAd:toggleAd,previewAd:previewAd,saveAds:saveAds,stickerForm:stickerForm,openBulkStickerUpload:openBulkStickerUpload,renameStickerPackage:renameStickerPackage,deleteStickerPackage:deleteStickerPackage,toggleSticker:toggleSticker,deleteSticker:deleteSticker,saveMedia:saveMedia,saveFeatures:saveFeatures,saveSettings:saveSettings,checkIntegrations:checkIntegrations,notifications:notifications,messages:messages};
+window.AdminV5={articleForm:articleForm,toggleArticle:toggleArticle,deleteArticle:deleteArticle,saveTrending:saveTrending,toggleTrending:toggleTrending,editViews:editViews,toggleComment:toggleComment,deleteComment:deleteComment,moderate:moderate,toggleReport:toggleReport,jobForm:jobForm,toggleJob:toggleJob,deleteJob:deleteJob,viewApplicant:viewApplicant,advanceApplicant:advanceApplicant,productForm:productForm,deleteProduct:deleteProduct,advanceOrder:advanceOrder,viewOrder:viewOrder,toggleSeller:toggleSeller,videoForm:videoForm,deleteVideo:deleteVideo,toggleUser:toggleUser,processWithdrawal:processWithdrawal,adForm:adForm,toggleAd:toggleAd,previewAd:previewAd,saveAds:saveAds,stickerForm:stickerForm,openBulkStickerUpload:openBulkStickerUpload,renameStickerPackage:renameStickerPackage,deleteStickerPackage:deleteStickerPackage,toggleSticker:toggleSticker,deleteSticker:deleteSticker,saveMedia:saveMedia,saveFeatures:saveFeatures,saveSettings:saveSettings,checkIntegrations:checkIntegrations,notifications:notifications,messages:messages};
 window.switchTab=window.switchTabV5=switchTabV5;
 document.querySelectorAll('.sb-item[data-tab]').forEach(function(el){el.onclick=function(){switchTabV5(el.dataset.tab)}});
 var topBtns=document.querySelectorAll('.topbar .icon-btn');if(topBtns[1])topBtns[1].onclick=notifications;if(topBtns[2])topBtns[2].onclick=messages;
