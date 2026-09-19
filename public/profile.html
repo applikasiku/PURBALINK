@@ -95,19 +95,19 @@ button{font-family:inherit;cursor:pointer;}
   <div class="menu-section">
     <div class="menu-label">Pengaturan</div>
     <div class="menu-card">
-      <div class="menu-item"><div class="menu-ic" style="background:var(--teal-50);color:var(--teal-700);">👤</div>Edit Profil<span class="chev">›</span></div>
-      <div class="menu-item"><div class="menu-ic" style="background:var(--teal-50);color:var(--teal-700);">🔒</div>Ubah Kata Sandi<span class="chev">›</span></div>
-      <div class="menu-item"><div class="menu-ic" style="background:var(--teal-50);color:var(--teal-700);">🔔</div>Notifikasi<span class="chev">›</span></div>
-      <div class="menu-item"><div class="menu-ic" style="background:var(--teal-50);color:var(--teal-700);">🌐</div>Bahasa — Indonesia<span class="chev">›</span></div>
+      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/ios/50/user--v1.png" alt=""></div>Edit Profil<span class="chev">›</span></div>
+      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/ios/50/lock--v1.png" alt=""></div>Ubah Kata Sandi<span class="chev">›</span></div>
+      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/ios/50/appointment-reminders--v1.png" alt=""></div>Notifikasi<span class="chev">›</span></div>
+      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/ios/50/globe--v1.png" alt=""></div>Bahasa — Indonesia<span class="chev">›</span></div>
     </div>
   </div>
 
   <div class="menu-section">
     <div class="menu-label">Lainnya</div>
     <div class="menu-card">
-      <div class="menu-item"><div class="menu-ic" style="background:#eef1f8;color:#5B6574;">❓</div>Pusat Bantuan<span class="chev">›</span></div>
-      <div class="menu-item"><div class="menu-ic" style="background:#eef1f8;color:#5B6574;">📄</div>Syarat & Ketentuan<span class="chev">›</span></div>
-      <div class="menu-item danger" id="logoutItem" onclick="logout()"><div class="menu-ic" style="background:var(--red-50);color:var(--red-800);">↪</div>Keluar</div>
+      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/ios/50/help--v1.png" alt=""></div>Pusat Bantuan<span class="chev">›</span></div>
+      <div class="menu-item"><div class="menu-ic"><img src="https://img.icons8.com/ios/50/document--v1.png" alt=""></div>Syarat & Ketentuan<span class="chev">›</span></div>
+      <div class="menu-item danger" id="logoutItem" onclick="logout()"><div class="menu-ic"><img src="https://img.icons8.com/ios/50/exit--v1.png" alt=""></div>Keluar</div>
     </div>
   </div>
   <div style="height:20px;"></div>
@@ -170,13 +170,11 @@ function renderProfile(){
 
   const user = JSON.parse(userRaw);
   area.innerHTML = `
-    <div class="profile-card">
-      <div class="pc-top">
-        <div class="pc-avatar">${initials(user.name || "Pengguna")}</div>
-        <div>
-          <div class="pc-name">${user.name || "Pengguna"}</div>
-          <div class="pc-email">${user.email || ""}</div>
-        </div>
+    <div class="profile-card pro-profile-card">
+      <div class="pc-cover" style="background-image:url('${user.cover || user.cover_url || "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=70"}')"></div>
+      <div class="pc-identity">
+        <div class="pc-avatar pc-photo">${user.photo || user.avatar || user.picture ? `<img src="${user.photo || user.avatar || user.picture}" alt="Foto profil">` : initials(user.name || "Pengguna")}</div>
+        <div class="pc-usercopy"><div class="pc-name">${user.name || "Pengguna"}${user.verified || user.fan_pro ? '<span class="verified-badge" title="Terverifikasi Fan Pro">✓</span>' : ''}</div><div class="pc-email">${user.email || ""}</div>${user.fan_pro?'<span class="fan-pro-badge">Fan Pro</span>':''}</div>
         <button class="pc-edit">Edit</button>
       </div>
       <div class="stats-row">
