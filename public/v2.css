@@ -888,3 +888,7 @@ body[data-pv2-page="shop.html"] .shop-trending-open img{width:14px;height:14px;o
 .pl-drawer-cat>b{font:800 13px/1.15 system-ui;white-space:nowrap}.pl-drawer-cat>i:last-child{color:#a5adb7;font-size:9px}
 .pl-drawer-cat:nth-child(4n+2) .pl-cat-icon{background:#fff3e8;color:#ef6c00}.pl-drawer-cat:nth-child(4n+3) .pl-cat-icon{background:#edf9f2;color:#14945b}.pl-drawer-cat:nth-child(4n+4) .pl-cat-icon{background:#f6efff;color:#7a42c8}
 @media(max-width:390px){.pl-drawer-cats .pl-drawer-cat{grid-template-columns:30px minmax(0,1fr) 9px;gap:7px;min-height:54px}.pl-cat-icon{width:29px;height:29px;border-radius:8px;font-size:12px}.pl-drawer-cat>b{font-size:12px}}
+
+/* V5.9 — feed performance controls */
+.pv58-feed-more-wrap{display:flex;justify-content:center;padding:18px 0 6px}.pv58-feed-more-wrap button{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 16px;border:1px solid #d7e2f0;border-radius:18px;background:#fff;color:#0b5ed7;font:800 9px/1 system-ui;box-shadow:0 3px 10px rgba(16,24,40,.04)}.pv58-feed-more-wrap button[hidden]{display:none}.pv58-feed-more-wrap button:active{transform:scale(.98)}
+.pv6-feed-carousel article,.pv6-feed-poster,.pv6-feed-thumb{background-color:#eef2f6}
