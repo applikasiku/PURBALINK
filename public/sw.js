@@ -1,4 +1,4 @@
-const CACHE = 'purbalink-v6-2-1-video-desktop-20260920';
+const CACHE = 'purbalink-v6-3-google-shorts-detail-20260920';
 const ASSETS = ['/', '/index.html', '/video.html', '/v2.js', '/v2.css', '/info.css', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 const PRIVATE_PATH = /^\/(?:api(?:\/|$)|admin(?:[\/-]|$)|login(?:\.html)?$|register(?:\.html)?$|profile(?:\.html)?$)/;
 self.addEventListener('install', event => {
