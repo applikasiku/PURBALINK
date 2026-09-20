@@ -1420,34 +1420,30 @@ function buildArticleToc(){
  document.getElementById('articleToc')?.classList.toggle('empty',!hs.length);
 }
 function toggleArticleAudio(force){
- const p=document.getElementById('articleAudioPopup'),btn=document.querySelector('.article-audio-trigger');if(!p)return;
- const opening=typeof force==='boolean'?force:!p.classList.contains('show');
- p.classList.toggle('show',opening);p.setAttribute('aria-hidden',opening?'false':'true');
- if(opening&&btn){const r=btn.getBoundingClientRect();p.style.position='fixed';p.style.left='auto';p.style.right=Math.max(12,window.innerWidth-r.right)+'px';p.style.bottom=Math.max(88,window.innerHeight-r.top+10)+'px';p.style.top='auto';}
+ const p=document.getElementById('articleAudioPopup');if(!p)return;const opening=typeof force==='boolean'?force:!p.classList.contains('show');p.classList.toggle('show',opening);p.setAttribute('aria-hidden',opening?'false':'true');
 }
-function articleSpeechText(){return [document.querySelector('#detailView .art-title')?.textContent,...[...document.querySelectorAll('#detailView .art-body h2,#detailView .art-body p')].map(x=>x.textContent)].filter(Boolean).join('. ')}
-let articleUtterance=null;
+function articleSpeechText(){return [document.querySelector('#detailView .art-title')?.textContent,...[...document.querySelectorAll('#detailView .art-body h2,#detailView .art-body p')].map(x=>x.textContent)].filter(Boolean).join('. ').replace(/\s+/g,' ').trim()}
+let articleSpeechQueue=[],articleSpeechIndex=0,articleUtterance=null,articleSpeechToken=0;
+function setAudioStatus(t){const s=document.getElementById('articleAudioStatus');if(s)s.textContent=t}
+function speechChunks(text,max=850){const sentences=String(text).match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[text];const out=[];let cur='';for(const s of sentences){if((cur+' '+s).length>max&&cur){out.push(cur.trim());cur=s}else cur+=' '+s}if(cur.trim())out.push(cur.trim());return out}
+function speakArticleChunk(token){
+ if(token!==articleSpeechToken)return;const synth=window.speechSynthesis;if(!articleSpeechQueue[articleSpeechIndex]){setAudioStatus('Selesai');articleUtterance=null;return}
+ const u=new SpeechSynthesisUtterance(articleSpeechQueue[articleSpeechIndex]);articleUtterance=u;u.lang='id-ID';u.rate=.94;u.pitch=1;u.volume=1;
+ const voices=synth.getVoices();u.voice=voices.find(v=>/^id[-_]/i.test(v.lang||''))||voices.find(v=>/indonesia/i.test(v.name||''))||null;
+ u.onstart=()=>setAudioStatus('Memutar · bagian '+(articleSpeechIndex+1)+'/'+articleSpeechQueue.length);
+ u.onend=()=>{if(token!==articleSpeechToken)return;articleSpeechIndex++;speakArticleChunk(token)};
+ u.onerror=e=>{if(token!==articleSpeechToken||e.error==='canceled'||e.error==='interrupted')return;setAudioStatus('Audio gagal. Ketuk Putar untuk mencoba lagi.')};
+ synth.speak(u);
+}
 function playArticleAudio(){
- const status=document.getElementById('articleAudioStatus');
- const synth=window.speechSynthesis;
- if(!synth||typeof window.SpeechSynthesisUtterance==='undefined'){if(status)status.textContent='Browser ini belum mendukung pembaca berita';return;}
- try{
-   if(synth.paused&&articleUtterance){synth.resume();if(status)status.textContent='Sedang memutar berita';return;}
-   synth.cancel();
-   articleUtterance=new SpeechSynthesisUtterance(articleSpeechText());
-   articleUtterance.lang='id-ID';articleUtterance.rate=.92;articleUtterance.pitch=1;articleUtterance.volume=1;
-   const voices=synth.getVoices();const idVoice=voices.find(v=>/^id(-|_)/i.test(v.lang||''));if(idVoice)articleUtterance.voice=idVoice;
-   articleUtterance.onstart=()=>{if(status)status.textContent='Sedang memutar berita'};
-   articleUtterance.onpause=()=>{if(status)status.textContent='Dijeda'};
-   articleUtterance.onresume=()=>{if(status)status.textContent='Sedang memutar berita'};
-   articleUtterance.onend=()=>{if(status)status.textContent='Selesai';articleUtterance=null};
-   articleUtterance.onerror=e=>{if(status)status.textContent=e.error==='canceled'?'Dihentikan':'Audio gagal diputar — coba Chrome terbaru';};
-   synth.speak(articleUtterance);
-   setTimeout(()=>{if(synth.paused)synth.resume()},120);
- }catch(e){if(status)status.textContent='Audio gagal dimulai di perangkat ini';}
+ const synth=window.speechSynthesis;if(!synth||typeof SpeechSynthesisUtterance==='undefined'){setAudioStatus('Perangkat ini tidak mendukung text-to-speech');return}
+ toggleArticleAudio(true);if(synth.paused&&articleUtterance){synth.resume();setAudioStatus('Melanjutkan audio');return}
+ if(articleUtterance&&synth.speaking){setAudioStatus('Audio sedang diputar');return}
+ const text=articleSpeechText();if(!text){setAudioStatus('Isi artikel belum tersedia');return}
+ articleSpeechToken++;synth.cancel();articleSpeechQueue=speechChunks(text);articleSpeechIndex=0;setAudioStatus('Menyiapkan audio…');setTimeout(()=>speakArticleChunk(articleSpeechToken),90);
 }
-function pauseArticleAudio(){if('speechSynthesis' in window){speechSynthesis.paused?speechSynthesis.resume():speechSynthesis.pause();}}
-function stopArticleAudio(){if('speechSynthesis' in window)speechSynthesis.cancel();articleUtterance=null;const s=document.getElementById('articleAudioStatus');if(s)s.textContent='Dihentikan';}
+function pauseArticleAudio(){const s=window.speechSynthesis;if(!s)return;if(s.speaking&&!s.paused){s.pause();setAudioStatus('Dijeda')}else if(s.paused){s.resume();setAudioStatus('Melanjutkan audio')}}
+function stopArticleAudio(){articleSpeechToken++;if('speechSynthesis'in window)speechSynthesis.cancel();articleUtterance=null;articleSpeechQueue=[];articleSpeechIndex=0;setAudioStatus('Dihentikan')}
 document.addEventListener('DOMContentLoaded',buildArticleToc);
 
 </script>
