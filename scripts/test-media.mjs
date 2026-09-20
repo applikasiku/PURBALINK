@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = new URL('../', import.meta.url);
 const html = readFileSync(new URL('public/index.html', root), 'utf8');
-const script = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).join('\n');
+const script = [...html.matchAll(/<script(?![^>]*\btype=["']application\/ld\+json["'])(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).join('\n');
 new vm.Script(script);
 for(const file of ['public/v2.js','public/sw.js','scripts/build-media.mjs']){
   execFileSync(process.execPath,['--check',fileURLToPath(new URL(file,root))]);
