@@ -12,6 +12,20 @@
     "ADMIN_EMAIL": "amelnewsid@gmail.com",
     "AI_PROVIDER_ORDER": "openrouter,groq,gemini,deepseek,mistral,together,openai,anthropic"
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "purbalink-db",
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "purbalink-media"
+    }
+  ],
   "routes": [
     { "pattern": "purbalink.web.id", "custom_domain": true },
     { "pattern": "admin.purbalink.web.id", "custom_domain": true }
