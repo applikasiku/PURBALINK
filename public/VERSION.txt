@@ -1,8 +1,7 @@
-PURBALINK V2.10.0 — Automatic Trending News
-Build date: 2026-09-19
-Trending source: article read counts + breaking-news boost
-Admin modes: Auto / Mixed / Manual
-Admin controls: limit, minimum reads, show read count, manual pin, edit views
-Homepage: clickable trending strip below header
+PURBALINK V5.9.1 — Stability fixes
+Base: V5.9 / 7dd31fc
+Fix: feed JavaScript syntax, PWA cache freshness and API exclusions
+Admin: read-only integration checks; AI generation restricted to admin
+Storage: browser-local articles; server CMS synchronization not implemented
 Public: https://purbalink.web.id
 Admin: https://admin.purbalink.web.id

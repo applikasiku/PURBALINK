@@ -294,7 +294,8 @@ function securityHeaders(headers = new Headers()) {
 }
 function publicAssetResponse(res, pathname) {
   const headers = securityHeaders(new Headers(res.headers));
-  if (/\.(?:js|css|png|jpg|jpeg|webp|svg|ico|woff2)$/i.test(pathname)) headers.set('cache-control','public, max-age=86400, stale-while-revalidate=604800');
+  if (/\.(?:js|css)$/i.test(pathname)) headers.set('cache-control','public, max-age=0, must-revalidate');
+  else if (/\.(?:png|jpg|jpeg|webp|svg|ico|woff2)$/i.test(pathname)) headers.set('cache-control','public, max-age=86400, stale-while-revalidate=604800');
   else if (/\.html$/i.test(pathname) || pathname === '/' || !pathname.includes('.')) headers.set('cache-control','public, max-age=0, must-revalidate');
   return new Response(res.body,{status:res.status,statusText:res.statusText,headers});
 }
@@ -333,9 +334,12 @@ export default {
     try {
       // API routes remain available on the Worker regardless of public/admin hostname.
       if (url.pathname === '/api/jobs/jooble' && request.method === 'POST') return searchJooble(request, env);
-      if (url.pathname === '/api/ai/article' && request.method === 'POST') return generateAIArticle(request, env);
+      if (url.pathname === '/api/ai/article' && request.method === 'POST') {
+        if (!isAdminHost || accessEmail(request) !== adminEmail(env)) return forbiddenAdmin();
+        return generateAIArticle(request, env);
+      }
       if (url.pathname === '/api/health') {
-        const health = json({ ok: true, app: 'PURBALINK', version: '5.3.0', environment: host.endsWith('.workers.dev') ? 'preview' : 'production', public_host: PUBLIC_HOST, admin_host: ADMIN_HOST, payment_gateway: 'Midtrans', mode: mode(env), midtrans_configured: Boolean(env.MIDTRANS_SERVER_KEY), jooble_configured: Boolean(env.JOOBLE_API_KEY), ai: { openai:Boolean(env.OPENAI_API_KEY), gemini:Boolean(env.GEMINI_API_KEY), deepseek:Boolean(env.DEEPSEEK_API_KEY), groq:Boolean(env.GROQ_API_KEY), mistral:Boolean(env.MISTRAL_API_KEY), anthropic:Boolean(env.ANTHROPIC_API_KEY), openrouter:Boolean(env.OPENROUTER_API_KEY), together:Boolean(env.TOGETHER_API_KEY) } });
+        const health = json({ ok: true, app: 'PURBALINK', version: '5.9.1', environment: host.endsWith('.workers.dev') ? 'preview' : 'production', public_host: PUBLIC_HOST, admin_host: ADMIN_HOST, payment_gateway: 'Midtrans', mode: mode(env), midtrans_configured: Boolean(env.MIDTRANS_SERVER_KEY), jooble_configured: Boolean(env.JOOBLE_API_KEY), ai: { openai:Boolean(env.OPENAI_API_KEY), gemini:Boolean(env.GEMINI_API_KEY), deepseek:Boolean(env.DEEPSEEK_API_KEY), groq:Boolean(env.GROQ_API_KEY), mistral:Boolean(env.MISTRAL_API_KEY), anthropic:Boolean(env.ANTHROPIC_API_KEY), openrouter:Boolean(env.OPENROUTER_API_KEY), together:Boolean(env.TOGETHER_API_KEY) } });
         const headers=new Headers(health.headers);headers.set('cache-control','no-store');return new Response(health.body,{status:health.status,headers});
       }
       if (url.pathname === '/api/midtrans/transaction' && request.method === 'POST') return createTransaction(request, env);

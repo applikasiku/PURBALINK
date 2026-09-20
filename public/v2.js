@@ -224,7 +224,7 @@
       quickBox?.querySelectorAll('[data-article]').forEach(el=>el.onclick=()=>PV2.openArticle(el.dataset.article));
     }
     window.PV2.openArticle=id=>{
-      const a=db.articles.find(x=>String(x.id)===String(id));if(!a)return;a.views=Number(a.views||0)+1;saveDb();
+      const a=db.articles.find(x=>String(x.id)===String(id)&&x.status==='Terbit');if(!a){toast('Artikel tidak tersedia');return;}a.views=Number(a.views||0)+1;saveDb();
       const pill=document.querySelector('#detailView .article-wrap > .pill'); if(pill)pill.textContent=a.cat;
       const title=document.querySelector('#detailView .art-title');if(title)title.textContent=a.title;
       const by=document.querySelector('#detailView .art-byline div:last-child');if(by)by.innerHTML=`<b style="color:var(--ink);">${esc(a.author||'Tim PURBALINK')}</b> · Reporter<br>${esc(a.date)} · 5 menit baca`;
@@ -291,7 +291,7 @@
         terkini:{title:'Terkini',desc:'Update berita terbaru PURBALINK, disusun dari publikasi paling baru.'},
         populer:{title:'Populer',desc:'Berita yang paling banyak menarik perhatian pembaca PURBALINK.'},
         rekomendasi:{title:'Rekomendasi',desc:'Pilihan berita menarik dari berbagai kategori untuk Anda.'}
-      }[mode]||{title:'Berita',desc:'Pilihan berita PURBALINK.'}};
+      }[mode]||{title:'Berita',desc:'Pilihan berita PURBALINK.'};
       if(!pageEl)return;pageEl.hidden=false;if(homeMain)homeMain.style.display='none';if(trend)trend.style.display='none';
       document.getElementById('pv6FeedTitle').textContent=cfg.title;document.getElementById('pv6FeedDesc').textContent=cfg.desc;
       let items=published().slice();

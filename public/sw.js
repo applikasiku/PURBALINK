@@ -1,23 +1,54 @@
-const CACHE = "purbalink-v5-9-feed-seo-pagination-20260920";
-const ASSETS = [
-  "./","./index.html","./purbalink-home.html","./loker.html","./shop.html","./video.html","./profile.html","./login.html","./register.html","./admin-dashboard.html",
-  "./tentang.html","./redaksi.html","./pedoman-media-siber.html","./privacy.html","./terms.html","./kontak.html",
-  "./v2.js","./v2.css","./info.css","./manifest.json","./icon-192.png","./icon-512.png","./brand-icon-transparent.png","./logo-purbalink.png",
-  "./SUKA.gif","./LOVE.gif","./HAHAHA.gif","./HERAN.gif","./SEDIH.gif","./MARAH.gif","./GABUNG.gif"
-];
-self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(cache=>Promise.allSettled(ASSETS.map(asset=>fetch(asset,{cache:"reload"}).then(res=>{if(res.ok)return cache.put(asset,res);throw new Error("asset "+asset)})))))});
-self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim()});
-self.addEventListener("fetch",e=>{
-  if(e.request.method!=="GET")return;
-  if(new URL(e.request.url).pathname.endsWith('/media-catalog.js')){
-    e.respondWith(fetch(e.request,{cache:'no-cache'}).then(res=>{
-      if(!res.ok)throw new Error('Media catalog unavailable');
-      const copy=res.clone();e.waitUntil(caches.open(CACHE).then(c=>c.put(e.request,copy)));return res;
-    }).catch(()=>caches.match(e.request).then(res=>res||Response.error())));return;
-  }
-  const url=new URL(e.request.url);if(url.pathname==='/v2.js'||url.pathname==='/v2.css'||url.pathname==='/index.html'||url.pathname==='/'||url.pathname==='/loker.html'||url.pathname==='/loker'||url.pathname==='/shop.html'||url.pathname==='/shop'){e.respondWith(fetch(e.request,{cache:'no-store'}).then(res=>{if(res.ok){const copy=res.clone();e.waitUntil(caches.open(CACHE).then(c=>c.put(e.request,copy)))}return res}).catch(()=>caches.match(e.request)));return;}
-  const isNav=e.request.mode==="navigate";
-  if(isNav){e.respondWith(fetch(e.request).then(res=>{const copy=res.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return res}).catch(()=>caches.match(e.request).then(r=>r||caches.match("./index.html"))));return;}
-  e.respondWith(caches.match(e.request).then(cached=>cached||fetch(e.request).then(res=>{if(res.ok&&new URL(e.request.url).origin===self.location.origin){const copy=res.clone();caches.open(CACHE).then(c=>c.put(e.request,copy))}return res})));
+const CACHE = 'purbalink-v5-9-1-stability';
+const ASSETS = ['/', '/index.html', '/v2.js', '/v2.css', '/info.css', '/manifest.json', '/icon-192.png', '/icon-512.png'];
+const PRIVATE_PATH = /^\/(?:api(?:\/|$)|admin(?:[\/-]|$)|login(?:\.html)?$|register(?:\.html)?$|profile(?:\.html)?$)/;
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(CACHE).then(cache => Promise.allSettled(ASSETS.map(async path => {
+    const response = await fetch(path, {cache: 'reload'});
+    if (response.ok && !response.redirected) await cache.put(path, response);
+  }))).then(() => self.skipWaiting()));
 });
-self.addEventListener("notificationclick",e=>{e.notification.close();e.waitUntil(clients.matchAll({type:"window",includeUncontrolled:true}).then(list=>{for(const c of list){if("focus" in c)return c.focus()}if(clients.openWindow)return clients.openWindow("./index.html")}))});
+self.addEventListener('activate', event => {
+  event.waitUntil(caches.keys().then(keys => Promise.all(keys
+    .filter(key => key.startsWith('purbalink-') && key !== CACHE)
+    .map(key => caches.delete(key)))).then(() => self.clients.claim()));
+});
+function cacheable(response) {
+  return response.ok && !response.redirected && !/no-store|private/i.test(response.headers.get('cache-control') || '');
+}
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  const url = new URL(request.url);
+  // Never cache API, admin, authentication or personalized responses.
+  if (request.method !== 'GET' || url.origin !== self.location.origin ||
+      self.location.hostname === 'admin.purbalink.web.id' || PRIVATE_PATH.test(url.pathname) ||
+      request.headers.has('authorization')) return;
+  const navigation = request.mode === 'navigate';
+  const fresh = navigation || /\.(?:js|css|html|json)$/.test(url.pathname);
+  event.respondWith((async () => {
+    const cache = await caches.open(CACHE);
+    if (!fresh) {
+      const cached = await cache.match(request);
+      if (cached) return cached;
+    }
+    try {
+      const response = await fetch(request, fresh ? {cache: 'no-cache'} : undefined);
+      if (cacheable(response) && !url.search) {
+        const copy = response.clone();
+        event.waitUntil(cache.put(request, copy));
+      }
+      return response;
+    } catch {
+      return await cache.match(request) || (navigation && await cache.match('/index.html')) ||
+        new Response(navigation ? 'Anda sedang offline. Hubungkan internet lalu coba lagi.' : 'Offline', {
+          status: 503, headers: {'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store'}
+        });
+    }
+  })());
+});
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  event.waitUntil(self.clients.matchAll({type: 'window', includeUncontrolled: true}).then(list => {
+    for (const client of list) if ('focus' in client) return client.focus();
+    return self.clients.openWindow('/');
+  }));
+});
