@@ -513,12 +513,10 @@ select.sort{border:1px solid var(--line);border-radius:7px;padding:6px 10px;font
         <nav class="article-toc" id="articleToc" aria-label="Daftar isi artikel"><div class="article-toc-head"><img src="https://img.icons8.com/fluency-systems-regular/48/list.png" alt=""><b>Daftar Isi</b></div><ol id="articleTocList"></ol></nav>
         <button class="article-audio-trigger" type="button" onclick="toggleArticleAudio()" aria-label="Dengarkan berita" title="Dengarkan berita"><img src="https://img.icons8.com/fluency-systems-regular/48/speaker.png" alt=""></button>
       </div>
-      <div class="article-audio-popup" id="articleAudioPopup" role="dialog" aria-label="Pemutar audio berita">
-        <div><b>Dengarkan Berita</b><small id="articleAudioStatus">Siap membacakan artikel</small></div>
-        <button type="button" onclick="playArticleAudio()" aria-label="Putar"><img src="https://img.icons8.com/fluency-systems-regular/48/play.png" alt=""></button>
-        <button type="button" onclick="pauseArticleAudio()" aria-label="Jeda"><img src="https://img.icons8.com/fluency-systems-regular/48/pause.png" alt=""></button>
-        <button type="button" onclick="stopArticleAudio()" aria-label="Berhenti"><img src="https://img.icons8.com/fluency-systems-regular/48/stop.png" alt=""></button>
-        <button type="button" class="audio-close" onclick="toggleArticleAudio(false)" aria-label="Tutup">×</button>
+      <div class="article-audio-popup pv6-audio-player" id="articleAudioPopup" role="dialog" aria-label="Pemutar audio berita" aria-hidden="true">
+        <div class="pv6-audio-head"><span class="pv6-audio-icon"><i class="fa-solid fa-headphones"></i></span><div><b>Dengarkan Berita</b><small id="articleAudioStatus">Siap diputar</small></div></div>
+        <div class="pv6-audio-controls"><button type="button" onclick="playArticleAudio()" aria-label="Putar"><i class="fa-solid fa-play"></i></button><button type="button" onclick="pauseArticleAudio()" aria-label="Jeda"><i class="fa-solid fa-pause"></i></button><button type="button" onclick="stopArticleAudio()" aria-label="Berhenti"><i class="fa-solid fa-stop"></i></button></div>
+        <button type="button" class="audio-close" onclick="toggleArticleAudio(false)" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       
