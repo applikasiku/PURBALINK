@@ -1,5 +1,5 @@
-const CACHE = 'purbalink-v5-9-1-stability';
-const ASSETS = ['/', '/index.html', '/v2.js', '/v2.css', '/info.css', '/manifest.json', '/icon-192.png', '/icon-512.png'];
+const CACHE = 'purbalink-v6-1-video-scroll-player-20260920';
+const ASSETS = ['/', '/index.html', '/video.html', '/v2.js', '/v2.css', '/info.css', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 const PRIVATE_PATH = /^\/(?:api(?:\/|$)|admin(?:[\/-]|$)|login(?:\.html)?$|register(?:\.html)?$|profile(?:\.html)?$)/;
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => Promise.allSettled(ASSETS.map(async path => {
