@@ -1,11 +1,14 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "purbalink",
+  "name": "purbalink--admin",
   "main": "src/worker.js",
   "compatibility_date": "2026-09-18",
   "build": {
     "command": "node scripts/build-media.mjs",
-    "watch_dir": ["sticker", "scripts"]
+    "watch_dir": [
+      "sticker",
+      "scripts"
+    ]
   },
   "vars": {
     "MIDTRANS_MODE": "sandbox",
@@ -16,7 +19,7 @@
     {
       "binding": "DB",
       "database_name": "purbalink-db",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "database_id": "ccd6e6ed-3b68-42e1-ab03-abe7829193bc",
       "migrations_dir": "migrations"
     }
   ],
@@ -27,12 +30,20 @@
     }
   ],
   "routes": [
-    { "pattern": "purbalink.web.id", "custom_domain": true },
-    { "pattern": "admin.purbalink.web.id", "custom_domain": true }
+    {
+      "pattern": "purbalink.web.id",
+      "custom_domain": true
+    },
+    {
+      "pattern": "admin.purbalink.web.id",
+      "custom_domain": true
+    }
   ],
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
-    "run_worker_first": ["/*"]
+    "run_worker_first": [
+      "/*"
+    ]
   }
 }
